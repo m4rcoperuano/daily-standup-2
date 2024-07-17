@@ -1,32 +1,36 @@
 <script setup>
-import {Link} from "@inertiajs/vue3";
-defineProps({
+  import { Link } from '@inertiajs/vue3';
+  defineProps( {
     type: {
-        type: String,
-        default: 'submit',
+      type: String,
+      default: 'submit',
     },
     link: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: false,
     },
     routeName: {
-        type: String,
-        default: '',
+      type: String,
+      default: '',
     },
-});
+  } );
 </script>
 
 <template>
-    <Link v-if="link"
-          :href="routeName"
-          class="button">
-        <slot />
-    </Link>
-    <button v-else
-            :type="type"
-            class="button">
-        <slot />
-    </button>
+  <Link
+    v-if="link"
+    :href="routeName"
+    class="button"
+    >
+    <slot></slot>
+  </Link>
+  <button
+    v-else
+    :type="type"
+    class="button"
+    >
+    <slot></slot>
+  </button>
 </template>
 
 <style scoped>

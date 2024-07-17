@@ -1,57 +1,69 @@
 <script setup>
-    import VueMarkdown from 'vue-markdown-render'
+  import VueMarkdown from 'vue-markdown-render';
 
 
-    defineProps({
-        title: String,
-        standUpEntries: Array,
-    })
+  defineProps( {
+    title: String,
+    standUpEntries: Array,
+  } );
 </script>
 
 <template>
-    <div class="font-bold py-2 capitalize text-center text-lg">
-        {{ title }}
-    </div>
-    <table class="table w-full text-left table-collapse border dark:border-gray-950">
-        <thead>
-        <tr>
-            <th style="width:150px;">
-                <div>
-                    Team Member
-                </div>
-            </th>
-            <th>
-                <div>
-                    In Progress
-                </div>
-            </th>
-            <th>
-                <div>
-                    Priorities
-                </div>
-            </th>
-            <th>
-                <div>
-                    Blockers
-                </div>
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="entry in standUpEntries" :key="entry.id">
-            <td>{{ entry.user.name }}</td>
-            <td>
-                <VueMarkdown v-if="entry.in_progress" :source="entry.in_progress" />
-            </td>
-            <td>
-                <VueMarkdown v-if="entry.priorities" :source="entry.priorities" />
-            </td>
-            <td>
-                <VueMarkdown v-if="entry.blockers" :source="entry.blockers" />
-            </td>
-        </tr>
-        </tbody>
-    </table>
+  <div class="font-bold py-2 capitalize text-center text-lg">
+    {{ title }}
+  </div>
+  <table class="table w-full text-left table-collapse border dark:border-gray-950">
+    <thead>
+      <tr>
+        <th style="width:150px;">
+          <div>
+            Team Member
+          </div>
+        </th>
+        <th>
+          <div>
+            In Progress
+          </div>
+        </th>
+        <th>
+          <div>
+            Priorities
+          </div>
+        </th>
+        <th>
+          <div>
+            Blockers
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="entry in standUpEntries"
+        :key="entry.id"
+        >
+        <td>{{ entry.user.name }}</td>
+        <td>
+          <VueMarkdown
+            v-if="entry.in_progress"
+            :source="entry.in_progress"
+            ></VueMarkdown>
+        </td>
+        <td>
+          <VueMarkdown
+            v-if="entry.priorities"
+            :source="entry.priorities"
+            ></VueMarkdown>
+        </td>
+        <td>
+          <VueMarkdown
+            v-if="entry.blockers"
+            :source="entry.blockers"
+            ></VueMarkdown>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <style scoped>
