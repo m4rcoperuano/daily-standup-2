@@ -19,6 +19,7 @@
         "vue": "^3.3.13"
     },
     "dependencies": {
-        "luxon": "^3.4.4"
+        "luxon": "^3.4.4",
+        "vue-markdown-render": "^2.2.1"
     }
 }
