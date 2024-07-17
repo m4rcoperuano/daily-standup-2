@@ -11,9 +11,14 @@ class StandUpEntry extends Model
     use HasFactory;
 
     protected $fillable = [
+        'date',
         'in_progress',
         'priorities',
         'blockers',
+    ];
+
+    protected $casts = [
+        'date' => 'datetime'
     ];
 
     public function standUpGroup(): BelongsTo

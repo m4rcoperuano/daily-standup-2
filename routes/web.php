@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\StandUpController;
+use App\Http\Controllers\StandUpEntryController;
 use App\Http\Controllers\StandUpGroupController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -24,15 +25,12 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/stand-up-groups/index', [StandUpGroupController::class, 'index'])
-        ->name('stand-up-groups.index');
+    Route::resource('/stand-up-groups', StandUpGroupController::class)
+        ->only(['index', 'create', 'store', 'show']);
 
-    Route::get('/stand-up-groups/create', [StandUpGroupController::class, 'create'])
-        ->name('stand-up-groups.create');
+    Route::get('/stand-up-groups/{standUpGroup}/entries', [StandUpEntryController::class, 'index'])
+        ->name('stand-up-entries.index');
 
-    Route::get('/stand-up-groups/{standUpGroup}', [StandUpGroupController::class, 'show'])
-        ->name('stand-up-groups.show');
-
-    Route::post('/stand-up-groups', [StandUpGroupController::class, 'store'])
-        ->name('stand-up-groups.store');
+    Route::resource('/stand-up-entries', StandUpEntryController::class)
+        ->only(['store', 'update']);
 });

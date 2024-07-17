@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('stand_up_group_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->dateTime('date');
             $table->text('in_progress')->nullable();
             $table->text('priorities')->nullable();
             $table->text('blockers')->nullable();
