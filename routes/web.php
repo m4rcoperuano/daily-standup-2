@@ -31,5 +31,5 @@ Route::middleware([
         ->name('stand-up-entries.index');
 
     Route::resource('/stand-up-entries', StandUpEntryController::class)
-        ->only(['store', 'update']);
+        ->only(['store', 'update', 'destroy']);
 });

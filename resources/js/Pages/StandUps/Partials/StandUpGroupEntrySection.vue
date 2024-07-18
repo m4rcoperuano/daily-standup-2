@@ -36,6 +36,12 @@
   const cancel = () => {
     editingId.value = null;
   };
+
+  const deleteEntry = async () => {
+    await axios.delete( route( 'stand-up-entries.destroy', editingId.value ) );
+    editingId.value = null;
+    emits( 'refresh' );
+  };
 </script>
 
 <template>
@@ -67,12 +73,13 @@
         class="p-4 dark:bg-gray-900 bg-gray-50"
         >
         <EditStandUpEntry
-          :date="entry.date"
           :in-progress="entry.in_progress"
           :priorities="entry.priorities"
           :blockers="entry.blockers"
+          :is-editing="true"
           @save="save"
           @cancel="cancel"
+          @delete="deleteEntry"
           >
         </EditStandUpEntry>
       </div>

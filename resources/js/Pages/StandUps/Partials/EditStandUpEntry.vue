@@ -3,11 +3,12 @@
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import { ref } from 'vue';
   import SecondaryButton from '@/Components/SecondaryButton.vue';
+  import DangerButton from '@/Components/DangerButton.vue';
 
   const props = defineProps( {
-    date: {
-      type: Date,
-      required: true,
+    isEditing: {
+      type: Boolean,
+      default: false,
     },
     inProgress: {
       type: String,
@@ -26,7 +27,6 @@
   const emits = defineEmits( [ 'save', 'cancel' ] );
 
   const form = ref( {
-    date: props.date,
     in_progress: props.inProgress,
     priorities: props.priorities,
     blockers: props.blockers,
@@ -38,6 +38,12 @@
 
   const cancel = async () => {
     emits( 'cancel' );
+  };
+
+  const doDelete = async () => {
+    if ( confirm( 'are you sure you want to delete this entry?' ) ) {
+      emits( 'delete' );
+    }
   };
 
 </script>
@@ -81,18 +87,26 @@
     </div>
 
     <div class="pt-4 flex gap-4">
-      <PrimaryButton
+      <DangerButton
         type="button"
-        @click="save"
+        @click="doDelete"
         >
-        Save
-      </PrimaryButton>
+        Delete
+      </DangerButton>
+      <div class="flex-grow"></div>
       <SecondaryButton
         type="button"
         @click="cancel"
         >
         Cancel
       </SecondaryButton>
+      <PrimaryButton
+        type="button"
+        @click="save"
+        >
+        Save
+      </PrimaryButton>
+
     </div>
   </div>
 </template>

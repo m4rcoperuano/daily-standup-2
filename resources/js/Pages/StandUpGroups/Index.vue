@@ -4,7 +4,10 @@
   import SecondaryButton from '@/Components/SecondaryButton.vue';
 
   defineProps( {
-    standUpGroups: Array,
+    standUpGroups: {
+      type: Array,
+      required: true,
+    },
   } );
 
 </script>

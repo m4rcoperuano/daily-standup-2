@@ -42,7 +42,6 @@ class StandUpEntryController extends Controller
     public function update(Request $request, StandUpEntry $standUpEntry)
     {
         $validated = $request->validate([
-            'date' => 'required|date',
             'in_progress' => 'nullable|string|max:4000',
             'priorities' => 'nullable|string|max:4000',
             'blockers' => 'nullable|string|max:4000',
@@ -52,5 +51,12 @@ class StandUpEntryController extends Controller
         $standUpEntry->save();
 
         return new StandUpEntryResource($standUpEntry);
+    }
+
+    public function destroy(Request $request, StandUpEntry $standUpEntry)
+    {
+        $standUpEntry->delete();
+
+        return response()->noContent();
     }
 }
