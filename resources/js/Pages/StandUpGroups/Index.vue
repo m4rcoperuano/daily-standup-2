@@ -21,13 +21,20 @@
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
           <div class="p-4">
-            <p
-              v-if="standUpGroups.length <= 0"
-              class="mb-2"
-              >
-              Hey! Your team currently doesn't have any stand up groups created. Start collecting
-              stand ups from your team by creating a group first.
-            </p>
+            <div v-if="standUpGroups.length <= 0">
+              <p
+                class="mb-2"
+                >
+                Hey! Your team currently doesn't have any stand up groups created. Start collecting
+                stand ups from your team by creating a group first.
+              </p>
+              <PrimaryButton
+                link
+                :route-name="route('stand-up-groups.create')"
+                >
+                Create Stand Up Group
+              </PrimaryButton>
+            </div>
             <div v-else>
               <div class="flex gap-2">
                 <div class="opacity-60 flex-grow">

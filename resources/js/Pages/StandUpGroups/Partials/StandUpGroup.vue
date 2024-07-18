@@ -1,91 +1,138 @@
 <script setup>
   import VueMarkdown from 'vue-markdown-render';
-
+  import { ref } from 'vue';
+  import EditStandUpEntry from '@/Pages/StandUps/Partials/EditStandUpEntry.vue';
+  import PrimaryButton from '@/Components/PrimaryButton.vue';
 
   defineProps( {
-    title: String,
-    standUpEntries: Array,
+    title: {
+      type: String,
+      required: true,
+    },
+    standUpEntries: {
+      type: Array,
+      required: true,
+    },
+    standUpGroupId: {
+      type: Number,
+      required: true,
+    },
   } );
+
+  const emits = defineEmits( [ 'refresh' ] );
+
+  const editingId = ref( null );
+
+  const editRow = ( rowId ) => {
+    editingId.value = rowId;
+  };
+
+  const save = async ( payload ) => {
+    await axios.patch( route( 'stand-up-entries.update', editingId.value ), payload );
+    editingId.value = null;
+    emits( 'refresh' );
+  };
+
+  const cancel = () => {
+    editingId.value = null;
+  };
 </script>
 
 <template>
-  <div class="font-bold py-2 capitalize text-center text-lg">
+  <div class="font-bold py-2 capitalize text-xl">
     {{ title }}
   </div>
-  <table class="table w-full text-left table-collapse border dark:border-gray-950">
-    <thead>
-      <tr>
-        <th style="width:150px;">
-          <div>
-            Team Member
-          </div>
-        </th>
-        <th>
-          <div>
-            In Progress
-          </div>
-        </th>
-        <th>
-          <div>
-            Priorities
-          </div>
-        </th>
-        <th>
-          <div>
-            Blockers
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="entry in standUpEntries"
-        :key="entry.id"
+  <div class="wrapper w-full border dark:border-gray-950">
+    <div class="grid grid-cols-4">
+      <div class="header">
+        Team Member
+      </div>
+      <div class="header">
+        In Progress
+      </div>
+      <div class="header">
+        Priorities
+      </div>
+      <div class="header">
+        Blockers
+      </div>
+    </div>
+    <div
+      v-for="entry in standUpEntries"
+      :key="entry.id"
+      class="row"
+      >
+      <div
+        v-if="editingId === entry.id"
+        class="p-4 bg-gray-900"
         >
-        <td>{{ entry.user.name }}</td>
-        <td>
+        <EditStandUpEntry
+          :date="entry.date"
+          :in-progress="entry.in_progress"
+          :priorities="entry.priorities"
+          :blockers="entry.blockers"
+          @save="save"
+          @cancel="cancel"
+          >
+        </EditStandUpEntry>
+      </div>
+      <div
+        v-else
+        class="readonly"
+        >
+        <div class="content">
+          {{ entry.user.name }}
+          <PrimaryButton
+            type="button"
+            @click="editRow(entry.id)"
+            >
+            Edit
+          </PrimaryButton>
+        </div>
+        <div class="content">
           <VueMarkdown
             v-if="entry.in_progress"
             :source="entry.in_progress"
             ></VueMarkdown>
-        </td>
-        <td>
+        </div>
+        <div class="content">
           <VueMarkdown
             v-if="entry.priorities"
             :source="entry.priorities"
             ></VueMarkdown>
-        </td>
-        <td>
+        </div>
+        <div class="content">
           <VueMarkdown
             v-if="entry.blockers"
             :source="entry.blockers"
             ></VueMarkdown>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
 
-.table {
+.wrapper {
     @apply bg-white dark:bg-gray-900;
 }
 
-.table th {
+.wrapper .header {
     @apply z-20 sticky top-0 font-semibold uppercase text-sm text-gray-700 bg-gray-100 border-x dark:bg-gray-950 dark:text-gray-400 dark:border-gray-700;
-}
-
-.table th div {
     @apply py-2 px-4 border-b border-gray-300 dark:border-gray-700;
 }
 
-.table tr td {
-    @apply align-top;
-    @apply border px-4 py-2 dark:border-gray-700 prose prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg;
+.wrapper .content {
+    @apply align-top border px-4 py-2 dark:border-gray-700 dark:prose-invert prose prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg;
+    @apply prose-ol:m-0;
 }
 
-.table tr:nth-child(even) {
+.wrapper .row .readonly {
+    @apply grid grid-cols-4;
+}
+
+.wrapper .row:nth-child(even) {
     @apply bg-gray-50 dark:bg-gray-800;
 }
 </style>

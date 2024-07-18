@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\StandUpController;
 use App\Http\Controllers\StandUpEntryController;
 use App\Http\Controllers\StandUpGroupController;
 use Illuminate\Foundation\Application;

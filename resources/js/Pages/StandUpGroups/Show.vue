@@ -1,12 +1,14 @@
 <script setup>
   import AppLayout from '@/Layouts/AppLayout.vue';
-  import EditStandUpEntry from '@/Pages/StandUps/Partials/EditStandUpEntry.vue';
   import { computed, onMounted, ref } from 'vue';
   import { DateTime } from 'luxon';
   import StandUpGroup from '@/Pages/StandUpGroups/Partials/StandUpGroup.vue';
 
   const props = defineProps( {
-    standUpGroup: Object,
+    standUpGroup: {
+      type: Object,
+      required: true,
+    },
   } );
 
   const standUpEntries = ref( [] );
@@ -44,23 +46,18 @@
       </h2>
     </template>
     <div class="py-12 dark:text-white">
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="mb-4">
-          <EditStandUpEntry
-            :stand-up-group-id="standUpGroup.id"
-            @saved="fetchEntries"
-            ></EditStandUpEntry>
-        </div>
-
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           v-for="date in Object.keys(standUpEntriesGroupedByDate)"
           :key="date"
-          class="p-4 bg-white dark:bg-gray-800 rounded-lg"
           >
           <stand-up-group
             :title="date"
             :stand-up-entries="standUpEntriesGroupedByDate[date]"
-            ></stand-up-group>
+            :stand-up-group-id="standUpEntriesGroupedByDate[date].stand_up_group_id"
+            @refresh="fetchEntries"
+            >
+          </stand-up-group>
         </div>
       </div>
     </div>

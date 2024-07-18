@@ -39,20 +39,18 @@ class StandUpEntryController extends Controller
         return response()->json($entry, 201);
     }
 
-    public function update(Request $request, StandUpEntry $entry)
+    public function update(Request $request, StandUpEntry $standUpEntry)
     {
         $validated = $request->validate([
             'date' => 'required|date',
             'in_progress' => 'nullable|string|max:4000',
             'priorities' => 'nullable|string|max:4000',
             'blockers' => 'nullable|string|max:4000',
-            'stand_up_group_id' => 'required|exists:stand_up_groups,id',
         ]);
 
-        $entry->fill($validated);
-        $entry->standUpGroup()->associate($validated['stand_up_group_id']);
-        $entry->save();
+        $standUpEntry->fill($validated);
+        $standUpEntry->save();
 
-        return new StandUpEntryResource($entry);
+        return new StandUpEntryResource($standUpEntry);
     }
 }

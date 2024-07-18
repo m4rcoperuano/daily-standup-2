@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('in_progress')->nullable();
             $table->text('priorities')->nullable();
             $table->text('blockers')->nullable();
+
+            $table->unique(['stand_up_group_id', 'user_id', 'date']);
             $table->timestamps();
         });
     }
