@@ -64,7 +64,7 @@
       >
       <div
         v-if="editingId === entry.id"
-        class="p-4 bg-gray-900"
+        class="p-4 dark:bg-gray-900 bg-gray-50"
         >
         <EditStandUpEntry
           :date="entry.date"
@@ -81,13 +81,16 @@
         class="readonly"
         >
         <div class="content">
-          {{ entry.user.name }}
-          <PrimaryButton
+          <div>
+            {{ entry.user.name }}
+          </div>
+          <button
+            class="dark:text-teal-500 dark:border-teal-500 text-teal-600 border-teal-600 border px-2 rounded hover:opacity-50"
             type="button"
             @click="editRow(entry.id)"
             >
             Edit
-          </PrimaryButton>
+          </button>
         </div>
         <div class="content">
           <VueMarkdown
