@@ -7,8 +7,8 @@ type StandUpEntryComposable = {
     standUpEntriesGroupedByDate: Ref<any>,
     fetchEntries: ( standUpGroupId: StringOrNumber ) => Promise<void>,
     createEntry: ( payload: StandUpEntry, dateSelected: string, standUpGroupId: StringOrNumber ) => Promise<CustomResponse>,
-    updateEntry: ( id: StringOrNumber, payload: StandUpEntry ) => Promise<Boolean>,
-    deleteEntry: ( id: StringOrNumber ) => Promise<Boolean>,
+    updateEntry: ( id: StringOrNumber, payload: StandUpEntry ) => Promise<CustomResponse>,
+    deleteEntry: ( id: StringOrNumber ) => Promise<CustomResponse>,
 };
 
 export type StandUpEntry = {
@@ -67,14 +67,12 @@ export function useStandUpEntries(): StandUpEntryComposable {
         return response;
     };
 
-    const updateEntry = async ( id: StringOrNumber, payload: StandUpEntry ) => {
-        const response = await api.standUpEntries.update( id, payload );
-        return response.success;
+    const updateEntry = async ( id: StringOrNumber, payload: StandUpEntry ): Promise<CustomResponse> => {
+        return await api.standUpEntries.update( id, payload );
     };
 
-    const deleteEntry = async ( id: StringOrNumber ) => {
-        const response = await api.standUpEntries.delete( id );
-        return response.success;
+    const deleteEntry = async ( id: StringOrNumber ): Promise<CustomResponse> => {
+        return await api.standUpEntries.delete( id );
     };
 
     return {

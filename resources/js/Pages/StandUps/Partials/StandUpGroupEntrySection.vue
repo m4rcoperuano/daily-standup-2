@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import VueMarkdown from 'vue-markdown-render';
   import { ref } from 'vue';
   import EditStandUpEntry from '@/Pages/StandUps/Partials/EditStandUpEntry.vue';
@@ -18,7 +18,7 @@
     },
   } );
 
-  import { useStandUpEntries } from '@/Pages/StandUps/useStandUpEntries.ts';
+  import { useStandUpEntries } from '@/Pages/StandUps/useStandUpEntries';
 
   const { deleteEntry, updateEntry } = useStandUpEntries();
   const emits = defineEmits( [ 'refresh' ] );
@@ -29,9 +29,14 @@
   };
 
   const onUpdate = async ( payload ) => {
-    await updateEntry( editingId.value, payload );
-    editingId.value = null;
-    emits( 'refresh' );
+    const response = await updateEntry( editingId.value, payload );
+    if ( response.success ) {
+      editingId.value = null;
+      emits( 'refresh' );
+    }
+    else {
+      alert( response.message );
+    }
   };
 
   const onCancel = () => {
@@ -39,9 +44,14 @@
   };
 
   const onDelete = async () => {
-    await deleteEntry( editingId.value );
-    editingId.value = null;
-    emits( 'refresh' );
+    const response = await deleteEntry( editingId.value );
+    if ( response.success ) {
+      editingId.value = null;
+      emits( 'refresh' );
+    }
+    else {
+      alert( response.message );
+    }
   };
 
 </script>

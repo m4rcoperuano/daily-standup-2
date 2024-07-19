@@ -12,6 +12,8 @@ class StandUpEntryController extends Controller
 {
     public function index(Request $request, StandUpGroup $standUpGroup)
     {
+        $this->authorize('viewAny', [StandUpEntry::class, $standUpGroup]);
+
         $entries = $standUpGroup->standUpEntries()
             ->orderBy('date', 'desc')
             ->with('user')
@@ -22,11 +24,13 @@ class StandUpEntryController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', [StandUpEntry::class, StandUpGroup::find($request->stand_up_group_id)]);
+
         $validated = $request->validate([
             'date' => ['required', 'date', function($attribute, $value, $fail) use ($request) {
                 if (
                     StandUpGroup::find($request->stand_up_group_id)
-                        ->standUpEntries()
+                    ->standUpEntries()
                     ->where('date', Carbon::parse($value))
                     ->where('user_id', $request->user()->getKey())
                     ->exists()) {
@@ -40,7 +44,6 @@ class StandUpEntryController extends Controller
             'stand_up_group_id' => 'required|exists:stand_up_groups,id',
         ]);
 
-
         $entry = StandUpEntry::make($validated);
         $entry->standUpGroup()->associate($validated['stand_up_group_id']);
         $entry->user()->associate($request->user());
@@ -52,6 +55,8 @@ class StandUpEntryController extends Controller
 
     public function update(Request $request, StandUpEntry $standUpEntry)
     {
+        $this->authorize('update', $standUpEntry);
+
         $validated = $request->validate([
             'in_progress' => 'nullable|string|max:4000',
             'priorities' => 'nullable|string|max:4000',
@@ -66,6 +71,7 @@ class StandUpEntryController extends Controller
 
     public function destroy(Request $request, StandUpEntry $standUpEntry)
     {
+        $this->authorize('delete', $standUpEntry);
         $standUpEntry->delete();
 
         return response()->noContent();

@@ -9,6 +9,8 @@ use Inertia\Inertia;
 class StandUpGroupController extends Controller
 {
     public function index(Request $request) {
+        $this->authorize('viewAny', StandUpGroup::class);
+
         $groups = $request->user()->currentTeam
             ->standUpGroups()
             ->orderByDesc('created_at')
@@ -37,8 +39,9 @@ class StandUpGroupController extends Controller
         return redirect()->route('stand-up-groups.index');
     }
 
-    public function show(StandUpGroup $standUpGroup)
+    public function show(Request $request, StandUpGroup $standUpGroup)
     {
+        $this->authorize('view', $standUpGroup);
         return Inertia::render('StandUpGroups/Show')
             ->with('standUpGroup', $standUpGroup);
     }
