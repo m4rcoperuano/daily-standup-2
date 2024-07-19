@@ -1,9 +1,10 @@
-<script setup>
+<script setup lang="ts">
 
   import PrimaryButton from '@/Components/PrimaryButton.vue';
-  import { ref } from 'vue';
+  import { Ref, ref } from 'vue';
   import SecondaryButton from '@/Components/SecondaryButton.vue';
   import DangerButton from '@/Components/DangerButton.vue';
+  import { StandUpEntry } from '@/Pages/StandUps/useStandUpEntries';
 
   const props = defineProps( {
     isEditing: {
@@ -24,9 +25,9 @@
     },
   } );
 
-  const emits = defineEmits( [ 'save', 'cancel' ] );
+  const emits = defineEmits( [ 'save', 'cancel', 'delete' ] );
 
-  const form = ref( {
+  const form : Ref<StandUpEntry> = ref( {
     in_progress: props.inProgress,
     priorities: props.priorities,
     blockers: props.blockers,
@@ -88,6 +89,7 @@
 
     <div class="pt-4 flex gap-4">
       <DangerButton
+        v-if="isEditing"
         type="button"
         @click="doDelete"
         >

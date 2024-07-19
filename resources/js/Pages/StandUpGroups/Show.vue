@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import AppLayout from '@/Layouts/AppLayout.vue';
   import { computed, onMounted, ref } from 'vue';
   import { DateTime } from 'luxon';
@@ -7,6 +7,7 @@
   import EditStandUpEntry from '@/Pages/StandUps/Partials/EditStandUpEntry.vue';
   import TextInput from '@/Components/TextInput.vue';
   import InputLabel from '@/Components/InputLabel.vue';
+  import { StandUpEntry, useStandUpEntries } from '@/Pages/StandUps/useStandUpEntries.js';
 
   const props = defineProps( {
     standUpGroup: {
@@ -15,61 +16,31 @@
     },
   } );
 
-  const standUpEntries = ref( [] );
+  const {
+    fetchEntries,
+    standUpEntriesGroupedByDate,
+    createEntry,
+  } = useStandUpEntries();
 
-  const fetchEntries = async () => {
-    const response = await axios.get( route( 'stand-up-entries.index', props.standUpGroup.id ) );
-    standUpEntries.value = response.data.data;
-  };
+  onMounted( () => fetchEntries( props.standUpGroup.id ) );
 
-  const standUpEntriesGroupedByDate = computed( () => {
-    return standUpEntries.value.reduce( ( acc, entry ) => {
-      const date = DateTime.fromISO( entry.date ).toFormat( 'cccc, LLLL d' );
-
-      if ( !acc[date] ) {
-        acc[date] = [];
-      }
-
-      acc[date].push( entry );
-
-      return acc;
-    }, {} );
-  } );
-
-  const standUpEntryGroupByDates = computed( () => {
-    return Object.keys( standUpEntriesGroupedByDate.value );
-  } );
-
-  onMounted( () => {
-    fetchEntries();
-  } );
-
+  const standUpEntryGroupByDateKeys = computed( () => Object.keys( standUpEntriesGroupedByDate.value ) );
   const isCreatingStandUpEntry = ref( false );
   const creatingStandUpEntryDate = ref( DateTime.now().toFormat( 'yyyy-MM-dd' ) );
 
-  const saveNew = async ( payload ) => {
-    const date = DateTime.fromISO( creatingStandUpEntryDate.value );
-
-    const dateNow = DateTime.now().set( {
-      day: date.day,
-      month: date.month,
-      year: date.year,
-    } ).startOf( 'day' ).minus( { minutes: date.offset } );
-
-    const response = await axios.post( route( 'stand-up-entries.store' ), {
-      ...payload,
-      date: dateNow,
-      stand_up_group_id: props.standUpGroup.id,
-    } );
-
-    if ( response.status === 201 ) {
-      fetchEntries();
-      isCreatingStandUpEntry.value = false;
-    }
-  };
-
   const cancelNew = () => {
     isCreatingStandUpEntry.value = false;
+  };
+
+  const saveNew = async ( payload: StandUpEntry ) => {
+    const response = await createEntry( payload, creatingStandUpEntryDate.value, props.standUpGroup.id );
+
+    if ( response.success ) {
+      isCreatingStandUpEntry.value = false;
+    }
+    else {
+      alert( response.message );
+    }
   };
 </script>
 
@@ -87,7 +58,7 @@
           class="mb-4"
           >
           <p
-            v-if="standUpEntryGroupByDates.length <= 0"
+            v-if="standUpEntryGroupByDateKeys.length <= 0"
             class="mb-2"
             >
             Hey! Your team currently doesn't posted any stand up entries to this group. Do you want to start it off?
@@ -118,7 +89,7 @@
         </div>
 
         <div
-          v-for="date in standUpEntryGroupByDates"
+          v-for="date in standUpEntryGroupByDateKeys"
           :key="date"
           class="mb-4"
           >
@@ -126,7 +97,7 @@
             :title="date"
             :stand-up-entries="standUpEntriesGroupedByDate[date]"
             :stand-up-group-id="standUpEntriesGroupedByDate[date].stand_up_group_id"
-            @refresh="fetchEntries"
+            @refresh="fetchEntries(standUpGroup.id)"
             >
           </StandUpGroupEntrySection>
         </div>

@@ -1,12 +1,9 @@
 {
   "extends": [
     "eslint:recommended",
-    "plugin:vue/vue3-recommended"
+    "plugin:vue/vue3-recommended",
+    "@vue/eslint-config-typescript"
   ],
-  "env": {
-    "es2021": true,
-    "vue/setup-compiler-macros": true
-  },
   "globals": {
     "$": true,
     "require": false,

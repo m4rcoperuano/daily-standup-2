@@ -2,7 +2,6 @@
   import VueMarkdown from 'vue-markdown-render';
   import { ref } from 'vue';
   import EditStandUpEntry from '@/Pages/StandUps/Partials/EditStandUpEntry.vue';
-  import PrimaryButton from '@/Components/PrimaryButton.vue';
 
   defineProps( {
     title: {
@@ -19,29 +18,32 @@
     },
   } );
 
-  const emits = defineEmits( [ 'refresh' ] );
+  import { useStandUpEntries } from '@/Pages/StandUps/useStandUpEntries.ts';
 
+  const { deleteEntry, updateEntry } = useStandUpEntries();
+  const emits = defineEmits( [ 'refresh' ] );
   const editingId = ref( null );
 
   const editRow = ( rowId ) => {
     editingId.value = rowId;
   };
 
-  const save = async ( payload ) => {
-    await axios.patch( route( 'stand-up-entries.update', editingId.value ), payload );
+  const onUpdate = async ( payload ) => {
+    await updateEntry( editingId.value, payload );
     editingId.value = null;
     emits( 'refresh' );
   };
 
-  const cancel = () => {
+  const onCancel = () => {
     editingId.value = null;
   };
 
-  const deleteEntry = async () => {
-    await axios.delete( route( 'stand-up-entries.destroy', editingId.value ) );
+  const onDelete = async () => {
+    await deleteEntry( editingId.value );
     editingId.value = null;
     emits( 'refresh' );
   };
+
 </script>
 
 <template>
@@ -77,9 +79,9 @@
           :priorities="entry.priorities"
           :blockers="entry.blockers"
           :is-editing="true"
-          @save="save"
-          @cancel="cancel"
-          @delete="deleteEntry"
+          @save="onUpdate"
+          @cancel="onCancel"
+          @delete="onDelete"
           >
         </EditStandUpEntry>
       </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\StandUpEntryResource;
 use App\Models\StandUpEntry;
 use App\Models\StandUpGroup;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class StandUpEntryController extends Controller
@@ -22,7 +23,17 @@ class StandUpEntryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'date' => 'required|date',
+            'date' => ['required', 'date', function($attribute, $value, $fail) use ($request) {
+                if (
+                    StandUpGroup::find($request->stand_up_group_id)
+                        ->standUpEntries()
+                    ->where('date', Carbon::parse($value))
+                    ->where('user_id', $request->user()->getKey())
+                    ->exists()) {
+
+                    $fail('Entry for this date already exists');
+                }
+            }],
             'in_progress' => 'nullable|string|max:4000',
             'priorities' => 'nullable|string|max:4000',
             'blockers' => 'nullable|string|max:4000',
