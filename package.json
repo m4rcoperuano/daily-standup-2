@@ -34,5 +34,8 @@
         "@vue/eslint-config-typescript": "^13.0.0",
         "luxon": "^3.4.4",
         "vue-markdown-render": "^2.2.1"
+    },
+    "optionalDependencies": {
+        "@rollup/rollup-linux-x64-musl": "^4.19.0"
     }
 }
