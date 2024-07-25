@@ -146,7 +146,8 @@
 }
 
 .wrapper .content {
-    @apply align-top border px-4 py-2 dark:border-gray-700 dark:prose-invert prose prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg;
+    @apply align-top border px-4 py-2 dark:border-gray-700 dark:prose-invert prose prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg
+        prose-li:break-words;
     @apply prose-ol:m-0;
 }
 
