@@ -8,6 +8,7 @@
   import TextInput from '@/Components/TextInput.vue';
   import InputLabel from '@/Components/InputLabel.vue';
   import { StandUpEntry, useStandUpEntries } from '@/Pages/StandUps/useStandUpEntries.js';
+  import { usePage } from '@inertiajs/vue3';
 
   const props = defineProps( {
     standUpGroup: {
@@ -15,6 +16,8 @@
       required: true,
     },
   } );
+
+  const page = usePage();
 
   const {
     fetchEntries,
@@ -95,6 +98,7 @@
           >
           <StandUpGroupEntrySection
             :title="date"
+            :current-user-id="page.props.auth.user.id"
             :stand-up-entries="standUpEntriesGroupedByDate[date]"
             :stand-up-group-id="standUpEntriesGroupedByDate[date].stand_up_group_id"
             @refresh="fetchEntries(standUpGroup.id)"

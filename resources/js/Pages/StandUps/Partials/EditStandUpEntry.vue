@@ -100,7 +100,7 @@
 </script>
 
 <template>
-  <div class="container">
+  <div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="content">
         <div class="bg-teal-800 text-white px-4 py-2 rounded-tl-lg rounded-tr-lg">
@@ -109,7 +109,7 @@
         <ckeditor
           v-model="form.in_progress"
           :editor="BalloonEditor"
-          :config="ckEditorConfig"
+          :config="{ ...ckEditorConfig, placeholder: 'What are you working on?' }"
           ></ckeditor>
       </div>
       <div class="content">
@@ -119,7 +119,7 @@
         <ckeditor
           v-model="form.priorities"
           :editor="BalloonEditor"
-          :config="ckEditorConfig"
+          :config="{ ...ckEditorConfig, placeholder: 'What are your priorities?'}"
           ></ckeditor>
       </div>
       <div class="content">
@@ -129,7 +129,7 @@
         <ckeditor
           v-model="form.blockers"
           :editor="BalloonEditor"
-          :config="ckEditorConfig"
+          :config="{ ...ckEditorConfig, placeholder: 'What are your blockers?'}"
           ></ckeditor>
       </div>
     </div>
@@ -171,9 +171,10 @@
     border-bottom-right-radius: 12px !important;
 
     height:calc(100% - 40px);
+    max-width: 100%;
 }
 
 .content {
-    @apply rounded-xl border border-gray-200;
+    @apply rounded-xl border border-gray-200 dark:border-gray-900;
 }
 </style>
