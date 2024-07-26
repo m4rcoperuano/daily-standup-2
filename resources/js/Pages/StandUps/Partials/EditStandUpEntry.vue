@@ -1,4 +1,26 @@
 <script setup lang="ts">
+  import 'ckeditor5/ckeditor5.css';
+  import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
+  import {
+    BalloonEditor,
+    Bold,
+    Essentials,
+    Italic,
+    Undo,
+    Paragraph,
+    Autoformat,
+    PasteFromMarkdownExperimental,
+    AutoLink,
+    Heading,
+    Link,
+    Image,
+    Table,
+    List,
+    TodoList,
+    ListProperties,
+    Code,
+    CodeBlock, LinkUI,
+  } from 'ckeditor5';
 
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import { Ref, ref } from 'vue';
@@ -47,43 +69,68 @@
     }
   };
 
+  const ckEditorConfig = {
+    plugins: [
+      Essentials,
+      Bold,
+      Italic,
+      Autoformat,
+      Undo,
+      Paragraph,
+      PasteFromMarkdownExperimental,
+      AutoLink,
+      Heading,
+      Link,
+      LinkUI,
+      Image,
+      Table,
+      List,
+      TodoList,
+      ListProperties,
+      Code,
+      CodeBlock,
+    ],
+    toolbar: [ 'undo', 'redo', '|', 'heading', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'todoList', '|', 'image', 'table' ],
+    link: {
+      addTargetToExternalLinks: true,
+      defaultProtocol: 'https://',
+    },
+  };
+
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div>
+      <div class="content">
         <div class="bg-teal-800 text-white px-4 py-2 rounded-tl-lg rounded-tr-lg">
           In Progress
         </div>
-        <textarea
+        <ckeditor
           v-model="form.in_progress"
-          placeholder="- Completed task A"
-          class="border-0 border-collapse"
-          rows="5"
-          ></textarea>
+          :editor="BalloonEditor"
+          :config="ckEditorConfig"
+          ></ckeditor>
       </div>
-      <div>
+      <div class="content">
         <div class="bg-blue-800 text-white px-4 py-2 rounded-tl-lg rounded-tr-lg">
           Priorities
         </div>
-        <textarea
+        <ckeditor
           v-model="form.priorities"
-          placeholder="- Will complete task B"
-          class="border-0 border-collapse"
-          rows="5"
-          ></textarea>
+          :editor="BalloonEditor"
+          :config="ckEditorConfig"
+          ></ckeditor>
       </div>
-      <div>
+      <div class="content">
         <div class="bg-red-800 text-white px-4 py-2 rounded-tl-lg rounded-tr-lg">
           Blockers
         </div>
-        <textarea
+        <ckeditor
           v-model="form.blockers"
-          placeholder="- Waiting on task C"
-          rows="5"
-          class="border-0 border-collapse"
-          ></textarea>
+          :editor="BalloonEditor"
+          :config="ckEditorConfig"
+          ></ckeditor>
       </div>
     </div>
 
@@ -114,7 +161,19 @@
 </template>
 
 <style scoped>
-textarea {
-    @apply block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-bl rounded-br shadow-sm;
+.content:deep(.ck-content) {
+    @apply prose dark:prose-invert prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0
+    prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg
+    prose-li:break-words prose-ol:m-0 py-2 dark:bg-gray-800 bg-white;
+
+    border-radius:initial !important;
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+
+    height:calc(100% - 40px);
+}
+
+.content {
+    @apply rounded-xl border border-gray-200;
 }
 </style>

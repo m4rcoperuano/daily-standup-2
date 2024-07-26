@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import VueMarkdown from 'vue-markdown-render';
   import { ref } from 'vue';
   import EditStandUpEntry from '@/Pages/StandUps/Partials/EditStandUpEntry.vue';
 
@@ -111,23 +110,25 @@
             Edit
           </button>
         </div>
-        <div class="content">
-          <VueMarkdown
+        <div
+          class="content"
+          >
+          <span
             v-if="entry.in_progress"
-            :source="entry.in_progress"
-            ></VueMarkdown>
+            v-html="entry.in_progress"
+            ></span>
         </div>
         <div class="content">
-          <VueMarkdown
+          <span
             v-if="entry.priorities"
-            :source="entry.priorities"
-            ></VueMarkdown>
+            v-html="entry.priorities"
+            ></span>
         </div>
         <div class="content">
-          <VueMarkdown
+          <span
             v-if="entry.blockers"
-            :source="entry.blockers"
-            ></VueMarkdown>
+            v-html="entry.blockers"
+            ></span>
         </div>
       </div>
     </div>

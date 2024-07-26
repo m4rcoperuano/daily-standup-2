@@ -30,8 +30,11 @@
         "ziggy-js": "^2.2.1"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-vue": "^6.0.0",
         "@rushstack/eslint-patch": "^1.10.3",
         "@vue/eslint-config-typescript": "^13.0.0",
+        "ckeditor5": "^42.0.2",
+        "ckeditor5-premium-features": "^42.0.2",
         "luxon": "^3.4.4",
         "vue-markdown-render": "^2.2.1"
     },
