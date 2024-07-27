@@ -9,6 +9,7 @@
   import InputLabel from '@/Components/InputLabel.vue';
   import { StandUpEntry, useStandUpEntries } from '@/Pages/StandUps/useStandUpEntries.js';
   import { usePage } from '@inertiajs/vue3';
+  import DateAwareDatePicker from '@/Components/DateAwareDatePicker.vue';
 
   const props = defineProps( {
     standUpGroup: {
@@ -79,10 +80,9 @@
               value="Date"
               class="uppercase"
               ></InputLabel>
-            <TextInput
+            <DateAwareDatePicker
               v-model="creatingStandUpEntryDate"
-              type="date"
-              ></TextInput>
+              ></DateAwareDatePicker>
           </div>
           <EditStandUpEntry
             @save="saveNew"

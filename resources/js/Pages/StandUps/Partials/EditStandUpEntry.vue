@@ -2,7 +2,7 @@
   import 'ckeditor5/ckeditor5.css';
   import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
   import {
-    BalloonEditor,
+    InlineEditor,
     Bold,
     Essentials,
     Italic,
@@ -50,9 +50,9 @@
   const emits = defineEmits( [ 'save', 'cancel', 'delete' ] );
 
   const form : Ref<StandUpEntry> = ref( {
-    in_progress: props.inProgress,
-    priorities: props.priorities,
-    blockers: props.blockers,
+    in_progress: props.inProgress ?? '',
+    priorities: props.priorities ?? '',
+    blockers: props.blockers ?? '',
   } );
 
   const save = async () => {
@@ -96,6 +96,8 @@
     },
   };
 
+  const editor = InlineEditor;
+
 </script>
 
 <template>
@@ -107,7 +109,7 @@
         </div>
         <ckeditor
           v-model="form.in_progress"
-          :editor="BalloonEditor"
+          :editor="editor"
           :config="{ ...ckEditorConfig, placeholder: 'What are you working on?' }"
           ></ckeditor>
       </div>
@@ -117,7 +119,7 @@
         </div>
         <ckeditor
           v-model="form.priorities"
-          :editor="BalloonEditor"
+          :editor="editor"
           :config="{ ...ckEditorConfig, placeholder: 'What are your priorities?'}"
           ></ckeditor>
       </div>
@@ -127,7 +129,7 @@
         </div>
         <ckeditor
           v-model="form.blockers"
-          :editor="BalloonEditor"
+          :editor="editor"
           :config="{ ...ckEditorConfig, placeholder: 'What are your blockers?'}"
           ></ckeditor>
       </div>

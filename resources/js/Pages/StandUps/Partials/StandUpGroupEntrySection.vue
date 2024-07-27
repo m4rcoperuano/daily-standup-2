@@ -62,7 +62,7 @@
   <div class="w-full md:border dark:border-gray-950">
     <div class="hidden md:grid grid-cols-7">
       <div class="header">
-        Team Member
+        Name
       </div>
       <div class="header col-span-2">
         In Progress
