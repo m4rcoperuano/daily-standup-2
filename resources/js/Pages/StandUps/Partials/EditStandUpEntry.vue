@@ -2,7 +2,7 @@
   import 'ckeditor5/ckeditor5.css';
   import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
   import {
-    InlineEditor,
+    BalloonEditor,
     Bold,
     Essentials,
     Italic,
@@ -96,7 +96,7 @@
     },
   };
 
-  const editor = InlineEditor;
+  const editor = BalloonEditor;
 
 </script>
 
