@@ -11,10 +11,6 @@
       type: Array,
       required: true,
     },
-    standUpGroupId: {
-      type: Number,
-      required: true,
-    },
     currentUserId: {
       type: Number,
       required: true,
@@ -103,7 +99,7 @@
           v-else
           class="md:grid md:grid-cols-7"
           >
-          <div class="align-top border px-4 py-2 dark:border-gray-700 flex md:block dark:bg-gray-700 bg-gray-100 md:bg-inherit dark:md:bg-inherit">
+          <div class=" align-top border px-4 py-2 dark:border-gray-700 flex md:block dark:bg-gray-700 bg-gray-100 md:bg-inherit dark:md:bg-inherit">
             <div class="inline-block md:block mr-2 md:mr-0 flex-grow font-bold md:font-normal">
               {{ entry.user.name }}
             </div>
@@ -117,13 +113,14 @@
             </button>
           </div>
           <div
-            class="align-top border px-4 py-2 dark:border-gray-700 prose-styles col-span-2"
+            class="align-top border px-4 py-2 dark:border-gray-700 col-span-2"
             >
             <div class="md:hidden uppercase font-bold text-xs text-gray-500">
               In Progress
             </div>
             <span
               v-if="entry.in_progress"
+              class=" prose-styles"
               v-html="entry.in_progress"
               ></span>
             <span
@@ -133,12 +130,13 @@
               (N/A)
             </span>
           </div>
-          <div class="align-top border px-4 py-2 dark:border-gray-700 prose-styles col-span-2">
+          <div class="align-top border px-4 py-2 dark:border-gray-700 col-span-2">
             <div class="md:hidden uppercase font-bold text-xs text-gray-500">
               Priorities
             </div>
             <span
               v-if="entry.priorities"
+              class=" prose-styles"
               v-html="entry.priorities"
               ></span>
             <span
@@ -148,12 +146,13 @@
               (N/A)
             </span>
           </div>
-          <div class="align-top border px-4 py-2 dark:border-gray-700 prose-styles col-span-2">
+          <div class="align-top border px-4 py-2 dark:border-gray-700 col-span-2">
             <div class="md:hidden uppercase font-bold text-xs text-gray-500">
               Blockers
             </div>
             <span
               v-if="entry.blockers"
+              class=" prose-styles"
               v-html="entry.blockers"
               ></span>
             <span
@@ -178,6 +177,22 @@
     @apply dark:prose-invert prose prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg
         prose-li:break-words;
     @apply prose-ol:m-0 prose-p:break-words;
+}
+
+.prose-styles:deep( input[type="checkbox"] ) {
+    @apply mr-2 bg-gray-200 border-gray-200;
+}
+
+.prose-styles:deep( input[type="checkbox"]:checked ) {
+    @apply bg-teal-500 border-teal-500;
+}
+
+.prose-styles:deep( ul.todo-list ) {
+    @apply list-none;
+}
+
+.prose-styles:deep( ul.todo-list:first-child ) {
+    @apply pl-0;
 }
 
 .row {

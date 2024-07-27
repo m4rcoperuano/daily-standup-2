@@ -100,7 +100,6 @@
             :title="date"
             :current-user-id="page.props.auth.user.id"
             :stand-up-entries="standUpEntriesGroupedByDate[date]"
-            :stand-up-group-id="standUpEntriesGroupedByDate[date].stand_up_group_id"
             @refresh="fetchEntries(standUpGroup.id)"
             >
           </StandUpGroupEntrySection>
