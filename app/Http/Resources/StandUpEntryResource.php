@@ -25,6 +25,7 @@ class StandUpEntryResource extends JsonResource
             'user' => $this->whenLoaded('user', fn() => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
+                'profile_photo_url' => $this->user->profile_photo_url,
             ]),
             'updated_at' => $this->updated_at,
         ];

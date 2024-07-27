@@ -100,12 +100,19 @@
           class="md:grid md:grid-cols-7"
           >
           <div class=" align-top border px-4 py-2 dark:border-gray-700 flex md:block dark:bg-gray-700 bg-gray-100 md:bg-inherit dark:md:bg-inherit">
-            <div class="inline-block md:block mr-2 md:mr-0 flex-grow font-bold md:font-normal">
-              {{ entry.user.name }}
+            <div class="inline-block md:flex items-center gap-1 md:mr-0 flex-grow font-bold md:font-normal">
+              <img
+                class="h-8 w-8 rounded-full object-cover"
+                :src="entry.user.profile_photo_url"
+                :alt="entry.user.name"
+                />
+              <span>
+                {{ entry.user.name }}
+              </span>
             </div>
             <button
               v-if="entry.user.id === currentUserId"
-              class="dark:text-teal-500 dark:border-teal-500 text-teal-600 border-teal-600 border px-2 rounded hover:opacity-50"
+              class="hidden edit dark:text-teal-500 md:mt-2 dark:border-teal-500 text-teal-600 border-teal-600 border px-2 rounded hover:opacity-50"
               type="button"
               @click="editRow(entry.id)"
               >
@@ -201,5 +208,9 @@
 
 .row:nth-child(odd) {
     @apply md:bg-gray-100 md:dark:bg-gray-900;
+}
+
+.row:hover .edit {
+    @apply block;
 }
 </style>
