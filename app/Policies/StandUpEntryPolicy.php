@@ -12,8 +12,12 @@ class StandUpEntryPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user, StandUpGroup $standUpGroup): bool
+    public function viewAny(User $user, ?StandUpGroup $standUpGroup = null): bool
     {
+        if ($standUpGroup === null) {
+            return false;
+        }
+
         return $user->can('view', $standUpGroup);
     }
 
@@ -28,8 +32,12 @@ class StandUpEntryPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user, StandUpGroup $standUpGroup): bool
+    public function create(User $user, ?StandUpGroup $standUpGroup = null): bool
     {
+        if ($standUpGroup === null) {
+            return false;
+        }
+
         return $user->can('view', $standUpGroup);
     }
 

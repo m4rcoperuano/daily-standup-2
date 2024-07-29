@@ -35,5 +35,7 @@ First and foremost, this is a Full Stack Laravel application. You can run it loc
    1. `./vendor/bin/sail artisan migrate`
    2. `./vendor/bin/sail artisan db:seed`
 9. Create a key for your application by running `./vendor/bin/sail artisan key:generate`
+10. You will need Laravel Nova for administrative functions. You can purchase a license from [here](https://nova.laravel.com/). This will eventually be sunset though in favor of FilamentPhp, since its free.
+    1. If you encounter issues with the installation because you don't have Nova, you can remove it from the composer file and run `composer update` to remove it.
 
 The seeder should take care of creating a sample user: test@example.com, password is `password`.
