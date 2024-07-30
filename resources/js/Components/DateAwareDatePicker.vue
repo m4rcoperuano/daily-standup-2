@@ -1,14 +1,17 @@
 <script setup lang="ts">
   import TextInput from '@/Components/TextInput.vue';
   import { computed, defineModel, ref } from 'vue';
-
+  import { DateTime } from 'luxon';
   const model = defineModel( { required: false } );
   const selectedButton = ref( 'today' );
 
   const changeSelectedButton = ( value ) => {
     selectedButton.value = value;
+
     const option = dayOptions.value.find( ( option ) => option.value === value );
-    model.value = option.date.toISOString().split( 'T' )[0];
+
+    //get only date in yyyy-mm-dd format taking into account timezone, which would not be using toISOString()
+    model.value = DateTime.fromJSDate( option.date ).toISODate();
   };
 
   const dayOptions = computed( () => {
@@ -34,7 +37,7 @@
     model.value = date;
 
     const matchingDayOption = dayOptions.value
-      .find( ( option ) => option.date.toISOString().split( 'T' )[0] === date );
+      .find( ( option ) => DateTime.fromJSDate( option.date ).toISODate() === date );
 
     if ( !matchingDayOption ) {
       selectedButton.value = '';
