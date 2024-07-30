@@ -3,16 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\App;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens;
     use HasFactory;
@@ -69,5 +72,13 @@ class User extends Authenticatable
     public function standUpEntries(): HasMany
     {
         return $this->hasMany(StandUpEntry::class);
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if (!App::isProduction()) return true;
+
+        $adminEmails = explode(',', config('standup-app.admin_emails'));
+        return in_array($this->email, $adminEmails) && $this->hasVerifiedEmail();
     }
 }
