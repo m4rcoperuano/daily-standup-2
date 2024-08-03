@@ -36,6 +36,7 @@
         "ckeditor5": "^42.0.2",
         "ckeditor5-premium-features": "^42.0.2",
         "luxon": "^3.4.4",
+        "pinia": "^2.2.0",
         "vue-markdown-render": "^2.2.1"
     },
     "optionalDependencies": {

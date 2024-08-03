@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FetchLinkPreviewController;
 use App\Http\Controllers\StandUpEntryController;
 use App\Http\Controllers\StandUpGroupController;
 use Illuminate\Foundation\Application;
@@ -32,4 +33,7 @@ Route::middleware([
 
     Route::resource('/stand-up-entries', StandUpEntryController::class)
         ->only(['store', 'update', 'destroy']);
+
+    Route::post('/link-preview', FetchLinkPreviewController::class)
+        ->name('link-preview.show');
 });

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import TextInput from '@/Components/TextInput.vue';
-  import { computed, defineModel, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { DateTime } from 'luxon';
   const model = defineModel( { required: false } );
   const selectedButton = ref( 'today' );

@@ -44,7 +44,14 @@ export function useApi( ) {
         },
     };
 
+    const linkPreviews = {
+        fetch: async ( url: string ): Promise<CustomResponse> => {
+            return await callApi( 'post', route( 'link-preview.show' ), { url } );
+        },
+    };
+
     return {
         standUpEntries,
+        linkPreviews,
     };
 }

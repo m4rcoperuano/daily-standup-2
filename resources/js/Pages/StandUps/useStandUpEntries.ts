@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import { CustomResponse, useApi } from '@/useApi';
 
 type StandUpEntryComposable = {
+    links: Ref<any[]>,
     standUpEntries: Ref<any[]>,
     standUpEntriesGroupedByDate: Ref<any>,
     fetchEntries: ( standUpGroupId: StringOrNumber ) => Promise<void>,
@@ -19,6 +20,7 @@ export type StandUpEntry = {
 
 export function useStandUpEntries(): StandUpEntryComposable {
     const standUpEntries = ref( [] );
+    const links = ref( [] );
     const api = useApi();
 
     const standUpEntriesGroupedByDate = computed( () => {
@@ -38,6 +40,7 @@ export function useStandUpEntries(): StandUpEntryComposable {
     const fetchEntries = async ( standUpGroupId: StringOrNumber ) : Promise<void> => {
         const { result } = await api.standUpEntries.fetchAll( standUpGroupId );
         standUpEntries.value = result.data.data;
+        links.value = standUpEntries.value.flatMap( entry => entry.links ).filter( link => link !== null );
     };
 
     const createEntry = async (
@@ -76,6 +79,7 @@ export function useStandUpEntries(): StandUpEntryComposable {
     };
 
     return {
+        links,
         standUpEntries,
         standUpEntriesGroupedByDate,
         fetchEntries,
