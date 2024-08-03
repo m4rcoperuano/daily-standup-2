@@ -40,7 +40,7 @@ export function useStandUpEntries(): StandUpEntryComposable {
     const fetchEntries = async ( standUpGroupId: StringOrNumber ) : Promise<void> => {
         const { result } = await api.standUpEntries.fetchAll( standUpGroupId );
         standUpEntries.value = result.data.data;
-        links.value = standUpEntries.value.flatMap( entry => entry.links ).filter( link => link !== null );
+        links.value = standUpEntries.value.flatMap( entry => entry.preview_links ).filter( link => link !== null );
     };
 
     const createEntry = async (

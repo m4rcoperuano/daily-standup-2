@@ -1,32 +1,10 @@
 <script setup lang="ts">
-  import 'ckeditor5/ckeditor5.css';
-  import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
-  import {
-    BalloonEditor,
-    Bold,
-    Essentials,
-    Italic,
-    Undo,
-    Paragraph,
-    Autoformat,
-    PasteFromMarkdownExperimental,
-    AutoLink,
-    Heading,
-    Link,
-    List,
-    TodoList,
-    ListProperties,
-    Code,
-    CodeBlock,
-    LinkUI,
-    PasteFromOffice,
-  } from 'ckeditor5';
-
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import { Ref, ref } from 'vue';
   import SecondaryButton from '@/Components/SecondaryButton.vue';
   import DangerButton from '@/Components/DangerButton.vue';
   import { StandUpEntry } from '@/Pages/StandUps/useStandUpEntries';
+  import RichTextEditor from '@/Components/RichTextEditor.vue';
 
   const props = defineProps( {
     isEditing: {
@@ -68,36 +46,6 @@
       emits( 'delete' );
     }
   };
-
-  const ckEditorConfig = {
-    plugins: [
-      Essentials,
-      Bold,
-      Italic,
-      Autoformat,
-      Undo,
-      Paragraph,
-      PasteFromMarkdownExperimental,
-      AutoLink,
-      Heading,
-      Link,
-      LinkUI,
-      List,
-      TodoList,
-      ListProperties,
-      Code,
-      CodeBlock,
-      PasteFromOffice,
-    ],
-    toolbar: [ 'undo', 'redo', '|', 'heading', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'todoList' ],
-    link: {
-      addTargetToExternalLinks: true,
-      defaultProtocol: 'https://',
-    },
-  };
-
-  const editor = BalloonEditor;
-
 </script>
 
 <template>
@@ -107,31 +55,28 @@
         <div class="bg-teal-800 text-white px-4 py-2 rounded-tl-lg rounded-tr-lg">
           In Progress
         </div>
-        <ckeditor
+        <RichTextEditor
           v-model="form.in_progress"
-          :editor="editor"
-          :config="{ ...ckEditorConfig, placeholder: 'What are you working on?' }"
-          ></ckeditor>
+          placeholder="What are you working on?"
+          ></RichTextEditor>
       </div>
       <div class="content">
         <div class="bg-blue-800 text-white px-4 py-2 rounded-tl-lg rounded-tr-lg">
           Priorities
         </div>
-        <ckeditor
+        <RichTextEditor
           v-model="form.priorities"
-          :editor="editor"
-          :config="{ ...ckEditorConfig, placeholder: 'What are your priorities?'}"
-          ></ckeditor>
+          placeholder="What are your priorities?"
+          ></RichTextEditor>
       </div>
       <div class="content">
         <div class="bg-red-800 text-white px-4 py-2 rounded-tl-lg rounded-tr-lg">
           Blockers
         </div>
-        <ckeditor
+        <RichTextEditor
           v-model="form.blockers"
-          :editor="editor"
-          :config="{ ...ckEditorConfig, placeholder: 'What are your blockers?'}"
-          ></ckeditor>
+          placeholder="What are your blockers?"
+          ></RichTextEditor>
       </div>
     </div>
 
