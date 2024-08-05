@@ -17,9 +17,10 @@
     },
   } );
 
-  import { useStandUpEntries } from '@/Pages/StandUps/useStandUpEntries';
+  import { useStandUpEntriesStore } from '@/Pages/StandUps/useStandUpEntriesStore';
 
-  const { deleteEntry, updateEntry } = useStandUpEntries();
+  const standUpEntriesStore = useStandUpEntriesStore();
+
   const emits = defineEmits( [ 'refresh' ] );
   const editingId = ref( null );
 
@@ -28,7 +29,7 @@
   };
 
   const onUpdate = async ( payload ) => {
-    const response = await updateEntry( editingId.value, payload );
+    const response = await standUpEntriesStore.update( editingId.value, payload );
     if ( response.success ) {
       editingId.value = null;
       emits( 'refresh' );
@@ -43,7 +44,7 @@
   };
 
   const onDelete = async () => {
-    const response = await deleteEntry( editingId.value );
+    const response = await standUpEntriesStore.delete( editingId.value );
     if ( response.success ) {
       editingId.value = null;
       emits( 'refresh' );

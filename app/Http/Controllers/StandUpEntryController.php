@@ -49,8 +49,9 @@ class StandUpEntryController extends Controller
         $entry->user()->associate($request->user());
         $entry->save();
 
-        //201 created
-        return response()->json($entry, 201);
+        $entry->load('user');
+
+        return (new StandUpEntryResource($entry))->response()->setStatusCode(201);
     }
 
     public function update(Request $request, StandUpEntry $standUpEntry)
@@ -65,6 +66,8 @@ class StandUpEntryController extends Controller
 
         $standUpEntry->fill($validated);
         $standUpEntry->save();
+
+        $standUpEntry->load('user');
 
         return new StandUpEntryResource($standUpEntry);
     }

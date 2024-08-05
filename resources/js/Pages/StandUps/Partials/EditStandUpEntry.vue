@@ -3,7 +3,7 @@
   import { Ref, ref } from 'vue';
   import SecondaryButton from '@/Components/SecondaryButton.vue';
   import DangerButton from '@/Components/DangerButton.vue';
-  import { StandUpEntry } from '@/Pages/StandUps/useStandUpEntries';
+  import { StandUpEntry } from '@/Pages/StandUps/useStandUpEntriesStore';
   import RichTextEditor from '@/Components/RichTextEditor.vue';
 
   const props = defineProps( {
