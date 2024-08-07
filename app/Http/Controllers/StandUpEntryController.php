@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreStandUpEntryRequest;
+use App\Http\Requests\UpdateStandUpEntryRequest;
 use App\Http\Resources\StandUpEntryResource;
 use App\Models\StandUpEntry;
 use App\Models\StandUpGroup;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class StandUpEntryController extends Controller
@@ -22,30 +23,12 @@ class StandUpEntryController extends Controller
         return StandUpEntryResource::collection($entries);
     }
 
-    public function store(Request $request)
+    public function store(StoreStandUpEntryRequest $request)
     {
-        $this->authorize('create', [StandUpEntry::class, StandUpGroup::find($request->stand_up_group_id)]);
+        $attributes = $request->validated();
 
-        $validated = $request->validate([
-            'date' => ['required', 'date', function($attribute, $value, $fail) use ($request) {
-                if (
-                    StandUpGroup::find($request->stand_up_group_id)
-                    ->standUpEntries()
-                    ->where('date', Carbon::parse($value))
-                    ->where('user_id', $request->user()->getKey())
-                    ->exists()) {
-
-                    $fail('Entry for this date already exists');
-                }
-            }],
-            'in_progress' => 'nullable|string|max:4000',
-            'priorities' => 'nullable|string|max:4000',
-            'blockers' => 'nullable|string|max:4000',
-            'stand_up_group_id' => 'required|exists:stand_up_groups,id',
-        ]);
-
-        $entry = StandUpEntry::make($validated);
-        $entry->standUpGroup()->associate($validated['stand_up_group_id']);
+        $entry = StandUpEntry::make($attributes);
+        $entry->standUpGroup()->associate($attributes['stand_up_group_id']);
         $entry->user()->associate($request->user());
         $entry->save();
 
@@ -54,17 +37,10 @@ class StandUpEntryController extends Controller
         return (new StandUpEntryResource($entry))->response()->setStatusCode(201);
     }
 
-    public function update(Request $request, StandUpEntry $standUpEntry)
+    public function update(UpdateStandUpEntryRequest $request, StandUpEntry $standUpEntry)
     {
-        $this->authorize('update', $standUpEntry);
-
-        $validated = $request->validate([
-            'in_progress' => 'nullable|string|max:4000',
-            'priorities' => 'nullable|string|max:4000',
-            'blockers' => 'nullable|string|max:4000',
-        ]);
-
-        $standUpEntry->fill($validated);
+        $attributes = $request->validated();
+        $standUpEntry->fill($attributes);
         $standUpEntry->save();
 
         $standUpEntry->load('user');

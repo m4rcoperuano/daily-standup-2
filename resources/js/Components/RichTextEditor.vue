@@ -22,8 +22,6 @@
     PasteFromOffice,
   } from 'ckeditor5';
 
-  import { Timestamp } from '@/Plugins/CustomAutoLink.js';
-
   const props = defineProps( {
     placeholder: {
       type: String,
@@ -52,7 +50,6 @@
       Code,
       CodeBlock,
       PasteFromOffice,
-      Timestamp,
     ],
     toolbar: [ 'undo', 'redo', '|', 'heading', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'todoList', 'timestamp' ],
     link: {
