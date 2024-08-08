@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import { CustomResponse, useApi } from '@/useApi';
 import { defineStore } from 'pinia';
+import { useLinkPreviewsStore } from '@/Stores/linkPreviewStore.js';
 
 export type StandUpEntry = {
     in_progress: string,
@@ -30,8 +31,10 @@ export const useStandUpEntriesStore = defineStore( 'standUpEntries', {
     actions: {
         async fetch( standUpGroupId: StringOrNumber ) {
             const api = useApi();
+            const linkPreviewsStore = useLinkPreviewsStore();
             const { result } = await api.standUpEntries.fetchAll( standUpGroupId );
             this.standUpEntries = result.data.data;
+            linkPreviewsStore.addLinks( this.standUpEntries.flatMap( entry => entry.stand_up_entry_links ) );
         },
         async create( payload: StandUpEntry, dateSelected: string, standUpGroupId: StringOrNumber ) {
             const api = useApi();
@@ -51,6 +54,8 @@ export const useStandUpEntriesStore = defineStore( 'standUpEntries', {
 
             if ( response.success ) {
                 this.standUpEntries = [ response.result.data.data, ...this.standUpEntries ];
+                const linkPreviewsStore = useLinkPreviewsStore();
+                linkPreviewsStore.addLinks( response.result.data.data.stand_up_entry_links );
 
                 //sort
                 this.standUpEntries.sort( ( a, b ) => {
@@ -66,8 +71,10 @@ export const useStandUpEntriesStore = defineStore( 'standUpEntries', {
 
             if ( response.success ) {
                 const index = this.standUpEntries.findIndex( entry => entry.id === id );
-                console.log( response.result.data );
                 this.standUpEntries[index] = response.result.data.data;
+
+                const linkPreviewsStore = useLinkPreviewsStore();
+                linkPreviewsStore.addLinks( response.result.data.data.stand_up_entry_links );
             }
 
             return response;

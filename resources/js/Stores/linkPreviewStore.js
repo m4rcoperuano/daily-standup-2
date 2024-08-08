@@ -4,21 +4,31 @@ import { useApi } from '@/useApi.ts';
 export const useLinkPreviewsStore = defineStore( 'linkPreviews', {
     state: () => ( {
         links: [],
-        previews: [],
-        previewMap: {},
+        onEachPreviewFn: null,
     } ),
     actions: {
+        setCallBack( callback ) {
+            this.onEachPreviewFn = callback;
+        },
         addLinks( links ) {
-            this.links = [ ...links ];
+            this.links = links
+                .filter( link => !link.attributes.disable_rich_link )
+                .filter( link => link.text === link.url )
+                .map( link => link.url );
+
+            this.startQueue();
         },
         async fetchLink( link ) {
             const api = useApi();
             const response = await api.linkPreviews.fetch( link );
-            this.previews.push( { link, result: response.result.data } );
-            this.previewMap[ link ] = response.result.data;
+            return response.result.data;
         },
-        fetchAllLinks() {
-            this.links.forEach( link => this.fetchLink( link ) );
+        async startQueue() {
+            while ( this.links.length > 0 ) {
+                const link = this.links.shift();
+                const preview = await this.fetchLink( link );
+                this.onEachPreviewFn( link, preview );
+            }
         },
     },
 } );
