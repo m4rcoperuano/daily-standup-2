@@ -41,20 +41,13 @@
             <div class="flex">
               <!-- Logo -->
               <div class="shrink-0 flex items-center">
-                <Link :href="route('dashboard')">
+                <Link :href="route('stand-up-groups.index')">
                   <ApplicationMark class="block h-9 w-auto"></ApplicationMark>
                 </Link>
               </div>
 
               <!-- Navigation Links -->
               <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                <NavLink
-                  :href="route('dashboard')"
-                  :active="route().current('dashboard')"
-                  >
-                  Dashboard
-                </NavLink>
-
                 <NavLink
                   :href="route('stand-up-groups.index')"
                   :active="route().current('stand-up-groups.index')"
@@ -273,12 +266,6 @@
           class="sm:hidden"
           >
           <div class="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink
-              :href="route('dashboard')"
-              :active="route().current('dashboard')"
-              >
-              Dashboard
-            </ResponsiveNavLink>
             <ResponsiveNavLink
               :href="route('stand-up-groups.index')"
               :active="route().current('stand-up-groups.index')"
