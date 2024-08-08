@@ -17,7 +17,7 @@ class StandUpEntryController extends Controller
 
         $entries = $standUpGroup->standUpEntries()
             ->orderBy('date', 'desc')
-            ->with('user')
+            ->with('user', 'standUpEntryLinks')
             ->get();
 
         return StandUpEntryResource::collection($entries);
@@ -32,7 +32,7 @@ class StandUpEntryController extends Controller
         $entry->user()->associate($request->user());
         $entry->save();
 
-        $entry->load('user');
+        $entry->load('user')->load('standUpEntryLinks');
 
         return (new StandUpEntryResource($entry))->response()->setStatusCode(201);
     }
@@ -43,7 +43,7 @@ class StandUpEntryController extends Controller
         $standUpEntry->fill($attributes);
         $standUpEntry->save();
 
-        $standUpEntry->load('user');
+        $standUpEntry->load('user')->load('standUpEntryLinks');
 
         return new StandUpEntryResource($standUpEntry);
     }

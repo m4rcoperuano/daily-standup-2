@@ -27,29 +27,11 @@ class StandUpEntryResource extends JsonResource
                 'name' => $this->user->name,
                 'profile_photo_url' => $this->user->profile_photo_url,
             ]),
-            'preview_links' => $this->getLinksFromText($this->in_progress.' '.$this->priorities.' '.$this->blockers),
+            'stand_up_entry_links' => $this->whenLoaded(
+                'standUpEntryLinks',
+                fn() => StandUpEntryLinkResource::collection($this->standUpEntryLinks)
+            ),
             'updated_at' => $this->updated_at,
         ];
-    }
-
-    protected function getLinksFromText(string $htmlText): array {
-        //regex for anchor tags with hrefs
-        preg_match_all('/<a[^>]+href=([\'"])(?<href>.+?)\1[^>]*>/i', $htmlText, $matches);
-
-        $disabledRichLinkIndexes = array_keys(
-            array_filter(
-                $matches[0],
-                fn($anchorTag) => str_contains($anchorTag, 'disable-rich-link="true"')
-            )
-        );
-
-        //now filter out those keys from $matches
-        foreach ($disabledRichLinkIndexes as $index) {
-            unset($matches['href'][$index]);
-            unset($matches[0][$index]);
-        }
-
-        //only pluck the hrefs
-        return collect(array_values($matches['href']))->map(fn($href) => $href)->toArray();
     }
 }

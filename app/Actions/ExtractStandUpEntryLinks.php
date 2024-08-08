@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Models\StandUpEntry;
 use DOMDocument;
 use DOMElement;
+use Illuminate\Support\Str;
 
 class ExtractStandUpEntryLinks
 {
@@ -39,7 +40,7 @@ class ExtractStandUpEntryLinks
         $attributes = [];
 
         foreach ($anchor->attributes as $attribute) {
-            $attributes[$attribute->name] = $attribute->value;
+            $attributes[Str::replace('-', '_', $attribute->name)] = $attribute->value;
         }
 
         return $attributes;
