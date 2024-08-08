@@ -10,7 +10,16 @@ class StandUpEntryLink extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['url', 'host'];
+    protected $fillable = [
+        'url',
+        'host',
+        'text',
+        'attributes',
+    ];
+
+    protected $casts = [
+        'attributes' => 'array',
+    ];
 
     public function standUpEntry(): BelongsTo
     {

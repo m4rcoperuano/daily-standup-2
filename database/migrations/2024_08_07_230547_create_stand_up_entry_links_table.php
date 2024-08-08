@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('stand_up_entry_id')->constrained()->cascadeOnDelete();
             $table->text('url');
             $table->text('host');
+            $table->text('text');
+            $table->json('attributes');
             $table->timestamps();
         });
     }
