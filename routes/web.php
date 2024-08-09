@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\FetchLinkPreviewController;
+use App\Http\Controllers\SocialiteIntegrationController;
 use App\Http\Controllers\StandUpEntryController;
 use App\Http\Controllers\StandUpGroupController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -36,4 +38,12 @@ Route::middleware([
 
     Route::get('/link-preview/{link}', FetchLinkPreviewController::class)
         ->name('link-preview.show');
+});
+
+
+Route::prefix('auth')->group(function() {
+    Route::get('{provider}/redirect', [SocialiteIntegrationController::class, 'redirect'])
+        ->name('socialite.redirect');
+    Route::get('{provider}/callback', [SocialiteIntegrationController::class, 'callback'])
+        ->name('socialite.callback');
 });

@@ -1,6 +1,6 @@
 <script setup>
   import { Link } from '@inertiajs/vue3';
-  defineProps( {
+  const props = defineProps( {
     type: {
       type: String,
       default: 'submit',
@@ -9,17 +9,28 @@
       type: Boolean,
       default: false,
     },
-    routeName: {
+    route: {
       type: String,
       default: '',
+    },
+    external: {
+      type: Boolean,
+      default: false,
     },
   } );
 </script>
 
 <template>
+  <a
+    v-if="external"
+    :href="route"
+    class="button"
+    >
+    <slot></slot>
+  </a>
   <Link
-    v-if="link"
-    :href="routeName"
+    v-else-if="link"
+    :href="route"
     class="button"
     >
     <slot></slot>

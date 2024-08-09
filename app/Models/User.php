@@ -81,4 +81,9 @@ class User extends Authenticatable implements FilamentUser
         $adminEmails = explode(',', config('standup-app.admin_emails'));
         return in_array($this->email, $adminEmails) && $this->hasVerifiedEmail();
     }
+
+    public function socialiteIntegrations(): HasMany
+    {
+        return $this->hasMany(SocialiteIntegration::class);
+    }
 }

@@ -6,6 +6,7 @@
   import TwoFactorAuthenticationForm from '@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue';
   import UpdatePasswordForm from '@/Pages/Profile/Partials/UpdatePasswordForm.vue';
   import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfileInformationForm.vue';
+  import SocialiteIntegrations from '@/Pages/Profile/Partials/SocialiteIntegrations.vue';
 
   defineProps( {
     confirmsTwoFactorAuthentication: Boolean,
@@ -26,6 +27,11 @@
         <div v-if="$page.props.jetstream.canUpdateProfileInformation">
           <UpdateProfileInformationForm :user="$page.props.auth.user"></UpdateProfileInformationForm>
 
+          <SectionBorder></SectionBorder>
+        </div>
+
+        <div>
+          <SocialiteIntegrations :user="$page.props.auth.user"></SocialiteIntegrations>
           <SectionBorder></SectionBorder>
         </div>
 

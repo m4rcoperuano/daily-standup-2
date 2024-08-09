@@ -10,7 +10,7 @@
       type: Boolean,
       default: false,
     },
-    routeName: {
+    route: {
       type: String,
       default: '',
     },
@@ -20,7 +20,7 @@
 <template>
   <Link
     v-if="link"
-    :href="routeName"
+    :href="route"
     class="button"
     >
     <slot></slot>

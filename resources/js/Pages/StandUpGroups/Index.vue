@@ -33,7 +33,7 @@
               </p>
               <PrimaryButton
                 link
-                :route-name="route('stand-up-groups.create')"
+                :route="route('stand-up-groups.create')"
                 >
                 Create Stand Up Group
               </PrimaryButton>
@@ -46,7 +46,7 @@
 
                 <PrimaryButton
                   link
-                  :route-name="route('stand-up-groups.create')"
+                  :route="route('stand-up-groups.create')"
                   >
                   Create Stand Up Group
                 </PrimaryButton>
@@ -63,7 +63,7 @@
                   </div>
                   <SecondaryButton
                     link
-                    :route-name="route('stand-up-groups.show', group.id)"
+                    :route="route('stand-up-groups.show', group.id)"
                     >
                     View
                   </SecondaryButton>

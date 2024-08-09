@@ -11,8 +11,10 @@
         "laravel/framework": "^11.9",
         "laravel/jetstream": "^5.1",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.15",
         "laravel/tinker": "^2.9",
         "resend/resend-laravel": "^0.14.0",
+        "socialiteproviders/atlassian": "dev-master",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
@@ -67,6 +69,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
