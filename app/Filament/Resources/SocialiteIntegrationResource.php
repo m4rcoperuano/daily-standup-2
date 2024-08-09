@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SocialiteIntegrationResource extends Resource
 {
+    protected static bool $shouldSkipAuthorization = true;
     protected static ?string $model = SocialiteIntegration::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';

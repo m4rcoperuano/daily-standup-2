@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class StandUpEntryLinkResource extends Resource
 {
+    protected static bool $shouldSkipAuthorization = true;
     protected static ?string $model = StandUpEntryLink::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
