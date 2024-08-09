@@ -21,6 +21,7 @@ class FetchLinkPreviewController extends Controller
 
     public function __invoke(Request $request, StandUpEntryLink $link)
     {
+        $this->authorize('view', $link);
         $url = $link->url;
         //the url may sometimes be too big to store as a key in the hash table
         $cacheKey = md5($url).$request->user()->getKey();
