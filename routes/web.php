@@ -34,6 +34,6 @@ Route::middleware([
     Route::resource('/stand-up-entries', StandUpEntryController::class)
         ->only(['store', 'update', 'destroy']);
 
-    Route::post('/link-preview', FetchLinkPreviewController::class)
+    Route::get('/link-preview/{link}', FetchLinkPreviewController::class)
         ->name('link-preview.show');
 });

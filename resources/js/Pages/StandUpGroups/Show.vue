@@ -22,17 +22,16 @@
   const standUpEntriesStore = useStandUpEntriesStore();
   const linkPreviewsStore = useLinkPreviewsStore();
 
-  linkPreviewsStore.setCallBack( ( link, preview ) => {
-    //find element where the <a href="..."> is equal to lastValue.url
-    const element = document.querySelector( `a[href="${link}"]` );
-    if ( element ) {
+  linkPreviewsStore.setCallBack( ( preview ) => {
+    const elements = document.querySelectorAll( `a[href="${preview.url}"]` );
+    elements.forEach( function( element ) {
       const title = preview.title;
       const image = preview.image;
 
       if ( image ) {
         element.innerHTML = `
               <div class="inline-block">
-                <div class="bg-gray-100 text-blue-800 rounded px-2 inline-block">
+                <div class="bg-gray-100 mb-2 border hover:bg-gray-200 text-blue-800 rounded px-2 inline-block">
                   <img src="${image}" alt="${title}" class="inline-block mr-2" style="margin-top:0;margin-bottom:0;height:20px;" />
                   ${title}
                 </div>
@@ -41,8 +40,7 @@
       else {
         element.innerHTML = title;
       }
-
-    }
+    } );
   } );
 
   onMounted(  () => standUpEntriesStore.fetch( props.standUpGroup.id ) );

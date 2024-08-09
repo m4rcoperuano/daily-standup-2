@@ -97,7 +97,7 @@
           </EditStandUpEntry>
         </div>
         <div
-          v-else
+          v-show="editingId !== entry.id"
           class="md:grid md:grid-cols-7"
           >
           <div class=" align-top border px-4 py-2 dark:border-gray-700 flex md:block dark:bg-gray-700 bg-gray-100 md:bg-inherit dark:md:bg-inherit">

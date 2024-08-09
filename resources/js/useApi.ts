@@ -45,8 +45,8 @@ export function useApi( ) {
     };
 
     const linkPreviews = {
-        fetch: async ( url: string ): Promise<CustomResponse> => {
-            return await callApi( 'post', route( 'link-preview.show' ), { url } );
+        fetch: async ( id: string ): Promise<CustomResponse> => {
+            return await callApi( 'get', route( 'link-preview.show', id ) );
         },
     };
 

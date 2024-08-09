@@ -51,7 +51,7 @@
       CodeBlock,
       PasteFromOffice,
     ],
-    toolbar: [ 'undo', 'redo', '|', 'heading', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'todoList', 'timestamp' ],
+    toolbar: [ 'undo', 'redo', '|', 'heading', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'todoList' ],
     link: {
       addTargetToExternalLinks: true,
       defaultProtocol: 'https://',

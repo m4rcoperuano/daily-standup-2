@@ -3,7 +3,7 @@ import { useApi } from '@/useApi.ts';
 
 export const useLinkPreviewsStore = defineStore( 'linkPreviews', {
     state: () => ( {
-        links: [],
+        linkIds: [],
         onEachPreviewFn: null,
     } ),
     actions: {
@@ -11,23 +11,23 @@ export const useLinkPreviewsStore = defineStore( 'linkPreviews', {
             this.onEachPreviewFn = callback;
         },
         addLinks( links ) {
-            this.links = links
+            this.linkIds = links
                 .filter( link => !link.attributes.disable_rich_link )
                 .filter( link => link.text === link.url )
-                .map( link => link.url );
+                .map( link => link.id );
 
             this.startQueue();
         },
-        async fetchLink( link ) {
+        async fetchLink( linkId ) {
             const api = useApi();
-            const response = await api.linkPreviews.fetch( link );
+            const response = await api.linkPreviews.fetch( linkId );
             return response.result.data;
         },
         async startQueue() {
-            while ( this.links.length > 0 ) {
-                const link = this.links.shift();
-                const preview = await this.fetchLink( link );
-                this.onEachPreviewFn( link, preview );
+            while ( this.linkIds.length > 0 ) {
+                const linkId = this.linkIds.shift();
+                const preview = await this.fetchLink( linkId );
+                this.onEachPreviewFn( preview );
             }
         },
     },

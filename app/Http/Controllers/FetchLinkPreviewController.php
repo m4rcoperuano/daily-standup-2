@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StandUpEntryLink;
 use DOMDocument;
 use Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class FetchLinkPreviewController extends Controller
 {
@@ -17,63 +19,74 @@ class FetchLinkPreviewController extends Controller
     //This token should be stored in the database, and used to make requests to the Github API.
     //Likewise with JIRA
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, StandUpEntryLink $link)
     {
-        $url = $request->url;
+        $url = $link->url;
         //the url may sometimes be too big to store as a key in the hash table
-        $cacheKey = md5($url);
+        $cacheKey = md5($url).$request->user()->getKey();
 
-        if (Cache::has($cacheKey)) {
-            return response()->json(Cache::get($cacheKey));
-        }
-
-        $html = Http::get($url)->body();
-        $doc = new DOMDocument();
-        @$doc->loadHTML($html);
-        $nodes = $doc->getElementsByTagName('title');
-
-        //get and display what you need:
-        $title = $nodes->item(0)->nodeValue;
-
-        $metas = $doc->getElementsByTagName('meta');
-
-        $description = '';
-        $image = '';
-        for ($i = 0; $i < $metas->length; $i++) {
-            $meta = $metas->item($i);
-            if ($meta->getAttribute('name') == 'description') {
-                $description = $meta->getAttribute('content');
+        try {
+            if (Cache::has($cacheKey)) {
+                return response()->json(Cache::get($cacheKey));
             }
-        }
 
-        //find favicon
-        $links = $doc->getElementsByTagName('link');
-        foreach ($links as $link) {
-            if ($link->getAttribute('rel') == 'icon') {
-                $faviconRelativePath = $link->getAttribute('href');
-                //check if relative path
-                //if so, then prepend the base url
+            $html = Http::get($url)->body();
+            $doc = new DOMDocument();
+            @$doc->loadHTML($html);
+            $nodes = $doc->getElementsByTagName('title');
 
-                if (strpos($faviconRelativePath, 'http') === false) {
-                    $baseUrl = parse_url($url, PHP_URL_SCHEME) . '://' . parse_url($url, PHP_URL_HOST);
-                    $image = $baseUrl . $faviconRelativePath;
-                }
-                else {
-                    $image = $faviconRelativePath;
+            //get and display what you need:
+            $title = $nodes->item(0)->nodeValue;
+
+            $metas = $doc->getElementsByTagName('meta');
+
+            $description = '';
+            $image = '';
+            for ($i = 0; $i < $metas->length; $i++) {
+                $meta = $metas->item($i);
+                if ($meta->getAttribute('name') == 'description') {
+                    $description = $meta->getAttribute('content');
                 }
             }
-        }
 
-        Cache::put($cacheKey, [
-            'title' => $title,
-            'description' => $description,
-            'image' => $image,
-        ], now()->addDay());
+            //find favicon
+            $links = $doc->getElementsByTagName('link');
+            foreach ($links as $link) {
+                if ($link->getAttribute('rel') == 'icon') {
+                    $faviconRelativePath = $link->getAttribute('href');
+                    //check if relative path
+                    //if so, then prepend the base url
+
+                    if (strpos($faviconRelativePath, 'http') === false) {
+                        $baseUrl = parse_url($url, PHP_URL_SCHEME) . '://' . parse_url($url, PHP_URL_HOST);
+                        $image = $baseUrl . $faviconRelativePath;
+                    } else {
+                        $image = $faviconRelativePath;
+                    }
+                }
+            }
+
+            Cache::put($cacheKey, [
+                'title' => $title,
+                'description' => $description,
+                'image' => $image,
+                'url' => $url,
+            ], now()->addDay());
+        }
+        catch (Throwable $e) {
+            return response()->json([
+                'title' => "$url",
+                'description' => 'An error occurred while fetching the link preview',
+                'image' => '',
+                'url' => $url,
+            ]);
+        }
 
         return response()->json([
             'title' => $title,
             'description' => $description,
             'image' => $image,
+            'url' => $url,
         ]);
     }
 }
