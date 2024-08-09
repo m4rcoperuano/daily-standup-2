@@ -13,11 +13,12 @@ class SocialiteIntegration extends Model
         'provider',
         'access_token',
         'refresh_token',
-        'meta',
-    ];
 
-    protected $casts = [
-        'meta' => 'array',
+        'provider_user_name',
+        'provider_user_avatar',
+        'provider_user_email',
+        'provider_user_nick_name',
+        'provider_user_id',
     ];
 
     public function user(): BelongsTo
