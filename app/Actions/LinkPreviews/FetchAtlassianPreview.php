@@ -2,8 +2,11 @@
 
 namespace App\Actions\LinkPreviews;
 
+use App\Models\SocialiteIntegration;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
 class FetchAtlassianPreview
@@ -16,6 +19,7 @@ class FetchAtlassianPreview
         $resourceId = $paths[1] ?? null;
         $host = $urlParts['host'];
 
+        //TODO: Save this in the db for the user
         $cloudIds = $this->getHttp($user)
             ->get('https://api.atlassian.com/oauth/token/accessible-resources')
             ->json();
@@ -25,6 +29,7 @@ class FetchAtlassianPreview
 
         return match($resource) {
             'browse' => $this->fetchJiraTicket($url, $cloudId, $user, $resourceId),
+            'wiki' => $this->fetchConfluencePage($url, $cloudId, $user),
             default => $this->tryFetchingStill($url, $cloudId, $user, $resource, $resourceId),
         };
     }
@@ -52,12 +57,55 @@ class FetchAtlassianPreview
     }
 
     private function getHttp(User $user): PendingRequest {
-        $token = $user->socialiteIntegrations()
-            ->where('provider', 'atlassian')->first()?->access_token;
+        $integration = $user->socialiteIntegrations()
+            ->where('provider', 'atlassian')->first();
 
-        return Http::withHeaders([
-            'Accept' => 'application/json',
-            'Authorization' => "Bearer $token",
+        return Http::acceptJson()
+            ->withToken($integration->access_token)
+            ->retry(2, 0, function (Exception $exception, PendingRequest $request) use ($integration) {
+            if (! $exception instanceof RequestException || $exception->response->status() !== 401) {
+                return false;
+            }
+
+            $request->withToken($this->refreshToken($integration));
+
+            return true;
+        });
+    }
+
+    private function refreshToken(SocialiteIntegration $integration) : string {
+        $result = Http::acceptJson()
+            ->post('https://auth.atlassian.com/oauth/token', [
+                'grant_type' => 'refresh_token',
+                'client_id' => config('services.atlassian.client_id'),
+                'client_secret' => config('services.atlassian.client_secret'),
+                'refresh_token' => $integration->refresh_token,
+            ]);
+
+        $accessToken = $result->json('access_token');
+        $refreshToken = $result->json('refresh_token');
+
+        $integration->update([
+            'access_token' => $accessToken,
+            'refresh_token' => $refreshToken,
         ]);
+
+        return $accessToken;
+    }
+
+    private function fetchConfluencePage(string $url, mixed $cloudId, User $user): LinkPreviewDto
+    {
+        $urlParts = parse_url($url);
+        $path = substr($urlParts['path'], 1); // remove leading slash
+        $paths = explode('/', $path);
+        $pageId = $paths[count($paths) - 2];
+
+        try {
+            $page = $this->getHttp($user)->get("https://api.atlassian.com/ex/confluence/$cloudId/pages/$pageId");
+        }
+        catch (Exception $exception){
+            dd($exception);
+        }
+        dd($page->json());
     }
 }

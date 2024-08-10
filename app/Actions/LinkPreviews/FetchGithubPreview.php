@@ -38,11 +38,11 @@ class FetchGithubPreview
     private function getHttp(User $user): PendingRequest {
         $token = $user->socialiteIntegrations()->where('provider', 'github')->first()?->access_token;
 
-        return Http::withHeaders([
-            'Accept' => 'application/vnd.github+json',
-            'Authorization' => "Bearer $token",
-            'X-GitHub-Api-Version' => '2022-11-28',
-        ]);
+        return Http::acceptJson()
+            ->withToken($token)
+            ->withHeaders([
+                'X-GitHub-Api-Version' => '2022-11-28',
+            ]);
     }
 
     private function fetchIssue(string $url, User $user, string $repositoryOwner, string $repositoryName, ?string $resourceId): LinkPreviewDto

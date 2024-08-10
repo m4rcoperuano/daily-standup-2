@@ -30,12 +30,12 @@
 
       if ( image ) {
         element.innerHTML = `
-              <div class="inline-block">
-                <div class="bg-gray-100 mb-2 border hover:bg-gray-200 text-blue-800 rounded px-2 inline-block">
-                  <img src="${image}" alt="${title}" class="inline-block mr-2" style="margin-top:0;margin-bottom:0;height:20px;" />
-                  ${title}
-                </div>
-              </div>`;
+          <div class="inline not-prose">
+            <div class="bg-gray-100 mb-2 border hover:bg-gray-200 text-blue-800 rounded inline break-all py-1 pr-1" style="line-height:34px;">
+              <img src="${image}" alt="${title}" class="inline-block p-1" style="height:25px;position:relative;top:-2px;left:2px;" />
+              ${title}
+            </div>
+          </div>`;
       }
       else {
         element.innerHTML = title;
