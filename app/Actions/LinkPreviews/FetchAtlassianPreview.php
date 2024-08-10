@@ -25,12 +25,12 @@ class FetchAtlassianPreview
             ->json();
 
         $cloud = collect($cloudIds)->where('url', "https://$host")->first();
-        $cloudId = $cloud['id'];
+        $cloudId = $cloud['id'] ?? null;
 
         return match($resource) {
             'browse' => $this->fetchJiraTicket($url, $cloudId, $user, $resourceId),
             'wiki' => $this->fetchConfluencePage($url, $cloudId, $user),
-            default => $this->tryFetchingStill($url, $cloudId, $user, $resource, $resourceId),
+            default => app(FetchHtmlPreview::class)->execute($url),
         };
     }
 
@@ -100,12 +100,13 @@ class FetchAtlassianPreview
         $paths = explode('/', $path);
         $pageId = $paths[count($paths) - 2];
 
-        try {
-            $page = $this->getHttp($user)->get("https://api.atlassian.com/ex/confluence/$cloudId/pages/$pageId");
-        }
-        catch (Exception $exception){
-            dd($exception);
-        }
-        dd($page->json());
+        $page = $this->getHttp($user)->get("https://api.atlassian.com/ex/confluence/$cloudId/wiki/api/v2/pages/$pageId");
+
+        return new LinkPreviewDto(
+            title: $page->json('title'),
+            description: '',
+            image: 'https://dac-static.atlassian.com/favicon.ico',
+            url: $url,
+        );
     }
 }

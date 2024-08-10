@@ -13,11 +13,11 @@ class FetchPreview
         $cacheKey = md5($url).$user->getKey();
 
         if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
+          //  return Cache::get($cacheKey);
         }
 
         $host = $link->host; //may be dev.github.com
-        if (str_contains($host, 'atlassian')) {
+        if (str_contains($host, 'atlassian') && !str_contains($host, 'www.atlassian.com') ) {
             $host = 'atlassian.com';
         }
         else if (str_contains($host, 'github')) {
