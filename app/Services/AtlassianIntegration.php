@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Http;
 class AtlassianIntegration
 {
     public function __construct(
-        protected SocialiteIntegration $integration
+        public SocialiteIntegration $socialiteIntegration
     )
     {
     }
@@ -49,7 +49,7 @@ class AtlassianIntegration
     private function http(): PendingRequest {
         return Http::acceptJson()
             ->baseUrl("https://api.atlassian.com")
-            ->withToken($this->integration->access_token)
+            ->withToken($this->socialiteIntegration->access_token)
             ->retry(2, 0, function (Exception $exception, PendingRequest $request) {
                 if (! $exception instanceof RequestException || $exception->response->status() !== 401) {
                     return false;
@@ -67,13 +67,13 @@ class AtlassianIntegration
                 'grant_type' => 'refresh_token',
                 'client_id' => config('services.atlassian.client_id'),
                 'client_secret' => config('services.atlassian.client_secret'),
-                'refresh_token' => $this->integration->refresh_token,
+                'refresh_token' => $this->socialiteIntegration->refresh_token,
             ]);
 
         $accessToken = $result->json('access_token');
         $refreshToken = $result->json('refresh_token');
 
-        $this->integration->update([
+        $this->socialiteIntegration->update([
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,
         ]);
