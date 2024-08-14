@@ -19,6 +19,12 @@ class SocialiteIntegration extends Model
         'provider_user_email',
         'provider_user_nick_name',
         'provider_user_id',
+
+        'meta'
+    ];
+
+    protected $casts = [
+        'meta' => 'array'
     ];
 
     public function user(): BelongsTo

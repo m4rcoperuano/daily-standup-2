@@ -44,4 +44,6 @@ Route::middleware([
         ->name('socialite.callback');
     Route::get('auth/integrations', [SocialiteIntegrationController::class, 'index'])
         ->name('socialite.index');
+    Route::delete('auth/integrations/{socialiteIntegration}', [SocialiteIntegrationController::class, 'destroy'])
+        ->name('socialite.destroy');
 });

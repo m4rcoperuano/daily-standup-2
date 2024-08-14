@@ -2,13 +2,14 @@
 
 namespace App\Actions\LinkPreviews;
 
-use App\Models\User;
-use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\Http;
+use App\Services\GithubIntegration;
 
-class FetchGithubPreview
+class FetchGithubPreview implements FetchServicePreview
 {
-    public function execute(User $user, string $url) : LinkPreviewDto {
+    public function __construct(protected GithubIntegration $integration)
+    {}
+
+    public function execute(string $url) : LinkPreviewDto {
         try {
             $urlParts = parse_url($url);
             $path = substr($urlParts['path'], 1); // remove leading slash
@@ -19,10 +20,10 @@ class FetchGithubPreview
             $resourceId = $paths[3] ?? null;
 
             return match($resource) {
-                'issues' => $resourceId ? $this->fetchIssue($url, $user, $repositoryOwner, $repositoryName, $resourceId)
-                    : $this->fetchRepository($url, $user, $repositoryOwner, $repositoryName),
-                'pull' => $this->fetchPullRequest($url, $user, $repositoryOwner, $repositoryName, $resourceId),
-                default => $this->fetchRepository($url, $user, $repositoryOwner, $repositoryName),
+                'issues' => $resourceId ? $this->fetchIssue($url, $repositoryOwner, $repositoryName, $resourceId)
+                    : $this->fetchRepository($url, $repositoryOwner, $repositoryName),
+                'pull' => $this->fetchPullRequest($url, $repositoryOwner, $repositoryName, $resourceId),
+                default => $this->fetchRepository($url, $repositoryOwner, $repositoryName),
             };
         }
         catch (\Exception $e) {
@@ -35,19 +36,9 @@ class FetchGithubPreview
         }
     }
 
-    private function getHttp(User $user): PendingRequest {
-        $token = $user->socialiteIntegrations()->where('provider', 'github')->first()?->access_token;
-
-        return Http::acceptJson()
-            ->withToken($token)
-            ->withHeaders([
-                'X-GitHub-Api-Version' => '2022-11-28',
-            ]);
-    }
-
-    private function fetchIssue(string $url, User $user, string $repositoryOwner, string $repositoryName, ?string $resourceId): LinkPreviewDto
+    private function fetchIssue(string $url, string $repositoryOwner, string $repositoryName, ?string $resourceId): LinkPreviewDto
     {
-        $issue = $this->getHttp($user)->get("https://api.github.com/repos/$repositoryOwner/$repositoryName/issues/$resourceId");
+        $issue = $this->integration->getIssue($repositoryOwner, $repositoryName, $resourceId);
         $title = $issue->json('title');
         $description = $issue->json('body');
 
@@ -59,9 +50,9 @@ class FetchGithubPreview
         );
     }
 
-    private function fetchPullRequest(string $url, User $user, string $repositoryOwner, string $repositoryName, ?string $resourceId): LinkPreviewDto
+    private function fetchPullRequest(string $url, string $repositoryOwner, string $repositoryName, ?string $resourceId): LinkPreviewDto
     {
-        $pr = $this->getHttp($user)->get("https://api.github.com/repos/$repositoryOwner/$repositoryName/pulls/$resourceId");
+        $pr = $this->integration->getPullRequest($repositoryOwner, $repositoryName, $resourceId);
         $title = $pr->json('title');
         $description = $pr->json('body');
 
@@ -73,9 +64,9 @@ class FetchGithubPreview
         );
     }
 
-    private function fetchRepository(string $url, User $user, string $repositoryOwner, string $repositoryName): LinkPreviewDto
+    private function fetchRepository(string $url, string $repositoryOwner, string $repositoryName): LinkPreviewDto
     {
-        $repo = $this->getHttp($user)->get("https://api.github.com/repos/$repositoryOwner/$repositoryName");
+        $repo = $this->integration->getRepository($repositoryOwner, $repositoryName);
         $title = $repo->json('name');
 
         return new LinkPreviewDto(

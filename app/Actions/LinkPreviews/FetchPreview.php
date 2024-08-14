@@ -4,6 +4,8 @@ namespace App\Actions\LinkPreviews;
 
 use App\Models\StandUpEntryLink;
 use App\Models\User;
+use App\Services\AtlassianIntegration;
+use App\Services\GithubIntegration;
 use Illuminate\Support\Facades\Cache;
 
 class FetchPreview
@@ -16,22 +18,25 @@ class FetchPreview
             return Cache::get($cacheKey);
         }
 
-        $host = $link->host; //may be dev.github.com
-        if (str_contains($host, 'atlassian') && !str_contains($host, 'www.atlassian.com') ) {
-            $host = 'atlassian.com';
-        }
-        else if (str_contains($host, 'github')) {
-            $host = 'github.com';
-        }
-
-        $preview = match ($host) {
-            'github.com' => app(FetchGithubPreview::class)->execute($user, $url),
-            'atlassian.com' => app(FetchAtlassianPreview::class)->execute($user, $url),
-            default => app(FetchHtmlPreview::class)->execute($url),
-        };
+        $host = $link->host;
+        $previewAction = $this->getPreviewService($host, $user);
+        $preview = $previewAction->execute($url);
 
         Cache::put($cacheKey, $preview, now()->addDay());
 
         return $preview;
+    }
+
+    private function getPreviewService(string $host, User $user): FetchServicePreview
+    {
+        if (str_contains($host, 'atlassian') && !str_contains($host, 'www.atlassian.com') ) {
+            return new FetchAtlassianPreview(AtlassianIntegration::make($user));
+        }
+        else if (str_contains($host, 'github')) {
+            return new FetchGithubPreview(GithubIntegration::make($user));
+        }
+
+        return new FetchHtmlPreview();
+
     }
 }

@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Socialite\SaveAtlassianIntegration;
+use App\Actions\Socialite\SaveGithubIntegration;
 use App\Http\Resources\SocialiteIntegrationResource;
+use App\Models\SocialiteIntegration;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteIntegrationController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index(Request $request) {
         $user = $request->user();
         $integrations = $user->socialiteIntegrations;
@@ -32,21 +38,18 @@ class SocialiteIntegrationController extends Controller
         $user = $request->user();
         $socialiteUser = Socialite::driver($provider)->user();
 
-        $user->socialiteIntegrations()->updateOrCreate(
-            [
-                'provider' => $provider
-            ],
-            [
-                'access_token' => $socialiteUser->token,
-                'refresh_token' => $socialiteUser->refreshToken,
-                'provider_user_name' => $socialiteUser->getName(),
-                'provider_user_avatar' => $socialiteUser->getAvatar(),
-                'provider_user_email' => $socialiteUser->getEmail(),
-                'provider_user_nick_name' => $socialiteUser->getNickname(),
-                'provider_user_id' => $socialiteUser->getId(),
-            ]
-        );
+        match($provider) {
+            'github' => app(SaveGithubIntegration::class)->execute($user, $socialiteUser),
+            'atlassian' => app(SaveAtlassianIntegration::class)->execute($user, $socialiteUser),
+        };
 
         return response()->redirectTo(route('profile.show'));
+    }
+
+    public function destroy(Request $request, SocialiteIntegration $socialiteIntegration) {
+        $this->authorize('delete', $socialiteIntegration);
+
+        $socialiteIntegration->delete();
+        return response()->json(['message' => 'Integration deleted']);
     }
 }

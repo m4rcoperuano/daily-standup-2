@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use const PHP_URL_HOST;
 use const PHP_URL_SCHEME;
 
-class FetchHtmlPreview
+class FetchHtmlPreview implements FetchServicePreview
 {
     public function execute(string $url) : LinkPreviewDto {
         $html = Http::get($url)->body();
