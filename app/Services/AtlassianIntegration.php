@@ -40,10 +40,22 @@ class AtlassianIntegration
 
     public function getAccessibleResources(): array
     {
-        return $this
+        if ($meta = $this->socialiteIntegration->meta) {
+            if (isset($meta['resources'])) {
+                return $meta['resources'];
+            }
+        }
+
+        $resources = $this
             ->http()
             ->get('/oauth/token/accessible-resources')
             ->json();
+
+        $this->socialiteIntegration->update([
+            'meta' => ['resources' => $resources],
+        ]);
+
+        return $resources;
     }
 
     private function http(): PendingRequest {

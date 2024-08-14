@@ -12,7 +12,7 @@ class SaveAtlassianIntegration
         User $user,
         Socialite\Contracts\User $socialiteUser
     ) {
-        $socialiteIntegration = $user->socialiteIntegrations()->updateOrCreate(
+        $user->socialiteIntegrations()->updateOrCreate(
             [
                 'provider' => 'atlassian'
             ],
@@ -26,14 +26,5 @@ class SaveAtlassianIntegration
                 'provider_user_id' => $socialiteUser->getId(),
             ]
         );
-
-        $atlassianIntegration = new AtlassianIntegration($socialiteIntegration);
-        $resources = $atlassianIntegration->getAccessibleResources();
-
-        $socialiteIntegration->update([
-            'meta' => [
-                'resources' => $resources
-            ]
-        ]);
     }
 }

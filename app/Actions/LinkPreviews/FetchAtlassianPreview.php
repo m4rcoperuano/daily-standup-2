@@ -16,13 +16,7 @@ class FetchAtlassianPreview implements FetchServicePreview
         $resource = $paths[0] ?? null;
         $host = $urlParts['host'];
 
-        $cloudIds = [];
-        if ($meta = $this->integration->socialiteIntegration->meta) {
-            $cloudIds = $meta['resources'] ?? [];
-        }
-        else {
-            $cloudIds = $this->integration->getAccessibleResources();
-        }
+        $cloudIds = $this->integration->getAccessibleResources();
 
         $cloud = collect($cloudIds)->where('url', "https://$host")->first();
         $cloudId = $cloud['id'] ?? null;
