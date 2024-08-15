@@ -10,7 +10,7 @@
 
         <meta property="og:title" content="Stellar Stand Ups">
         <meta property="og:type" content="website">
-        <meta property="og:description" content="Stellar Stand Ups is a tool to help you run effective stand up meetings.">
+        <meta property="og:description" content="Stellar Stand Ups is an open source tool (currently in beta) to help you run effective stand up meetings!">
         <meta property="og:image" content="{{ asset('assets/landing.png') }}">
         <meta property="og:url" content="https://stellarstandups.com">
         <meta name="twitter:card" content="summary_large_image">
