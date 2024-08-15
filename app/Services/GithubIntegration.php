@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\SocialiteIntegration;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -18,6 +19,9 @@ class GithubIntegration
 
     public static function make(User $user): self {
         $socialiteIntegration = $user->socialiteIntegrations()->where('provider', 'github')->first();
+        if (!$socialiteIntegration) {
+            throw new Exception("Integration for github not set up");
+        }
         return new self($socialiteIntegration);
     }
 
@@ -34,6 +38,12 @@ class GithubIntegration
     public function getIssue(string $repositoryOwner, string $repositoryName, string $resourceId): Response
     {
         return $this->http()->get("/repos/$repositoryOwner/$repositoryName/issues/$resourceId");
+    }
+
+    public function getActivity(): Response
+    {
+        $username = $this->integration->provider_user_nick_name;
+        return $this->http()->get("/users/$username/events");
     }
 
     private function http(): PendingRequest {

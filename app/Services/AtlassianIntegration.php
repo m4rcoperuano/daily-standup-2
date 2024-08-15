@@ -21,6 +21,9 @@ class AtlassianIntegration
     public static function make(User $user): self
     {
         $socialiteIntegration = $user->socialiteIntegrations()->where('provider', 'atlassian')->first();
+        if (!$socialiteIntegration) {
+            throw new Exception("Integration for atlassian not set up");
+        }
         return new self($socialiteIntegration);
     }
 
@@ -56,6 +59,11 @@ class AtlassianIntegration
         ]);
 
         return $resources;
+    }
+
+    public function getActivity(string $cloudId): Response
+    {
+        return $this->http()->get("/ex/jira/$cloudId/rest/api/3/events");
     }
 
     private function http(): PendingRequest {

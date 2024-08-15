@@ -28,7 +28,15 @@ class SocialiteIntegrationController extends Controller
                 ->scopes(['read:user', 'repo', 'offline_access'])
                 ->redirect(),
             'atlassian' => Socialite::driver('atlassian')
-                ->scopes(['read:jira-work', 'read:page:confluence', 'read:confluence-props', 'read:confluence-user', 'read:confluence-content.summary', 'read:confluence-content.all', 'offline_access'])
+                ->scopes([
+                    'read:jira-work',
+                    'read:page:confluence',
+                    'read:confluence-props',
+                    'read:confluence-user',
+                    'read:confluence-content.summary',
+                    'read:confluence-content.all',
+                    'offline_access',
+                ])
                 ->redirect(),
             default => abort(404),
         };
