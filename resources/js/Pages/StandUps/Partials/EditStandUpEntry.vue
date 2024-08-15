@@ -50,10 +50,10 @@
 
 <template>
   <div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 gap-4">
       <div class="content">
-        <div class="bg-teal-800 text-white px-4 py-2 rounded-tl-lg rounded-tr-lg">
-          In Progress
+        <div class="dark:bg-gray-950 dark:text-white px-4 py-2 bg-gray-100 border-b">
+          ✅ In Progress
         </div>
         <RichTextEditor
           v-model="form.in_progress"
@@ -61,8 +61,8 @@
           ></RichTextEditor>
       </div>
       <div class="content">
-        <div class="bg-blue-800 text-white px-4 py-2 rounded-tl-lg rounded-tr-lg">
-          Priorities
+        <div class="dark:bg-gray-950 dark:text-white px-4 py-2 bg-gray-100 border-b">
+          💯 Priorities
         </div>
         <RichTextEditor
           v-model="form.priorities"
@@ -70,8 +70,8 @@
           ></RichTextEditor>
       </div>
       <div class="content">
-        <div class="bg-red-800 text-white px-4 py-2 rounded-tl-lg rounded-tr-lg">
-          Blockers
+        <div class="dark:bg-gray-950 dark:text-white px-4 py-2 bg-gray-100 border-b">
+          🚨 Blockers
         </div>
         <RichTextEditor
           v-model="form.blockers"
@@ -121,6 +121,6 @@
 }
 
 .content {
-    @apply rounded-xl border border-gray-200 dark:border-gray-900;
+    @apply rounded-xl border border-gray-200 dark:border-gray-900 shadow overflow-hidden;
 }
 </style>

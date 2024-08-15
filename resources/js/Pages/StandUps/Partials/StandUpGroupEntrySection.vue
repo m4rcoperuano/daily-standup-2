@@ -60,30 +60,14 @@
   <div class="font-bold py-2 capitalize text-xl">
     {{ title }}
   </div>
-  <div class="w-full md:border dark:border-gray-950">
-    <div class="hidden md:grid grid-cols-7">
-      <div class="header">
-        Name
-      </div>
-      <div class="header col-span-2">
-        In Progress
-      </div>
-      <div class="header col-span-2">
-        Priorities
-      </div>
-      <div class="header col-span-2">
-        Blockers
-      </div>
-    </div>
+  <div class="w-full dark:border-gray-950">
     <div
       v-for="entry in standUpEntries"
       :key="entry.id"
-      class="row mb-6 md:mb-0"
       >
-      <div class="md:mb-0">
+      <div>
         <div
           v-if="editingId === entry.id"
-          class="p-4 dark:bg-gray-900 bg-gray-50"
           >
           <EditStandUpEntry
             :in-progress="entry.in_progress"
@@ -98,22 +82,22 @@
         </div>
         <div
           v-show="editingId !== entry.id"
-          class="md:grid md:grid-cols-7"
+          class="row mb-6 shadow"
           >
-          <div class=" align-top border px-4 py-2 dark:border-gray-700 flex md:block dark:bg-gray-700 bg-gray-100 md:bg-inherit dark:md:bg-inherit">
-            <div class="inline-block md:flex items-center gap-1 md:mr-0 flex-grow font-bold md:font-normal">
+          <div class="align-top border-b px-4 py-2 dark:border-gray-700 flex dark:bg-gray-950 bg-gray-50">
+            <div class="items-center flex flex-grow gap-2">
               <img
                 class="h-8 w-8 rounded-full object-cover"
                 :src="entry.user.profile_photo_url"
                 :alt="entry.user.name"
                 />
-              <span>
+              <span class="font-normal dark:text-gray-300">
                 {{ entry.user.name }}
               </span>
             </div>
             <button
               v-if="entry.user.id === currentUserId"
-              class="hidden edit dark:text-teal-500 md:mt-2 dark:border-teal-500 text-teal-600 border-teal-600 border px-2 rounded hover:opacity-50"
+              class="edit dark:text-teal-500 dark:border-teal-500 text-teal-600 border-teal-600 border px-2 rounded hover:opacity-50"
               type="button"
               @click="editRow(entry.id)"
               >
@@ -121,9 +105,9 @@
             </button>
           </div>
           <div
-            class="align-top border px-4 py-2 dark:border-gray-700 col-span-2"
+            class="align-top border-b p-4 dark:border-gray-700 col-span-2"
             >
-            <div class="md:hidden uppercase font-bold text-xs text-gray-500">
+            <div class="uppercase font-bold text-xs text-gray-500">
               In Progress
             </div>
             <span
@@ -133,13 +117,13 @@
               ></span>
             <span
               v-else
-              class="text-xs md:hidden"
+              class="text-xs"
               >
               (N/A)
             </span>
           </div>
-          <div class="align-top border px-4 py-2 dark:border-gray-700 col-span-2">
-            <div class="md:hidden uppercase font-bold text-xs text-gray-500">
+          <div class="align-top border-b p-4 dark:border-gray-700 col-span-2">
+            <div class="uppercase font-bold text-xs text-gray-500">
               Priorities
             </div>
             <span
@@ -149,13 +133,13 @@
               ></span>
             <span
               v-else
-              class="text-xs md:hidden"
+              class="text-xs"
               >
               (N/A)
             </span>
           </div>
-          <div class="align-top border px-4 py-2 dark:border-gray-700 col-span-2">
-            <div class="md:hidden uppercase font-bold text-xs text-gray-500">
+          <div class="align-top p-4 dark:border-gray-700 col-span-2">
+            <div class="uppercase font-bold text-xs text-gray-500">
               Blockers
             </div>
             <span
@@ -165,7 +149,7 @@
               ></span>
             <span
               v-else
-              class="text-xs md:hidden"
+              class="text-xs"
               >
               (N/A)
             </span>
@@ -204,14 +188,7 @@
 }
 
 .row {
-    @apply bg-white dark:bg-gray-800;
+    @apply bg-white dark:bg-gray-800 rounded-lg overflow-hidden;
 }
 
-.row:nth-child(odd) {
-    @apply md:bg-gray-100 md:dark:bg-gray-900;
-}
-
-.row:hover .edit {
-    @apply block;
-}
 </style>
