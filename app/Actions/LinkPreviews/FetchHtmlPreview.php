@@ -10,13 +10,14 @@ use const PHP_URL_SCHEME;
 class FetchHtmlPreview implements FetchServicePreview
 {
     public function execute(string $url) : LinkPreviewDto {
-        $html = Http::get($url)->body();
+        $html = Http::withUserAgent('Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail Firefox/firefoxversion')
+            >get($url)->body();
         $doc = new DOMDocument();
         @$doc->loadHTML($html);
         $nodes = $doc->getElementsByTagName('title');
 
         //get and display what you need:
-        $title = $nodes->item(0)->nodeValue;
+        $title = $nodes->item(0)?->nodeValue;
 
         $metas = $doc->getElementsByTagName('meta');
 

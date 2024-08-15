@@ -30,6 +30,7 @@ export const useStandUpEntriesStore = defineStore( 'standUpEntries', {
     },
     actions: {
         async fetch( standUpGroupId: StringOrNumber ) {
+            this.standUpEntries = [];
             const api = useApi();
             const linkPreviewsStore = useLinkPreviewsStore();
             const { result } = await api.standUpEntries.fetchAll( standUpGroupId );
