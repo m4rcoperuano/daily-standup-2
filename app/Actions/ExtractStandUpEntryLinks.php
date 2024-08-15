@@ -12,6 +12,9 @@ class ExtractStandUpEntryLinks
     public function execute(StandUpEntry $entry)
     {
         $content = $entry->in_progress . $entry->priorities . $entry->blockers;
+        if (!$content) {
+            return;
+        }
 
         $dom = new DOMDocument();
         $dom->loadHTML($content);

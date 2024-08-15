@@ -47,7 +47,7 @@
             <div class="text-gray-600 dark:text-gray-400">
               JIRA is <span class="text-green-500 font-bold">connected</span>
             </div>
-            <div class="text-sm">
+            <div class="text-sm dark:text-white">
               This JIRA connection will allow us to show linked tickets and confluence articles in the app.
             </div>
           </div>
@@ -89,7 +89,7 @@
             <div class="text-gray-600 dark:text-gray-400">
               Github is <span class="text-green-500 font-bold">connected</span>
             </div>
-            <div class="text-sm">
+            <div class="text-sm dark:text-white">
               This Github connection will allow us to show linked pull requests and issues in the app.
             </div>
           </div>

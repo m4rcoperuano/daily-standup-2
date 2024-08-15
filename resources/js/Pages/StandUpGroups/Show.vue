@@ -31,7 +31,7 @@
       if ( image ) {
         element.innerHTML = `
           <div class="inline not-prose">
-            <div class="bg-teal-50 dark:bg-teal-950 dark:text-blue-200 mb-2 hover:bg-gray-200 text-blue-800 rounded inline break-all py-1 pr-1" style="line-height:34px;">
+            <div class="bg-teal-50 dark:bg-teal-950 dark:text-blue-200 mb-2 hover:bg-teal-100 dark:hover:bg-teal-900 text-blue-800 rounded inline break-all py-1 pr-1" style="line-height:34px;">
               <img src="${image}" class="inline-block p-1 rounded mr-1 bg-white" style="height:25px;position:relative;top:-2px;" />
               ${title}
             </div>
