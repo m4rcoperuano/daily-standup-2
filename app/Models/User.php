@@ -86,4 +86,17 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(SocialiteIntegration::class);
     }
+
+    protected function defaultProfilePhotoUrl()
+    {
+        if ($this->socialiteIntegrations()->whereNotNull('provider_user_avatar')->exists()) {
+            return $this->socialiteIntegrations->first()->provider_user_avatar;
+        }
+
+        $name = trim(collect(explode(' ', $this->name))->map(function ($segment) {
+            return mb_substr($segment, 0, 1);
+        })->join(' '));
+
+        return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=7F9CF5&background=EBF4FF';
+    }
 }
