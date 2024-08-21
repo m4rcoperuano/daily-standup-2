@@ -30,8 +30,8 @@ export function useApi( ) {
     };
 
     const standUpEntries = {
-        fetchAll: async ( standUpGroupId: StringOrNumber ): Promise<CustomResponse> => {
-            return await callApi( 'get', route( 'stand-up-entries.index', standUpGroupId ) );
+        fetch: async ( standUpGroupId: StringOrNumber, all: Boolean ): Promise<CustomResponse> => {
+            return await callApi( 'get', route( 'stand-up-entries.index', standUpGroupId ) + '?all=' + all );
         },
         create: async ( payload ): Promise<CustomResponse> => {
             return await callApi( 'post', route( 'stand-up-entries.store' ), payload );

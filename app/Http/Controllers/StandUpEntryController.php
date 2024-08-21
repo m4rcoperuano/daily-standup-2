@@ -18,6 +18,7 @@ class StandUpEntryController extends Controller
         $entries = $standUpGroup->standUpEntries()
             ->orderBy('date', 'desc')
             ->with('user', 'standUpEntryLinks')
+            ->unless($request->boolean('all'), fn($query) => $query->where('user_id', $request->user()->id))
             ->get();
 
         return StandUpEntryResource::collection($entries);

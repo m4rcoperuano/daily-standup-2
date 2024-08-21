@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import AppLayout from '@/Layouts/AppLayout.vue';
-  import { computed, onMounted, ref } from 'vue';
+  import { computed, onMounted, ref, watch } from 'vue';
   import { DateTime } from 'luxon';
   import StandUpGroupEntrySection from '@/Pages/StandUps/Partials/StandUpGroupEntrySection.vue';
   import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -10,6 +10,7 @@
   import { usePage } from '@inertiajs/vue3';
   import DateAwareDatePicker from '@/Components/DateAwareDatePicker.vue';
   import { useLinkPreviewsStore } from '@/Stores/linkPreviewStore';
+
 
   const props = defineProps( {
     standUpGroup: {
@@ -68,6 +69,12 @@
       alert( response.message );
     }
   };
+
+  const showFilter = ref( 'show-mine' );
+
+  watch( showFilter, () => {
+    standUpEntriesStore.fetch( props.standUpGroup.id, showFilter.value === 'show-all' );
+  } );
 </script>
 
 <template>
@@ -89,12 +96,49 @@
             >
             Hey! Your team currently doesn't posted any stand up entries to this group. Do you want to start it off?
           </p>
-          <PrimaryButton
-            type="button"
-            @click="isCreatingStandUpEntry = !isCreatingStandUpEntry"
+
+          <div class="flex">
+            <PrimaryButton
+              type="button"
+              @click="isCreatingStandUpEntry = !isCreatingStandUpEntry"
+              >
+              Create Standup Entry
+            </PrimaryButton>
+          </div>
+
+          <div
+            v-if="standUpEntryGroupByDateKeys.length"
+            class="gap-3 flex pt-4"
             >
-            Create Standup Entry
-          </PrimaryButton>
+            <div class="flex items-center">
+              <input
+                id="show-mine"
+                v-model="showFilter"
+                name="show_filter"
+                type="radio"
+                value="show-mine"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+              <label
+                for="show-mine"
+                class="ms-2 font-medium text-gray-900 dark:text-gray-300"
+                >Show My Entries</label>
+            </div>
+            <div class="flex items-center">
+              <input
+                id="show-all"
+                v-model="showFilter"
+                type="radio"
+                value="show-all"
+                name="show_filter"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+              <label
+                for="show-all"
+                class="ms-2  font-medium text-gray-900 dark:text-gray-300"
+                >Show Everyone</label>
+            </div>
+          </div>
         </div>
         <div v-else-if="isCreatingStandUpEntry">
           <div class="mb-2">

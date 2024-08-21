@@ -61,102 +61,104 @@
     {{ title }}
   </div>
   <div class="w-full dark:border-gray-950 gap-6 flex flex-col">
-    <div
-      v-for="entry in standUpEntries"
-      :key="entry.id"
-      >
-      <div>
-        <div
-          v-if="editingId === entry.id"
-          >
-          <EditStandUpEntry
-            :in-progress="entry.in_progress"
-            :priorities="entry.priorities"
-            :blockers="entry.blockers"
-            :is-editing="true"
-            @save="onUpdate"
-            @cancel="onCancel"
-            @delete="onDelete"
+    <transition-group name="fade">
+      <div
+        v-for="entry in standUpEntries"
+        :key="entry.id"
+        >
+        <div>
+          <div
+            v-if="editingId === entry.id"
             >
-          </EditStandUpEntry>
-        </div>
-        <div
-          v-show="editingId !== entry.id"
-          class="row shadow"
-          >
-          <div class="align-top border-b px-4 py-2 dark:border-gray-700 flex dark:bg-gray-950 bg-gray-50">
-            <div class="items-center flex flex-grow gap-2">
-              <img
-                class="h-8 w-8 rounded-full object-cover"
-                :src="entry.user.profile_photo_url"
-                :alt="entry.user.name"
-                />
-              <span class="font-normal dark:text-gray-300">
-                {{ entry.user.name }}
-              </span>
-            </div>
-            <button
-              v-if="entry.user.id === currentUserId"
-              class="edit dark:text-teal-500 dark:border-teal-500 text-teal-600 border-teal-600 border px-2 rounded hover:opacity-50"
-              type="button"
-              @click="editRow(entry.id)"
+            <EditStandUpEntry
+              :in-progress="entry.in_progress"
+              :priorities="entry.priorities"
+              :blockers="entry.blockers"
+              :is-editing="true"
+              @save="onUpdate"
+              @cancel="onCancel"
+              @delete="onDelete"
               >
-              Edit
-            </button>
+            </EditStandUpEntry>
           </div>
           <div
-            class="align-top border-b p-4 dark:border-gray-700 col-span-2"
+            v-show="editingId !== entry.id"
+            class="row shadow"
             >
-            <div class="uppercase font-bold text-xs text-gray-500">
-              In Progress
+            <div class="align-top border-b px-4 py-2 dark:border-gray-700 flex dark:bg-gray-950 bg-gray-50">
+              <div class="items-center flex flex-grow gap-2">
+                <img
+                  class="h-8 w-8 rounded-full object-cover"
+                  :src="entry.user.profile_photo_url"
+                  :alt="entry.user.name"
+                  />
+                <span class="font-normal dark:text-gray-300">
+                  {{ entry.user.name }}
+                </span>
+              </div>
+              <button
+                v-if="entry.user.id === currentUserId"
+                class="edit dark:text-teal-500 dark:border-teal-500 text-teal-600 border-teal-600 border px-2 rounded hover:opacity-50"
+                type="button"
+                @click="editRow(entry.id)"
+                >
+                Edit
+              </button>
             </div>
-            <span
-              v-if="entry.in_progress"
-              class=" prose-styles"
-              v-html="entry.in_progress"
-              ></span>
-            <span
-              v-else
-              class="text-xs"
+            <div
+              class="align-top border-b p-4 dark:border-gray-700 col-span-2"
               >
-              (N/A)
-            </span>
-          </div>
-          <div class="align-top border-b p-4 dark:border-gray-700 col-span-2">
-            <div class="uppercase font-bold text-xs text-gray-500">
-              Priorities
+              <div class="uppercase font-bold text-xs text-gray-500">
+                In Progress
+              </div>
+              <span
+                v-if="entry.in_progress"
+                class=" prose-styles"
+                v-html="entry.in_progress"
+                ></span>
+              <span
+                v-else
+                class="text-xs"
+                >
+                (N/A)
+              </span>
             </div>
-            <span
-              v-if="entry.priorities"
-              class=" prose-styles"
-              v-html="entry.priorities"
-              ></span>
-            <span
-              v-else
-              class="text-xs"
-              >
-              (N/A)
-            </span>
-          </div>
-          <div class="align-top p-4 dark:border-gray-700 col-span-2">
-            <div class="uppercase font-bold text-xs text-gray-500">
-              Blockers
+            <div class="align-top border-b p-4 dark:border-gray-700 col-span-2">
+              <div class="uppercase font-bold text-xs text-gray-500">
+                Priorities
+              </div>
+              <span
+                v-if="entry.priorities"
+                class=" prose-styles"
+                v-html="entry.priorities"
+                ></span>
+              <span
+                v-else
+                class="text-xs"
+                >
+                (N/A)
+              </span>
             </div>
-            <span
-              v-if="entry.blockers"
-              class=" prose-styles"
-              v-html="entry.blockers"
-              ></span>
-            <span
-              v-else
-              class="text-xs"
-              >
-              (N/A)
-            </span>
+            <div class="align-top p-4 dark:border-gray-700 col-span-2">
+              <div class="uppercase font-bold text-xs text-gray-500">
+                Blockers
+              </div>
+              <span
+                v-if="entry.blockers"
+                class=" prose-styles"
+                v-html="entry.blockers"
+                ></span>
+              <span
+                v-else
+                class="text-xs"
+                >
+                (N/A)
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </transition-group>
   </div>
 </template>
 
@@ -189,6 +191,18 @@
 
 .row {
     @apply bg-white dark:bg-gray-800 rounded-lg overflow-hidden;
+}
+
+
+
+.fade-enter-active,
+.fade-leave-active {
+    @apply transition-opacity;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    @apply opacity-0;
 }
 
 </style>

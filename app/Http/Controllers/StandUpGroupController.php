@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StandUpGroup;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -42,8 +43,15 @@ class StandUpGroupController extends Controller
     public function show(Request $request, StandUpGroup $standUpGroup)
     {
         $this->authorize('view', $standUpGroup);
+        $distinctUserIds = $standUpGroup->standUpEntries()
+            ->select('user_id')
+            ->distinct()
+            ->get();
+
+        $users = User::find($distinctUserIds->pluck('user_id'));
         return Inertia::render('StandUpGroups/Show')
-            ->with('standUpGroup', $standUpGroup);
+            ->with('standUpGroup', $standUpGroup)
+            ->with('users', $users);
     }
 
 }

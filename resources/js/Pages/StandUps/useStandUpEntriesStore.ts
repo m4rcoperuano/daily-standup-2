@@ -11,6 +11,7 @@ export type StandUpEntry = {
 
 export const useStandUpEntriesStore = defineStore( 'standUpEntries', {
     state: () => ( {
+        standUpGroupId: null,
         standUpEntries: [],
     } ),
     getters: {
@@ -29,11 +30,15 @@ export const useStandUpEntriesStore = defineStore( 'standUpEntries', {
         },
     },
     actions: {
-        async fetch( standUpGroupId: StringOrNumber ) {
-            this.standUpEntries = [];
+        async fetch( standUpGroupId: StringOrNumber, showAll: Boolean = false ) {
+            if ( this.standUpGroupId !== standUpGroupId ) {
+                this.standUpEntries = [];
+                this.standUpGroupId = standUpGroupId;
+            }
+
             const api = useApi();
             const linkPreviewsStore = useLinkPreviewsStore();
-            const { result } = await api.standUpEntries.fetchAll( standUpGroupId );
+            const { result } = await api.standUpEntries.fetch( standUpGroupId, showAll );
             this.standUpEntries = result.data.data;
             linkPreviewsStore.addLinks( this.standUpEntries.flatMap( entry => entry.stand_up_entry_links ) );
         },
