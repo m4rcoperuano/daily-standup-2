@@ -11,7 +11,7 @@ class FetchHtmlPreview implements FetchServicePreview
 {
     public function execute(string $url) : LinkPreviewDto {
         $html = Http::withUserAgent('Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail Firefox/firefoxversion')
-            >get($url)->body();
+            ->get($url)->body();
         $doc = new DOMDocument();
         @$doc->loadHTML($html);
         $nodes = $doc->getElementsByTagName('title');
