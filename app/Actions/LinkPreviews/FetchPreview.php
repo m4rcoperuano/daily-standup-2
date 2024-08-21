@@ -15,7 +15,7 @@ class FetchPreview
         $cacheKey = md5($url).$user->getKey();
 
         if (Cache::has($cacheKey)) {
-            //return Cache::get($cacheKey);
+            return Cache::get($cacheKey);
         }
 
         $host = $link->host;
