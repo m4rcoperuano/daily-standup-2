@@ -107,7 +107,6 @@
           </div>
 
           <div
-            v-if="standUpEntryGroupByDateKeys.length"
             class="gap-3 flex pt-4"
             >
             <div class="flex items-center">
