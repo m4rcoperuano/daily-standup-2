@@ -60,7 +60,7 @@
   <div class="font-bold py-2 capitalize text-xl">
     {{ title }}
   </div>
-  <div class="w-full dark:border-gray-950">
+  <div class="w-full dark:border-gray-950 gap-6 flex flex-col">
     <div
       v-for="entry in standUpEntries"
       :key="entry.id"
@@ -82,7 +82,7 @@
         </div>
         <div
           v-show="editingId !== entry.id"
-          class="row mb-6 shadow"
+          class="row shadow"
           >
           <div class="align-top border-b px-4 py-2 dark:border-gray-700 flex dark:bg-gray-950 bg-gray-50">
             <div class="items-center flex flex-grow gap-2">
