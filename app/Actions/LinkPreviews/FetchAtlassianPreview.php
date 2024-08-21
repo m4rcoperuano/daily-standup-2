@@ -21,6 +21,10 @@ class FetchAtlassianPreview implements FetchServicePreview
         $cloud = collect($cloudIds)->where('url', "https://$host")->first();
         $cloudId = $cloud['id'] ?? null;
 
+        if (str_contains($url, 'selectedIssue')) {
+            $resource = 'browse';
+        }
+
         return match($resource) {
             'browse' => $this->fetchJiraTicket($url, $cloudId),
             'wiki' => $this->fetchConfluencePage($url, $cloudId),
@@ -35,6 +39,14 @@ class FetchAtlassianPreview implements FetchServicePreview
 
         $paths = explode('/', $path);
         $resourceId = $paths[1] ?? null;
+
+        if ($query = $urlParts['query'] ?? null) {
+            parse_str($query, $queryParts);
+
+            if (isset($queryParts['selectedIssue'])) {
+                $resourceId = $queryParts['selectedIssue'];
+            }
+        }
 
         $ticket = $this->integration->getJiraTicket($cloudId, $resourceId);
 
