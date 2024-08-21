@@ -99,4 +99,8 @@ class User extends Authenticatable implements FilamentUser
 
         return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=7F9CF5&background=EBF4FF';
     }
+
+    public function hasIntegration(string $integration): bool {
+        return $this->socialiteIntegrations()->where('provider', $integration)->exists();
+    }
 }

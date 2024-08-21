@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\StandUpGroup;
 use App\Models\User;
+use App\Services\AtlassianIntegration;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,9 +22,11 @@ class StandUpGroupController extends Controller
             ->with('standUpGroups', $groups);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return Inertia::render('StandUpGroups/Create');
+        $hasJiraIntegration = $request->user()->hasIntegration('atlassian');
+        return Inertia::render('StandUpGroups/Create')
+            ->with("hasJiraIntegration", $hasJiraIntegration);
     }
 
 
