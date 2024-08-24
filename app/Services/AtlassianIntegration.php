@@ -59,7 +59,7 @@ class AtlassianIntegration
     {
         return $this
             ->http()
-            ->get("/ex/jira/$cloudId/rest/agile/1.0/board/$boardId/sprint");
+            ->get("/ex/jira/$cloudId/rest/agile/1.0/board/$boardId/sprint?state=active");
     }
 
     public function getAccessibleResources(): array

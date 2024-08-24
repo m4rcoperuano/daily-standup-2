@@ -6,7 +6,7 @@
   import { useForm } from '@inertiajs/vue3';
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import FormSection from '@/Components/FormSection.vue';
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, watch } from 'vue';
   import CustomSelect from '@/Components/CustomSelect.vue';
 
   defineProps( {
@@ -17,10 +17,12 @@
   } );
 
   const boards = ref( [] );
+  const sprints = ref( [] );
 
   const form = useForm( {
     name: null,
     boardId: '',
+    sprintId: '',
   } );
 
   const submitForm = () => {
@@ -32,12 +34,23 @@
 
     if ( boards.value.length === 1 ) {
       form.boardId = boards.value[0].id;
+      fetchSprints();
     }
   };
 
 
+  const fetchSprints = async () => {
+    sprints.value = ( await axios.get( route( 'integrations.jira.sprints', form.boardId ) ) ).data;
+
+  };
 
   onMounted( () => fetchBoards() );
+
+  watch( form.boardId, ( value ) => {
+    if ( value ) {
+      fetchSprints();
+    }
+  } );
 </script>
 
 <template>
@@ -74,15 +87,31 @@
                   class="mt-2"
                   ></InputError>
               </div>
-              <div v-if="hasJiraIntegration">
-                <InputLabel
-                  for="jira-board"
-                  value="Jira Integration Board"
-                  ></InputLabel>
-                <CustomSelect
-                  v-model="form.boardId"
-                  :options="boards"
-                  ></CustomSelect>
+              <div
+                v-if="hasJiraIntegration"
+                class="flex flex-col gap-4"
+                >
+                <div>
+                  <InputLabel
+                    for="jira-board"
+                    value="Jira Integration Board"
+                    ></InputLabel>
+                  <CustomSelect
+                    v-model="form.boardId"
+                    :options="boards"
+                    ></CustomSelect>
+                </div>
+                <div>
+                  <InputLabel
+                    for="jira-sprints"
+                    value="Jira Integration Sprint"
+                    ></InputLabel>
+                  <CustomSelect
+                    v-model="form.sprintId"
+                    :options="sprints"
+                    ></CustomSelect>
+                </div>
+
               </div>
             </div>
           </template>
