@@ -51,7 +51,7 @@ class FetchAtlassianPreview implements FetchServicePreview
         $ticket = $this->integration->getJiraTicket($cloudId, $resourceId);
 
         return new LinkPreviewDto(
-            title: $ticket->json('fields.summary'),
+            title: $resourceId.": ".$ticket->json('fields.summary'),
             description: '',
             image: $ticket->json('fields.issuetype.iconUrl'),
             url: $url,
