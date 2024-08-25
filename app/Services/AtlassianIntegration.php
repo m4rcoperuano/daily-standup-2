@@ -62,6 +62,13 @@ class AtlassianIntegration
             ->get("/ex/jira/$cloudId/rest/agile/1.0/board/$boardId/sprint?state=active");
     }
 
+    public function getSprint(string $cloudId, string $sprintId): Response
+    {
+        return $this
+            ->http()
+            ->get("/ex/jira/$cloudId/rest/agile/1.0/sprint/$sprintId");
+    }
+
     public function getAccessibleResources(): array
     {
         if ($meta = $this->socialiteIntegration->meta) {

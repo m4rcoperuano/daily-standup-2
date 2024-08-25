@@ -8,6 +8,7 @@
   import FormSection from '@/Components/FormSection.vue';
   import { onMounted, ref, watch } from 'vue';
   import CustomSelect from '@/Components/CustomSelect.vue';
+  import { useApi } from '@/useApi.ts';
 
   defineProps( {
     hasJiraIntegration: {
@@ -16,13 +17,14 @@
     },
   } );
 
+  const api = useApi();
   const boards = ref( [] );
   const sprints = ref( [] );
 
   const form = useForm( {
     name: null,
-    boardId: '',
-    sprintId: '',
+    atlassian_board_id: '',
+    atlassian_sprint_id: '',
   } );
 
   const submitForm = () => {
@@ -30,23 +32,25 @@
   };
 
   const fetchBoards = async () => {
-    boards.value = ( await axios.get( route( 'integrations.jira.boards' ) ) ).data;
+    boards.value = ( await api.integrations.jira.boards() ).result?.data;
 
-    if ( boards.value.length === 1 ) {
-      form.boardId = boards.value[0].id;
-      fetchSprints();
+    if ( boards.value.length === 1 && !form.atlassian_board_id ) {
+      form.atlassian_board_id = boards.value[0].id;
     }
   };
 
 
   const fetchSprints = async () => {
-    sprints.value = ( await axios.get( route( 'integrations.jira.sprints', form.boardId ) ) ).data;
+    sprints.value = ( await api.integrations.jira.sprints( form.atlassian_board_id ) ).result?.data;
 
+    if ( sprints.value.length === 1 && !form.atlassian_sprint_id ) {
+      form.atlassian_sprint_id = sprints.value[0].id;
+    }
   };
 
   onMounted( () => fetchBoards() );
 
-  watch( form.boardId, ( value ) => {
+  watch( () => form.atlassian_board_id, ( value ) => {
     if ( value ) {
       fetchSprints();
     }
@@ -97,7 +101,7 @@
                     value="Jira Integration Board"
                     ></InputLabel>
                   <CustomSelect
-                    v-model="form.boardId"
+                    v-model="form.atlassian_board_id"
                     :options="boards"
                     ></CustomSelect>
                 </div>
@@ -107,7 +111,7 @@
                     value="Jira Integration Sprint"
                     ></InputLabel>
                   <CustomSelect
-                    v-model="form.sprintId"
+                    v-model="form.atlassian_sprint_id"
                     :options="sprints"
                     ></CustomSelect>
                 </div>

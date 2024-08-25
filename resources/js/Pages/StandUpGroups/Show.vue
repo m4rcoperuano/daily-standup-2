@@ -10,7 +10,7 @@
   import { usePage } from '@inertiajs/vue3';
   import DateAwareDatePicker from '@/Components/DateAwareDatePicker.vue';
   import { useLinkPreviewsStore } from '@/Stores/linkPreviewStore';
-
+  import SprintDetails from '@/Pages/StandUpGroups/Partials/SprintDetails.vue';
 
   const props = defineProps( {
     standUpGroup: {
@@ -22,6 +22,10 @@
   const page = usePage();
   const standUpEntriesStore = useStandUpEntriesStore();
   const linkPreviewsStore = useLinkPreviewsStore();
+  const standUpEntryGroupByDateKeys = computed( () => Object.keys( standUpEntriesStore.groupedByDate ) );
+  const isCreatingStandUpEntry = ref( false );
+  const showFilter = ref( 'show-mine' );
+  const creatingStandUpEntryDate = ref( DateTime.now().toFormat( 'yyyy-MM-dd' ) );
 
   linkPreviewsStore.setCallBack( ( preview ) => {
     const elements = document.querySelectorAll( `a[href="${preview.url}"]` );
@@ -45,11 +49,11 @@
     } );
   } );
 
-  onMounted(  () => standUpEntriesStore.fetch( props.standUpGroup.id ) );
+  const hasSprintIntegration = !!props.standUpGroup.atlassian_sprint_id;
 
-  const standUpEntryGroupByDateKeys = computed( () => Object.keys( standUpEntriesStore.groupedByDate ) );
-  const isCreatingStandUpEntry = ref( false );
-  const creatingStandUpEntryDate = ref( DateTime.now().toFormat( 'yyyy-MM-dd' ) );
+  onMounted(  () =>  {
+    standUpEntriesStore.fetch( props.standUpGroup.id );
+  } );
 
   const cancelNew = () => {
     isCreatingStandUpEntry.value = false;
@@ -70,11 +74,11 @@
     }
   };
 
-  const showFilter = ref( 'show-mine' );
-
-  watch( showFilter, () => {
+  const changeFilter = ( value: string ) => {
+    showFilter.value = value;
     standUpEntriesStore.fetch( props.standUpGroup.id, showFilter.value === 'show-all' );
-  } );
+  };
+
 </script>
 
 <template>
@@ -85,6 +89,9 @@
       </h2>
     </template>
     <div class="py-12 dark:text-white">
+      <div v-if="hasSprintIntegration">
+        <SprintDetails :sprint-id="standUpGroup.atlassian_sprint_id"></SprintDetails>
+      </div>
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           v-if="!isCreatingStandUpEntry"
@@ -112,29 +119,31 @@
             <div class="flex items-center">
               <input
                 id="show-mine"
-                v-model="showFilter"
                 name="show_filter"
                 type="radio"
                 value="show-mine"
+                :checked="showFilter === 'show-mine'"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                @input="changeFilter('show-mine')"
                 />
               <label
                 for="show-mine"
-                class="ms-2 font-medium text-gray-900 dark:text-gray-300"
+                class="ms-2 cursor-pointer font-medium text-gray-900 dark:text-gray-300"
                 >Show My Entries</label>
             </div>
             <div class="flex items-center">
               <input
                 id="show-all"
-                v-model="showFilter"
                 type="radio"
                 value="show-all"
                 name="show_filter"
+                :checked="showFilter === 'show-all'"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                @input="changeFilter('show-all')"
                 />
               <label
                 for="show-all"
-                class="ms-2  font-medium text-gray-900 dark:text-gray-300"
+                class="ms-2 cursor-pointer font-medium text-gray-900 dark:text-gray-300"
                 >Show Everyone</label>
             </div>
           </div>

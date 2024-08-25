@@ -27,6 +27,12 @@ class SocialiteIntegration extends Model
         'meta' => 'array'
     ];
 
+    protected $hidden = [
+        'access_token',
+        'refresh_token',
+        'provider_user_id'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

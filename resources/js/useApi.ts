@@ -50,8 +50,23 @@ export function useApi( ) {
         },
     };
 
+    const integrations = {
+        jira: {
+            boards: async (): Promise<CustomResponse> => {
+                return await callApi( 'get', route( 'integrations.jira.boards' ) );
+            },
+            sprints: async ( boardId: StringOrNumber ): Promise<CustomResponse> => {
+                return await callApi( 'get', route( 'integrations.jira.sprints', boardId ) );
+            },
+            sprint: async ( sprintId: StringOrNumber ): Promise<CustomResponse> => {
+                return await callApi( 'get', route( 'integrations.jira.sprint', sprintId ) );
+            },
+        },
+    };
+
     return {
         standUpEntries,
         linkPreviews,
+        integrations,
     };
 }

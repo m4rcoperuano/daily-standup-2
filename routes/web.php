@@ -55,5 +55,8 @@ Route::middleware([
 
             Route::get("/boards/{boardId}/sprints", [JiraController::class, "sprints"])
                 ->name("integrations.jira.sprints");
+
+            Route::get("/sprints/{sprintId}", [JiraController::class, "sprint"])
+                ->name("integrations.jira.sprint");
         });
 });
