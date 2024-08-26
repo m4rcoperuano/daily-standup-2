@@ -20,11 +20,17 @@ class SocialiteIntegration extends Model
         'provider_user_nick_name',
         'provider_user_id',
 
-        'meta'
+        'meta',
+        'version',
     ];
 
     protected $casts = [
         'meta' => 'array'
+    ];
+
+    protected $hidden = [
+        'access_token',
+        'refresh_token',
     ];
 
     public function user(): BelongsTo

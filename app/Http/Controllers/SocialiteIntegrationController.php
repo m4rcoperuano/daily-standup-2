@@ -36,6 +36,11 @@ class SocialiteIntegrationController extends Controller
                     'read:confluence-content.summary',
                     'read:confluence-content.all',
                     'offline_access',
+                    'read:sprint:jira-software',
+                    'read:issue-details:jira',
+                    'read:board-scope:jira-software',
+                    'read:jql:jira',
+                    'read:project:jira'
                 ])
                 ->redirect(),
             default => abort(404),

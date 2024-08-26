@@ -11,7 +11,11 @@ class StandUpGroup extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'atlassian_sprint_id',
+        'atlassian_board_id'
+    ];
 
     public function team(): BelongsTo
     {

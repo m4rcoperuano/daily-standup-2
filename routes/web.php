@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FetchLinkPreviewController;
+use App\Http\Controllers\JiraController;
 use App\Http\Controllers\SocialiteIntegrationController;
 use App\Http\Controllers\StandUpEntryController;
 use App\Http\Controllers\StandUpGroupController;
@@ -46,4 +47,16 @@ Route::middleware([
         ->name('socialite.index');
     Route::delete('auth/integrations/{socialiteIntegration}', [SocialiteIntegrationController::class, 'destroy'])
         ->name('socialite.destroy');
+
+    Route::prefix("integrations/jira")
+        ->group(function() {
+            Route::get("/boards", [JiraController::class, "boards"])
+                ->name("integrations.jira.boards");
+
+            Route::get("/boards/{boardId}/sprints", [JiraController::class, "sprints"])
+                ->name("integrations.jira.sprints");
+
+            Route::get("/sprints/{sprintId}", [JiraController::class, "sprint"])
+                ->name("integrations.jira.sprint");
+        });
 });

@@ -41,7 +41,7 @@
             <div v-else>
               <div class="flex gap-2">
                 <div class="opacity-60 flex-grow">
-                  Group Name
+                  Stand Up Group
                 </div>
 
                 <PrimaryButton

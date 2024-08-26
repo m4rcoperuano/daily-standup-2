@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StandUpGroupResource;
+use App\Http\Resources\UserResource;
 use App\Models\StandUpGroup;
 use App\Models\User;
+use App\Services\AtlassianIntegration;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,21 +24,23 @@ class StandUpGroupController extends Controller
             ->with('standUpGroups', $groups);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return Inertia::render('StandUpGroups/Create');
+        $hasJiraIntegration = $request->user()->hasIntegration('atlassian');
+        return Inertia::render('StandUpGroups/Create')
+            ->with("hasJiraIntegration", $hasJiraIntegration);
     }
 
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'atlassian_sprint_id' => 'nullable',
+            'atlassian_board_id' => 'nullable'
         ]);
 
-        $request->user()->currentTeam->standUpGroups()->create([
-            'name' => $request->name,
-        ]);
+        $request->user()->currentTeam->standUpGroups()->create($validated);
 
         return redirect()->route('stand-up-groups.index');
     }
@@ -43,15 +48,8 @@ class StandUpGroupController extends Controller
     public function show(Request $request, StandUpGroup $standUpGroup)
     {
         $this->authorize('view', $standUpGroup);
-        $distinctUserIds = $standUpGroup->standUpEntries()
-            ->select('user_id')
-            ->distinct()
-            ->get();
-
-        $users = User::find($distinctUserIds->pluck('user_id'));
         return Inertia::render('StandUpGroups/Show')
-            ->with('standUpGroup', $standUpGroup)
-            ->with('users', $users);
+            ->with('standUpGroup', new StandUpGroupResource($standUpGroup));
     }
 
 }

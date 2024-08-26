@@ -41,6 +41,34 @@ class AtlassianIntegration
             ->get("/ex/jira/$cloudId/rest/api/3/issue/$ticketId");
     }
 
+    public function getJiraSprint(string $cloudId, string $sprintId): Response
+    {
+        return $this
+            ->http()
+            ->get("/ex/jira/$cloudId/rest/agile/1.0/sprint/$sprintId");
+    }
+
+    public function getBoards(string $cloudId): Response
+    {
+        return $this
+            ->http()
+            ->get("/ex/jira/$cloudId/rest/agile/1.0/board");
+    }
+
+    public function getSprints(string $cloudId, string $boardId): Response
+    {
+        return $this
+            ->http()
+            ->get("/ex/jira/$cloudId/rest/agile/1.0/board/$boardId/sprint?state=active");
+    }
+
+    public function getSprint(string $cloudId, string $sprintId): Response
+    {
+        return $this
+            ->http()
+            ->get("/ex/jira/$cloudId/rest/agile/1.0/sprint/$sprintId");
+    }
+
     public function getAccessibleResources(): array
     {
         if ($meta = $this->socialiteIntegration->meta) {
