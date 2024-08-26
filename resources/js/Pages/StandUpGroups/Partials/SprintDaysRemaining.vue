@@ -22,7 +22,7 @@
   const chartData = {
     datasets: [ {
       label: 'Days Remaining',
-      data: [ Math.ceil( daysRemaining ), Math.ceil( totalDays - daysRemaining ) ],
+      data: [ Math.ceil( totalDays - daysRemaining ), Math.ceil( daysRemaining ) ],
       backgroundColor: [
         'rgb(0,202,62)',
         'rgb(179,179,179)',

@@ -23,6 +23,7 @@ class SaveGithubIntegration
                 'provider_user_email' => $socialiteUser->getEmail(),
                 'provider_user_nick_name' => $socialiteUser->getNickname(),
                 'provider_user_id' => $socialiteUser->getId(),
+                'version' => '1.0.0'
             ]
         );
     }

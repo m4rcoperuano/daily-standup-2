@@ -20,7 +20,8 @@ class SocialiteIntegration extends Model
         'provider_user_nick_name',
         'provider_user_id',
 
-        'meta'
+        'meta',
+        'version',
     ];
 
     protected $casts = [
@@ -30,7 +31,6 @@ class SocialiteIntegration extends Model
     protected $hidden = [
         'access_token',
         'refresh_token',
-        'provider_user_id'
     ];
 
     public function user(): BelongsTo

@@ -24,6 +24,7 @@ class SaveAtlassianIntegration
                 'provider_user_email' => $socialiteUser->getEmail(),
                 'provider_user_nick_name' => $socialiteUser->getNickname(),
                 'provider_user_id' => $socialiteUser->getId(),
+                'version' => '2.0.0',
             ]
         );
     }

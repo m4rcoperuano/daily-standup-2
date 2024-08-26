@@ -20,6 +20,8 @@
   } );
 
   const page = usePage();
+  const user = computed( () => page.props.auth.user );
+  const atlassianIntegration = computed( () => user.value?.socialite_integrations?.filter( ( integration ) => integration.provider === 'atlassian' )[0] );
   const standUpEntriesStore = useStandUpEntriesStore();
   const linkPreviewsStore = useLinkPreviewsStore();
   const standUpEntryGroupByDateKeys = computed( () => Object.keys( standUpEntriesStore.groupedByDate ) );
@@ -91,7 +93,7 @@
     <div class="py-6 dark:text-white">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          v-if="hasSprintIntegration && !isCreatingStandUpEntry"
+          v-if="hasSprintIntegration && !isCreatingStandUpEntry && atlassianIntegration?.version === '2.0.0'"
           class="mb-4 md:mb-0 md:float-right"
           >
           <SprintDetails :sprint-id="standUpGroup.atlassian_sprint_id"></SprintDetails>
@@ -177,7 +179,7 @@
           >
           <StandUpGroupEntrySection
             :title="date"
-            :current-user-id="page.props.auth.user.id"
+            :current-user-id="user?.id"
             :stand-up-entries="standUpEntriesStore.groupedByDate[date]"
             >
           </StandUpGroupEntrySection>

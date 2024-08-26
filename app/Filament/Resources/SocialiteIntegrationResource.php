@@ -40,6 +40,9 @@ class SocialiteIntegrationResource extends Resource
                 Forms\Components\TextInput::make('provider_user_email'),
                 Forms\Components\TextInput::make('provider_user_nick_name'),
                 Forms\Components\TextInput::make('provider_user_id'),
+                Forms\Components\TextInput::make('version')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -62,6 +65,9 @@ class SocialiteIntegrationResource extends Resource
                     ->label('Nickname'),
                 Tables\Columns\TextColumn::make('provider_user_id')
                     ->label('Provider ID'),
+                Tables\Columns\TextColumn::make('version')
+                    ->label('Version')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
