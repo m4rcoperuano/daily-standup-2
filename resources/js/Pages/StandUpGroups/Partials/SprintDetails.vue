@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { computed, onMounted, ref } from 'vue';
   import { useApi } from '@/useApi';
+  import SprintDaysRemaining from '@/Pages/StandUpGroups/Partials/SprintDaysRemaining.vue';
+  import { DateTime } from 'luxon';
 
   const api = useApi();
 
@@ -14,13 +16,22 @@
   const sprint = ref( null );
 
   onMounted( async () => {
-    sprint.value = ( await api.integrations.jira.sprint( props.sprintId ) ).result;
+    sprint.value = ( await api.integrations.jira.sprint( props.sprintId ) ).result.data;
   } );
+
+  const sprintStartDate = computed( () => DateTime.fromISO( sprint.value?.startDate ).startOf( 'day' ).toJSDate() );
+  const sprintEndDate = computed( () => DateTime.fromISO( sprint.value?.endDate ).endOf( 'day' ).toJSDate() );
 
 </script>
 
 <template>
-  {{ sprint }}
+  <div>
+    <SprintDaysRemaining
+      v-if="sprint"
+      :start-date="sprintStartDate"
+      :end-date="sprintEndDate"
+      ></SprintDaysRemaining>
+  </div>
 </template>
 
 <style scoped>

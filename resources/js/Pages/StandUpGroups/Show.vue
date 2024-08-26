@@ -88,11 +88,14 @@
         Stand Up {{ standUpGroup.name }}
       </h2>
     </template>
-    <div class="py-12 dark:text-white">
-      <div v-if="hasSprintIntegration">
-        <SprintDetails :sprint-id="standUpGroup.atlassian_sprint_id"></SprintDetails>
-      </div>
+    <div class="py-6 dark:text-white">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          v-if="hasSprintIntegration && !isCreatingStandUpEntry"
+          class="mb-4 md:mb-0 md:float-right"
+          >
+          <SprintDetails :sprint-id="standUpGroup.atlassian_sprint_id"></SprintDetails>
+        </div>
         <div
           v-if="!isCreatingStandUpEntry"
           class="mb-4"
@@ -149,6 +152,7 @@
           </div>
         </div>
         <div v-else-if="isCreatingStandUpEntry">
+          <h3 class="text-2xl font-bold mb-4">New Stand Up Entry</h3>
           <div class="mb-2">
             <InputLabel
               value="Date"

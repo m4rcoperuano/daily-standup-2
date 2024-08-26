@@ -18,6 +18,7 @@
   } );
 
   import { useStandUpEntriesStore } from '@/Pages/StandUps/useStandUpEntriesStore';
+  import CopyTextButton from '@/Components/CopyTextButton.vue';
 
   const standUpEntriesStore = useStandUpEntriesStore();
 
@@ -106,10 +107,15 @@
               </button>
             </div>
             <div
-              class="align-top border-b p-4 dark:border-gray-700 col-span-2"
+              class="align-top border-b p-4 dark:border-gray-700 col-span-2 stand-up-content"
               >
               <div class="uppercase font-bold text-xs text-gray-500">
-                In Progress
+                <span>In Progress</span>
+                <copy-text-button
+                  v-if="entry.in_progress"
+                  class="copy-text-button"
+                  :text="entry.in_progress"
+                  ></copy-text-button>
               </div>
               <span
                 v-if="entry.in_progress"
@@ -123,9 +129,14 @@
                 (N/A)
               </span>
             </div>
-            <div class="align-top border-b p-4 dark:border-gray-700 col-span-2">
+            <div class="align-top border-b p-4 dark:border-gray-700 col-span-2 stand-up-content">
               <div class="uppercase font-bold text-xs text-gray-500">
-                Priorities
+                <span>Priorities</span>
+                <copy-text-button
+                  v-if="entry.priorities"
+                  class="copy-text-button"
+                  :text="entry.priorities"
+                  ></copy-text-button>
               </div>
               <span
                 v-if="entry.priorities"
@@ -139,9 +150,14 @@
                 (N/A)
               </span>
             </div>
-            <div class="align-top p-4 dark:border-gray-700 col-span-2">
+            <div class="align-top p-4 dark:border-gray-700 col-span-2 stand-up-content">
               <div class="uppercase font-bold text-xs text-gray-500">
-                Blockers
+                <span>Blockers</span>
+                <copy-text-button
+                  v-if="entry.blockers"
+                  class="copy-text-button"
+                  :text="entry.blockers"
+                  ></copy-text-button>
               </div>
               <span
                 v-if="entry.blockers"
@@ -193,7 +209,13 @@
     @apply bg-white dark:bg-gray-800 rounded-lg overflow-hidden;
 }
 
+.copy-text-button {
+    @apply float-right text-gray-400 hover:dark:text-teal-200 hover:text-teal-600 hidden;
+}
 
+.stand-up-content:hover .copy-text-button {
+    @apply block;
+}
 
 .fade-enter-active,
 .fade-leave-active {
