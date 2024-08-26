@@ -110,7 +110,7 @@
               class="align-top border-b p-4 dark:border-gray-700 col-span-2 stand-up-content"
               >
               <div class="uppercase font-bold text-xs text-gray-500">
-                <span>In Progress</span>
+                <span>What did you do yesterday?</span>
                 <copy-text-button
                   v-if="entry.in_progress"
                   class="copy-text-button"
@@ -131,7 +131,7 @@
             </div>
             <div class="align-top border-b p-4 dark:border-gray-700 col-span-2 stand-up-content">
               <div class="uppercase font-bold text-xs text-gray-500">
-                <span>Priorities</span>
+                <span>What will you do today?</span>
                 <copy-text-button
                   v-if="entry.priorities"
                   class="copy-text-button"
