@@ -31,6 +31,12 @@ class StandUpGroupResource extends Resource
                 Forms\Components\Select::make('team_id')
                     ->relationship('team', 'name')
                     ->required(),
+                Forms\Components\TextInput::make('atlassian_board_id')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('atlassian_sprint_id')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
