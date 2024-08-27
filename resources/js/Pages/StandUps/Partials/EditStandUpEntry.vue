@@ -53,7 +53,7 @@
     <div class="grid grid-cols-1 gap-4">
       <div class="content">
         <div class="dark:bg-gray-950 dark:text-white px-4 py-2 bg-gray-100 border-b">
-          ✅ In Progress
+          ✅ What did you do yesterday?
         </div>
         <RichTextEditor
           v-model="form.in_progress"
@@ -62,7 +62,7 @@
       </div>
       <div class="content">
         <div class="dark:bg-gray-950 dark:text-white px-4 py-2 bg-gray-100 border-b">
-          💯 Priorities
+          💯 What will you do today?
         </div>
         <RichTextEditor
           v-model="form.priorities"
