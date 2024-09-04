@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import AppLayout from '@/Layouts/AppLayout.vue';
-  import { computed, onMounted, ref, watch } from 'vue';
+  import { computed, onMounted, ref } from 'vue';
   import { DateTime } from 'luxon';
   import StandUpGroupEntrySection from '@/Pages/StandUps/Partials/StandUpGroupEntrySection.vue';
   import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -21,7 +21,10 @@
 
   const page = usePage();
   const user = computed( () => page.props.auth.user );
-  const atlassianIntegration = computed( () => user.value?.socialite_integrations?.filter( ( integration ) => integration.provider === 'atlassian' )[0] );
+  const userIntegrations = computed( () => user.value?.socialite_integrations?.map( integration => ( {
+    provider: integration.provider,
+    version: integration.version,
+  } ) ) );
   const standUpEntriesStore = useStandUpEntriesStore();
   const linkPreviewsStore = useLinkPreviewsStore();
   const standUpEntryGroupByDateKeys = computed( () => Object.keys( standUpEntriesStore.groupedByDate ) );
@@ -93,7 +96,7 @@
     <div class="py-6 dark:text-white">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          v-if="hasSprintIntegration && !isCreatingStandUpEntry && atlassianIntegration?.version === '2.0.0'"
+          v-if="!isCreatingStandUpEntry && hasSprintIntegration"
           class="mb-4 md:mb-0 md:float-right"
           >
           <SprintDetails :sprint-id="standUpGroup.atlassian_sprint_id"></SprintDetails>
@@ -106,7 +109,7 @@
             v-if="standUpEntryGroupByDateKeys.length <= 0"
             class="mb-2"
             >
-            Hey! Your team currently doesn't posted any stand up entries to this group. Do you want to start it off?
+            No stand up entries yet! Click the button below to create one!
           </p>
 
           <div class="flex">
@@ -153,7 +156,7 @@
             </div>
           </div>
         </div>
-        <div v-else-if="isCreatingStandUpEntry">
+        <div v-else>
           <h3 class="text-2xl font-bold mb-4">New Stand Up Entry</h3>
           <div class="mb-2">
             <InputLabel
@@ -165,12 +168,12 @@
               ></DateAwareDatePicker>
           </div>
           <EditStandUpEntry
+            :user-integrations="userIntegrations"
             @save="saveNew"
             @cancel="cancelNew"
             ></EditStandUpEntry>
           <div class="mb-4 border-b pb-8 border-gray-700"></div>
         </div>
-
 
         <div
           v-for="date in standUpEntryGroupByDateKeys"
@@ -181,6 +184,7 @@
             :title="date"
             :current-user-id="user?.id"
             :stand-up-entries="standUpEntriesStore.groupedByDate[date]"
+            :user-integrations="userIntegrations"
             >
           </StandUpGroupEntrySection>
         </div>

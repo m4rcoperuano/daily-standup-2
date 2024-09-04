@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\IntegrationMissing;
 use App\Models\SocialiteIntegration;
 use App\Models\User;
 use Exception;
@@ -20,7 +21,7 @@ class GithubIntegration
     public static function make(User $user): self {
         $socialiteIntegration = $user->socialiteIntegrations()->where('provider', 'github')->first();
         if (!$socialiteIntegration) {
-            throw new Exception("Integration for github not set up");
+            throw new IntegrationMissing("github", "Integration for github not set up");
         }
         return new self($socialiteIntegration);
     }
