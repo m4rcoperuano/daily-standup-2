@@ -15,10 +15,6 @@
       type: Number,
       required: true,
     },
-    userIntegrations: {
-      type: Array,
-      default: () => [],
-    },
   } );
 
   import { useStandUpEntriesStore } from '@/Pages/StandUps/useStandUpEntriesStore';
@@ -80,7 +76,6 @@
               :priorities="entry.priorities"
               :blockers="entry.blockers"
               :is-editing="true"
-              :user-integrations="userIntegrations"
               @save="onUpdate"
               @cancel="onCancel"
               @delete="onDelete"

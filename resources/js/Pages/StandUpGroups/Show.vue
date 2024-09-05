@@ -21,10 +21,6 @@
 
   const page = usePage();
   const user = computed( () => page.props.auth.user );
-  const userIntegrations = computed( () => user.value?.socialite_integrations?.map( integration => ( {
-    provider: integration.provider,
-    version: integration.version,
-  } ) ) );
   const standUpEntriesStore = useStandUpEntriesStore();
   const linkPreviewsStore = useLinkPreviewsStore();
   const standUpEntryGroupByDateKeys = computed( () => Object.keys( standUpEntriesStore.groupedByDate ) );
@@ -168,7 +164,6 @@
               ></DateAwareDatePicker>
           </div>
           <EditStandUpEntry
-            :user-integrations="userIntegrations"
             @save="saveNew"
             @cancel="cancelNew"
             ></EditStandUpEntry>
@@ -184,7 +179,6 @@
             :title="date"
             :current-user-id="user?.id"
             :stand-up-entries="standUpEntriesStore.groupedByDate[date]"
-            :user-integrations="userIntegrations"
             >
           </StandUpGroupEntrySection>
         </div>
