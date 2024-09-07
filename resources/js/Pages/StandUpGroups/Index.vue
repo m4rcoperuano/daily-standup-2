@@ -26,7 +26,7 @@
 
     <div class="py-6 dark:text-white">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="shadow-xl sm:rounded-lg">
+        <div>
           <div class="p-4">
             <div v-if="standUpGroups.length <= 0">
               <p
