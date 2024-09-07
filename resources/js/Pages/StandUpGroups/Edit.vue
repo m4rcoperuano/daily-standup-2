@@ -74,6 +74,10 @@
           <template #title>
             Edit Stand Up Group
           </template>
+          <template #description>
+            Name your Stand Up Group after your Sprint name! If you have a JIRA integration, you can connect your JIRA Sprint to this group.
+            Coming soon: Adding images to your Sprint
+          </template>
           <template #form>
             <div class="col-span-6 sm:col-span-4 flex flex-col gap-4">
               <div>
