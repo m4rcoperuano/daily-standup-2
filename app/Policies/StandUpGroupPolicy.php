@@ -30,7 +30,7 @@ class StandUpGroupPolicy
      */
     public function create(User $user, Team $team): bool
     {
-        return $user->hasTeamRole($team, 'administrator');
+        return $user->hasTeamRole($team, 'admin');
     }
 
     /**
@@ -38,7 +38,7 @@ class StandUpGroupPolicy
      */
     public function update(User $user, StandUpGroup $standUpGroup, Team $team): bool
     {
-        return $user->hasTeamRole($team, 'administrator');
+        return $user->hasTeamRole($team, 'admin');
     }
 
     /**
