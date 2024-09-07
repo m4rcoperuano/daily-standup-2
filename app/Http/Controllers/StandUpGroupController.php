@@ -28,9 +28,7 @@ class StandUpGroupController extends Controller
     {
         $this->authorize('create', [StandUpGroup::class, $request->user()->currentTeam]);
 
-        $hasJiraIntegration = $request->user()->hasIntegration('atlassian');
-        return Inertia::render('StandUpGroups/Create')
-            ->with("hasJiraIntegration", $hasJiraIntegration);
+        return Inertia::render('StandUpGroups/Create');
     }
 
     public function edit(Request $request, StandUpGroup $standUpGroup)

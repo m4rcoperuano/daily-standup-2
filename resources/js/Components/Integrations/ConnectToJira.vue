@@ -82,7 +82,7 @@
 
         <div v-if="currentVersion === null || currentVersion === '1.0.0'">
           <p class="mb-2">
-            View the number of days left in your sprint using our sprint widget 🎉
+            View the number of days left in your sprint by connecting your Stand Up Group to your Sprint. You will then see our sprint widget when entering your Stand Up Entries 🎉
           </p>
           <img
             src="/assets/sprint-countdown-widget.png"

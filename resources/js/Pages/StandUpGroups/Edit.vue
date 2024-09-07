@@ -9,21 +9,20 @@
   import { onMounted, ref, watch } from 'vue';
   import CustomSelect from '@/Components/CustomSelect.vue';
   import { useApi } from '@/useApi.ts';
+  import ConnectToJira from '@/Components/Integrations/ConnectToJira.vue';
+  import { useIntegrationsStore } from '@/Stores/integrationsStore.js';
 
   const props = defineProps( {
     standUpGroup: {
       type: Object,
       required: true,
     },
-    hasJiraIntegration: {
-      type: Boolean,
-      default: false,
-    },
   } );
 
   const api = useApi();
   const boards = ref( [] );
   const sprints = ref( [] );
+  const integrationsStore = useIntegrationsStore();
 
   const form = useForm( {
     name: props.standUpGroup.name,
@@ -44,8 +43,16 @@
     sprints.value = ( await api.integrations.jira.sprints( form.atlassian_board_id, false ) ).result?.data;
   };
 
+  const userConnected = async () => {
+    await integrationsStore.fetchIntegrations();
+    fetchBoards();
+    fetchSprints();
+  };
+
   onMounted(
-    () => {
+    async () => {
+      await integrationsStore.fetchIntegrations();
+
       fetchBoards();
       if ( form.atlassian_board_id ) {
         fetchSprints();
@@ -99,7 +106,7 @@
                   ></InputError>
               </div>
               <div
-                v-if="hasJiraIntegration"
+                v-if="integrationsStore.hasIntegration('atlassian', '2.0.0')"
                 class="flex flex-col gap-4"
                 >
                 <div>
@@ -122,7 +129,16 @@
                     :options="sprints"
                     ></CustomSelect>
                 </div>
-
+              </div>
+              <div v-else-if="integrationsStore.hasIntegration('atlassian', '1.0.0')">
+                <ConnectToJira
+                  upgrade
+                  current-version="1.0.0"
+                  @user-connected="userConnected"
+                  ></ConnectToJira>
+              </div>
+              <div v-else>
+                <ConnectToJira @user-connected="userConnected"></ConnectToJira>
               </div>
             </div>
           </template>

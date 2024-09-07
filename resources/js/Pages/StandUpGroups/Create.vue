@@ -9,17 +9,13 @@
   import { onMounted, ref, watch } from 'vue';
   import CustomSelect from '@/Components/CustomSelect.vue';
   import { useApi } from '@/useApi.ts';
-
-  defineProps( {
-    hasJiraIntegration: {
-      type: Boolean,
-      default: false,
-    },
-  } );
+  import { useIntegrationsStore } from '@/Stores/integrationsStore.js';
+  import ConnectToJira from '@/Components/Integrations/ConnectToJira.vue';
 
   const api = useApi();
   const boards = ref( [] );
   const sprints = ref( [] );
+  const integrationsStore = useIntegrationsStore();
 
   const form = useForm( {
     name: null,
@@ -47,8 +43,21 @@
       form.atlassian_sprint_id = sprints.value[0].id;
     }
   };
+  const userConnected = async () => {
+    await integrationsStore.fetchIntegrations();
 
-  onMounted( () => fetchBoards() );
+    if ( integrationsStore.hasIntegration( 'atlassian', '2.0.0' ) ) {
+      fetchBoards();
+    }
+  };
+
+  onMounted( async () => {
+    await integrationsStore.fetchIntegrations();
+
+    if ( integrationsStore.hasIntegration( 'atlassian', '2.0.0' ) ) {
+      fetchBoards();
+    }
+  } );
 
   watch( () => form.atlassian_board_id, ( value ) => {
     if ( value ) {
@@ -96,7 +105,7 @@
                   ></InputError>
               </div>
               <div
-                v-if="hasJiraIntegration"
+                v-if="integrationsStore.hasIntegration('atlassian', '2.0.0')"
                 class="flex flex-col gap-4"
                 >
                 <div>
@@ -119,7 +128,16 @@
                     :options="sprints"
                     ></CustomSelect>
                 </div>
-
+              </div>
+              <div v-else-if="integrationsStore.hasIntegration('atlassian', '1.0.0')">
+                <ConnectToJira
+                  upgrade
+                  current-version="1.0.0"
+                  @user-connected="userConnected"
+                  ></ConnectToJira>
+              </div>
+              <div v-else>
+                <ConnectToJira @user-connected="userConnected"></ConnectToJira>
               </div>
             </div>
           </template>
