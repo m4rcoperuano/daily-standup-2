@@ -6,7 +6,7 @@
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import EditStandUpEntry from '@/Pages/StandUps/Partials/EditStandUpEntry.vue';
   import InputLabel from '@/Components/InputLabel.vue';
-  import { StandUpEntry, useStandUpEntriesStore } from '@/Pages/StandUps/useStandUpEntriesStore';
+  import { StandUpEntry, useStandUpEntriesStore } from '@/Pages/StandUps/standUpEntriesStore';
   import { usePage } from '@inertiajs/vue3';
   import DateAwareDatePicker from '@/Components/DateAwareDatePicker.vue';
   import { useLinkPreviewsStore } from '@/Stores/linkPreviewStore';
@@ -167,7 +167,7 @@
             @save="saveNew"
             @cancel="cancelNew"
             ></EditStandUpEntry>
-          <div class="mb-4 border-b pb-8 border-gray-700"></div>
+          <div class="mb-4 border-b pb-8 border-gray-200  dark:border-gray-700"></div>
         </div>
 
         <div

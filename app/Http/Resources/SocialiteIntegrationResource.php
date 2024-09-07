@@ -17,6 +17,7 @@ class SocialiteIntegrationResource extends JsonResource
         return [
             'id' => $this->id,
             'provider' => $this->provider,
+            'version' => $this->version,
         ];
     }
 }

@@ -30,11 +30,6 @@ class SocialiteIntegrationResource extends Resource
                 Forms\Components\TextInput::make('provider')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('access_token')
-                    ->password()
-                    ->required(),
-                Forms\Components\TextInput::make('refresh_token')
-                    ->password(),
                 Forms\Components\TextInput::make('provider_user_name'),
                 Forms\Components\TextInput::make('provider_user_avatar'),
                 Forms\Components\TextInput::make('provider_user_email'),

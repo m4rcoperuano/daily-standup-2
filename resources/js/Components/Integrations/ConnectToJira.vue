@@ -1,4 +1,17 @@
 <script setup lang="ts">
+  defineProps( {
+    currentVersion: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    upgrade: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  } );
+
   const emit = defineEmits( [
     'user-connected',
   ] );
@@ -18,22 +31,28 @@
       showPending.value = false;
     }, 500 );
   };
+
+  const showAd = () => {
+    showAdvertisement.value = true;
+  };
 </script>
 
 <template>
-  <button
-    class="inline-flex items-center px-4 py-2 bg-blue-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 transition ease-in-out duration-150"
-    type="button"
-    @click="showAdvertisement = true"
-    >
-    <img
-      src="https://dac-static.atlassian.com/favicon.ico"
-      style="width:15px;"
-      class="mr-1"
-      alt="logo"
-      />
-    Connect to JIRA
-  </button>
+  <slot :show-ad="showAd">
+    <button
+      class="inline-flex items-center px-4 py-2 bg-blue-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 transition ease-in-out duration-150"
+      type="button"
+      @click="showAdvertisement = true"
+      >
+      <img
+        src="https://dac-static.atlassian.com/favicon.ico"
+        style="width:15px;"
+        class="mr-1"
+        alt="logo"
+        />
+      {{ upgrade ? 'Upgrade' : 'Connect to JIRA' }}
+    </button>
+  </slot>
   <DialogModal
     :show="showAdvertisement"
     :closeable="false"
@@ -41,32 +60,37 @@
     >
     <template #title>
       <div class="text-center text-2xl">
-        JIRA Integration
+        {{ upgrade ? 'Upgrade' : '' }} JIRA Integration
       </div>
     </template>
     <template #content>
       <div
         v-if="!showPending"
-        class="text-md text-white text-center"
+        class="text-md dark:text-white text-center"
         >
-        <p class="mb-2">
-          Auto-formats pasted links to JIRA issues and Confluence articles ✨
-        </p>
-        <img
-          src="/assets/jira-autoformatting.png"
-          alt="JIRA autoformatting"
-          style="width:450px;"
-          class="mb-4 shadow-md mx-auto"
-          />
-        <p class="mb-2">
-          View the number of days left in your sprint using our sprint widget 🎉
-        </p>
-        <img
-          src="/assets/sprint-countdown-widget.png"
-          alt="JIRA Sprint Countdown Widget"
-          style="width:450px;"
-          class="shadow-md mx-auto"
-          />
+        <div v-if="currentVersion === null">
+          <p class="mb-2">
+            Auto-formats pasted links to JIRA issues and Confluence articles ✨
+          </p>
+          <img
+            src="/assets/jira-autoformatting.png"
+            alt="JIRA autoformatting"
+            style="width:450px;"
+            class="mb-4 shadow-md mx-auto"
+            />
+        </div>
+
+        <div v-if="currentVersion === null || currentVersion === '1.0.0'">
+          <p class="mb-2">
+            View the number of days left in your sprint using our sprint widget 🎉
+          </p>
+          <img
+            src="/assets/sprint-countdown-widget.png"
+            alt="JIRA Sprint Countdown Widget"
+            style="width:450px;"
+            class="shadow-md mx-auto"
+            />
+        </div>
       </div>
       <div
         v-else
@@ -101,12 +125,12 @@
             class="mr-1"
             alt="logo"
             />
-          Connect to JIRA
+          {{ upgrade ? 'Upgrade' : 'Connect to JIRA' }}
         </a>
         <div class="pt-4">
           <button
             type="button"
-            class="dark:text-gray-400"
+            class="dark:text-gray-400 hover:opacity-50"
             @click="showAdvertisement = false"
             >
             Not now
