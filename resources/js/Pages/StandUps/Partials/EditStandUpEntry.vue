@@ -1,10 +1,13 @@
 <script setup lang="ts">
   import PrimaryButton from '@/Components/PrimaryButton.vue';
-  import { Ref, ref } from 'vue';
+  import { computed, onMounted, Ref, ref } from 'vue';
   import SecondaryButton from '@/Components/SecondaryButton.vue';
   import DangerButton from '@/Components/DangerButton.vue';
-  import { StandUpEntry } from '@/Pages/StandUps/useStandUpEntriesStore';
+  import { StandUpEntry } from '@/Pages/StandUps/standUpEntriesStore';
   import RichTextEditor from '@/Components/RichTextEditor.vue';
+  import ConnectToJira from '@/Components/Integrations/ConnectToJira.vue';
+  import ConnectToGithub from '@/Components/Integrations/ConnectToGithub.vue';
+  import { useIntegrationsStore } from '@/Stores/integrationsStore.js';
 
   const props = defineProps( {
     isEditing: {
@@ -26,6 +29,8 @@
   } );
 
   const emits = defineEmits( [ 'save', 'cancel', 'delete' ] );
+  const integrationsStore = useIntegrationsStore();
+  const integrationConnectedSuccess = ref( false );
 
   const form : Ref<StandUpEntry> = ref( {
     in_progress: props.inProgress ?? '',
@@ -46,6 +51,37 @@
       emits( 'delete' );
     }
   };
+
+  const suggestAtlassianIntegration = computed( () => {
+    return !integrationsStore.hasIntegration( 'atlassian' ) &&
+      (
+        form.value.in_progress.includes( 'atlassian' )
+        || form.value.priorities.includes( 'atlassian' )
+        || form.value.blockers.includes( 'atlassian' )
+      );
+  } );
+
+  const suggestGithubIntegration = computed( () => {
+    return !integrationsStore.hasIntegration( 'github' ) &&
+      (
+        form.value.in_progress.includes( 'github' )
+        || form.value.priorities.includes( 'github' )
+        || form.value.blockers.includes( 'github' )
+      );
+  } );
+
+  const onUserConnectedIntegration = async ( provider ) => {
+    integrationsStore.setIntegrationsLoading( true );
+    await integrationsStore.fetchIntegrations();
+
+    if ( integrationsStore.hasIntegration( provider ) ) {
+      integrationConnectedSuccess.value = true;
+    }
+  };
+
+  onMounted( () => {
+    integrationsStore.fetchIntegrations();
+  } );
 </script>
 
 <template>
@@ -101,7 +137,52 @@
         >
         Save
       </PrimaryButton>
-
+    </div>
+    <div
+      v-if="integrationConnectedSuccess"
+      class="text-green-100 bg-green-900 p-3 rounded mt-4"
+      >
+      Your integration connection was successful! Links will be auto-formatted upon save
+    </div>
+    <div
+      v-if="!integrationsStore.integrationsLoading && ( suggestAtlassianIntegration || suggestGithubIntegration )"
+      class="dark:text-white p-2 rounded mt-4"
+      >
+      <div class="flex justify-center">
+        <div class="flex gap-2  opacity-50">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+            >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
+              ></path>
+          </svg>
+          <span class="text-sm">
+            Integrations Available
+          </span>
+        </div>
+      </div>
+      <div
+        class="justify-center flex pt-2"
+        >
+        <div class="flex gap-2">
+          <ConnectToJira
+            v-if="suggestAtlassianIntegration"
+            @user-connected="onUserConnectedIntegration('atlassian')"
+            ></ConnectToJira>
+          <ConnectToGithub
+            v-if="suggestGithubIntegration"
+            @user-connected="onUserConnectedIntegration('github')"
+            ></ConnectToGithub>
+        </div>
+      </div>
     </div>
   </div>
 </template>

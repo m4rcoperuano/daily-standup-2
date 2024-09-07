@@ -3,14 +3,21 @@
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import { computed, onMounted, ref } from 'vue';
   import DangerButton from '@/Components/DangerButton.vue';
+  import ConnectToGithub from '@/Components/Integrations/ConnectToGithub.vue';
+  import ConnectToJira from '@/Components/Integrations/ConnectToJira.vue';
 
   const loading = ref( true );
   const integrations = ref( [] );
 
-  onMounted( async () => {
+  const fetchIntegrations = async () => {
+    loading.value = true;
     const response = await axios.get( route( 'socialite.index' ) );
     integrations.value = response.data;
     loading.value = false;
+  };
+
+  onMounted( () => {
+    fetchIntegrations();
   } );
 
   const atlassianIntegration = computed(
@@ -63,17 +70,11 @@
         <div
           v-else
           >
-          <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-            Click below to connect your JIRA Account
-          </div>
-
-          <div class="mt-3">
-            <PrimaryButton
-              external
-              :route="route('socialite.redirect', 'atlassian')"
-              >
-              Connect Jira
-            </PrimaryButton>
+          <div>
+            <ConnectToJira @user-connected="fetchIntegrations"></ConnectToJira>
+            <div class="dark:text-white pt-4">
+              Connecting to JIRA will automatically format pasted links to JIRA tickets and Confluence articles.
+            </div>
           </div>
         </div>
 
@@ -104,19 +105,12 @@
         </div>
         <div
           v-else
-          class="mb-2"
           >
-          <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-            Click below to connect your Github Account
-          </div>
-
-          <div class="mt-3">
-            <PrimaryButton
-              external
-              :route="route('socialite.redirect', 'github')"
-              >
-              Connect Github
-            </PrimaryButton>
+          <div>
+            <ConnectToGithub></ConnectToGithub>
+            <div class="dark:text-white pt-4">
+              Connecting to Github will automatically format pasted links to issues and pull requests.
+            </div>
           </div>
         </div>
       </div>

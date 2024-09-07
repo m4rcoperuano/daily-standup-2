@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\IntegrationMissing;
 use App\Models\SocialiteIntegration;
 use App\Models\User;
 use Exception;
@@ -22,7 +23,7 @@ class AtlassianIntegration
     {
         $socialiteIntegration = $user->socialiteIntegrations()->where('provider', 'atlassian')->first();
         if (!$socialiteIntegration) {
-            throw new Exception("Integration for atlassian not set up");
+            throw new IntegrationMissing("atlassian", "Integration for atlassian not set up");
         }
         return new self($socialiteIntegration);
     }

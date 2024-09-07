@@ -17,7 +17,7 @@
     },
   } );
 
-  import { useStandUpEntriesStore } from '@/Pages/StandUps/useStandUpEntriesStore';
+  import { useStandUpEntriesStore } from '@/Pages/StandUps/standUpEntriesStore';
   import CopyTextButton from '@/Components/CopyTextButton.vue';
 
   const standUpEntriesStore = useStandUpEntriesStore();

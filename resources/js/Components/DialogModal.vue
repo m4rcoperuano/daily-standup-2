@@ -35,7 +35,7 @@
         <slot name="title"></slot>
       </div>
 
-      <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+      <div class="mt-4 text-gray-600 dark:text-gray-400">
         <slot name="content"></slot>
       </div>
     </div>
