@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.9",
         "resend/resend-laravel": "^0.14.0",
         "socialiteproviders/atlassian": "dev-master",
+        "stechstudio/filament-impersonate": "^3.14",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
