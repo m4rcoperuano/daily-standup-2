@@ -45,7 +45,7 @@
       @click="showAdvertisement = true"
       >
       <img
-        src="https://dac-static.atlassian.com/favicon.ico"
+        src="/assets/atlassian-generic.ico"
         style="width:15px;"
         class="mr-1"
         alt="logo"

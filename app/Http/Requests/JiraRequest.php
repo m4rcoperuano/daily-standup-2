@@ -22,7 +22,7 @@ class JiraRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'active' => 'bool'
         ];
     }
 }

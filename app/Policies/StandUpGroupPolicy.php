@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\StandUpGroup;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -27,17 +28,17 @@ class StandUpGroupPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Team $team): bool
     {
-        return true;
+        return $user->hasTeamRole($team, 'administrator');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, StandUpGroup $standUpGroup): bool
+    public function update(User $user, StandUpGroup $standUpGroup, Team $team): bool
     {
-        return $this->view($user, $standUpGroup);
+        return $user->hasTeamRole($team, 'administrator');
     }
 
     /**

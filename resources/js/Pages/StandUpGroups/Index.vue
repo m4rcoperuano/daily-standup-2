@@ -1,11 +1,15 @@
 <script setup>
   import AppLayout from '@/Layouts/AppLayout.vue';
   import PrimaryButton from '@/Components/PrimaryButton.vue';
-  import SecondaryButton from '@/Components/SecondaryButton.vue';
+  import StandUpGroupCard from '@/Pages/StandUpGroups/Partials/StandUpGroupCard.vue';
 
   defineProps( {
     standUpGroups: {
       type: Array,
+      required: true,
+    },
+    canCreateOrEdit: {
+      type: Boolean,
       required: true,
     },
   } );
@@ -20,9 +24,9 @@
       </h2>
     </template>
 
-    <div class="py-12 dark:text-white">
+    <div class="py-6 dark:text-white">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+        <div class="shadow-xl sm:rounded-lg">
           <div class="p-4">
             <div v-if="standUpGroups.length <= 0">
               <p
@@ -32,6 +36,7 @@
                 stand ups from your team by creating a group first.
               </p>
               <PrimaryButton
+                v-if="canCreateOrEdit"
                 link
                 :route="route('stand-up-groups.create')"
                 >
@@ -39,11 +44,10 @@
               </PrimaryButton>
             </div>
             <div v-else>
-              <div class="flex gap-2">
-                <div class="opacity-60 flex-grow">
-                  Stand Up Group
-                </div>
-
+              <div
+                v-if="canCreateOrEdit"
+                class="flex gap-2 justify-center mb-4"
+                >
                 <PrimaryButton
                   link
                   :route="route('stand-up-groups.create')"
@@ -52,23 +56,18 @@
                 </PrimaryButton>
               </div>
 
-              <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-                <li
-                  v-for="group in standUpGroups"
-                  :key="group.id"
-                  class="py-4 flex justify-between items-center"
-                  >
-                  <div>
-                    <h3 class="font-semibold">{{ group.name }}</h3>
-                  </div>
-                  <SecondaryButton
-                    link
-                    :route="route('stand-up-groups.show', group.id)"
+              <div class="justify-center">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                  <StandUpGroupCard
+                    v-for="group in standUpGroups"
+                    :key="group.id"
+                    :title="group.name"
+                    :group-id="group.id"
+                    :can-edit="canCreateOrEdit"
                     >
-                    View
-                  </SecondaryButton>
-                </li>
-              </ul>
+                  </StandUpGroupCard>
+                </div>
+              </div>
             </div>
           </div>
         </div>

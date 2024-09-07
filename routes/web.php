@@ -28,7 +28,7 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('/stand-up-groups', StandUpGroupController::class)
-        ->only(['index', 'create', 'store', 'show']);
+        ->only(['index', 'create', 'store', 'show', 'edit', 'update']);
 
     Route::get('/stand-up-groups/{standUpGroup}/entries', [StandUpEntryController::class, 'index'])
         ->name('stand-up-entries.index');

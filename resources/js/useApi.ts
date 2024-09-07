@@ -55,8 +55,8 @@ export function useApi( ) {
             boards: async (): Promise<CustomResponse> => {
                 return await callApi( 'get', route( 'integrations.jira.boards' ) );
             },
-            sprints: async ( boardId: StringOrNumber ): Promise<CustomResponse> => {
-                return await callApi( 'get', route( 'integrations.jira.sprints', boardId ) );
+            sprints: async ( boardId: StringOrNumber,  activeOnly = true ): Promise<CustomResponse> => {
+                return await callApi( 'get', route( 'integrations.jira.sprints', boardId ) + '?active=' + ( activeOnly ? 1 : 0 )  );
             },
             sprint: async ( sprintId: StringOrNumber ): Promise<CustomResponse> => {
                 return await callApi( 'get', route( 'integrations.jira.sprint', sprintId ) );

@@ -16,7 +16,7 @@ class JiraController extends Controller
     public function sprints(JiraRequest $request, string $boardId) {
         $integration = AtlassianIntegration::make($request->user());
         $cloudId = data_get($integration->getAccessibleResources(), "0.id");
-        return $integration->getSprints($cloudId, $boardId)->json('values');
+        return $integration->getSprints($cloudId, $boardId, $request->boolean('active'))->json('values');
     }
 
     public function sprint(JiraRequest $request, string $sprintId) {

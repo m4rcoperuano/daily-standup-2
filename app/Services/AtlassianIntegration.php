@@ -56,11 +56,11 @@ class AtlassianIntegration
             ->get("/ex/jira/$cloudId/rest/agile/1.0/board");
     }
 
-    public function getSprints(string $cloudId, string $boardId): Response
+    public function getSprints(string $cloudId, string $boardId, bool $activeOnly = true): Response
     {
         return $this
             ->http()
-            ->get("/ex/jira/$cloudId/rest/agile/1.0/board/$boardId/sprint?state=active");
+            ->get("/ex/jira/$cloudId/rest/agile/1.0/board/$boardId/sprint". ($activeOnly ? "?state=active" : ""));
     }
 
     public function getSprint(string $cloudId, string $sprintId): Response

@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class StandUpGroupResource extends JsonResource
 {
     public static $wrap = false;
-    
+
     /**
      * Transform the resource into an array.
      *
@@ -20,7 +20,7 @@ class StandUpGroupResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             "atlassian_board_id" => $this->atlassian_board_id,
-            "atlassian_sprint_id" => $this->atlassian_sprint_id
+            "atlassian_sprint_id" => $this->atlassian_sprint_id,
         ];
     }
 }

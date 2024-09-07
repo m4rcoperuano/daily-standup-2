@@ -55,18 +55,18 @@
   const suggestAtlassianIntegration = computed( () => {
     return !integrationsStore.hasIntegration( 'atlassian' ) &&
       (
-        form.value.in_progress.includes( 'atlassian' )
-        || form.value.priorities.includes( 'atlassian' )
-        || form.value.blockers.includes( 'atlassian' )
+        form.value.in_progress.includes( 'atlassian.com' )
+        || form.value.priorities.includes( 'atlassian.com' )
+        || form.value.blockers.includes( 'atlassian.com' )
       );
   } );
 
   const suggestGithubIntegration = computed( () => {
     return !integrationsStore.hasIntegration( 'github' ) &&
       (
-        form.value.in_progress.includes( 'github' )
-        || form.value.priorities.includes( 'github' )
-        || form.value.blockers.includes( 'github' )
+        form.value.in_progress.includes( 'github.com' )
+        || form.value.priorities.includes( 'github.com' )
+        || form.value.blockers.includes( 'github.com' )
       );
   } );
 
