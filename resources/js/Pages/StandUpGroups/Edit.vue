@@ -71,6 +71,9 @@
     <div class="py-6 dark:text-white">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <FormSection @submitted="submitForm">
+          <template #title>
+            Edit Stand Up Group
+          </template>
           <template #form>
             <div class="col-span-6 sm:col-span-4 flex flex-col gap-4">
               <div>
