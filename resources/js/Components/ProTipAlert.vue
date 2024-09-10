@@ -29,7 +29,7 @@
     v-if="initialized && !proTipsAcknowledged.includes(proTipName)"
     class="mt-4 bg-gray-200 dark:bg-gray-800 p-4 rounded-lg text-sm dark:text-gray-300 text-gray-800"
     >
-    <span class="font-bold">Pro tip!</span>
+    <span class="font-bold">Tip!</span>
     <slot></slot>
     <br />
     <button
