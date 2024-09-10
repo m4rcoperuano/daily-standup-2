@@ -51,7 +51,7 @@
             >
             <nav
               v-if="canLogin"
-              class="flex flex-1 justify-left"
+              class="flex flex-1 justify-center"
               >
               <Link
                 v-if="$page.props.auth.user"

@@ -79,8 +79,17 @@
     }
   };
 
+  const proTipsAcknowledged = ref( [] );
+  const acknowledge = ( tip ) => {
+    proTipsAcknowledged.value.push( tip );
+    localStorage.setItem( 'proTipsAcknowledged', JSON.stringify( proTipsAcknowledged.value ) );
+  };
+
   onMounted( () => {
     integrationsStore.fetchIntegrations();
+    if ( localStorage.getItem( 'proTipsAcknowledged' ) ) {
+      proTipsAcknowledged.value = JSON.parse( localStorage.getItem( 'proTipsAcknowledged' ) );
+    }
   } );
 </script>
 
@@ -114,6 +123,19 @@
           placeholder="What are your blockers?"
           ></RichTextEditor>
       </div>
+    </div>
+
+    <div
+      v-if="!proTipsAcknowledged.includes('autoformatting-links')"
+      class="mt-4 bg-gray-200 dark:bg-gray-800 p-4 rounded-lg text-sm dark:text-gray-300 text-gray-800"
+      >
+      <span class="font-bold">Pro tip!</span> We auto-format any link for you. Just paste the link, press space or enter to active the link, and save to see the result.
+      <br />
+      <button
+        type="button"
+        class="bg-gray-300 dark:bg-gray-700 mt-1 px-2 rounded shadow hover:bg-gray-500"
+        @click="acknowledge('autoformatting-links')"
+        >Dismiss</button>
     </div>
 
     <div class="pt-4 flex gap-4">
