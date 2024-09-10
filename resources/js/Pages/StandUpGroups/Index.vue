@@ -2,6 +2,7 @@
   import AppLayout from '@/Layouts/AppLayout.vue';
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import StandUpGroupCard from '@/Pages/StandUpGroups/Partials/StandUpGroupCard.vue';
+  import ProTipAlert from '@/Components/ProTipAlert.vue';
 
   defineProps( {
     standUpGroups: {
@@ -69,6 +70,15 @@
                 </div>
               </div>
             </div>
+
+            <ProTipAlert
+              v-if="canCreateOrEdit"
+              pro-tip-name="stand-up-groups-info"
+              >
+              Your stand up groups are containers for each of your Sprints. Any time you start a new sprint, create a new group!
+              Your team members will automatically get access to it.
+
+            </ProTipAlert>
           </div>
         </div>
       </div>
