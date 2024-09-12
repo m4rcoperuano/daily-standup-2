@@ -120,6 +120,10 @@
     <ProTipAlert pro-tip-name="autoformatting-links">
       We auto-format any link for you. Just paste the link, press space or enter to active the link, and save to see the result.
     </ProTipAlert>
+    <ProTipAlert pro-tip-name="markdown-support">
+      Each text-field above supports markdown. You can use "- " for bullet points, "**" for bold, and more. You can also highlight text and apply
+      additional formatting using the formatting toolbar.
+    </ProTipAlert>
 
     <div class="pt-4 flex gap-4">
       <DangerButton
