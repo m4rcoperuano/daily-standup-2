@@ -43,12 +43,15 @@ Route::middleware([
         ->name('socialite.redirect');
     Route::get('auth/{provider}/callback', [SocialiteIntegrationController::class, 'callback'])
         ->name('socialite.callback');
-    Route::get('auth/integrations', [SocialiteIntegrationController::class, 'index'])
+    Route::get('auth/{team}/integrations', [SocialiteIntegrationController::class, 'index'])
         ->name('socialite.index');
     Route::delete('auth/integrations/{socialiteIntegration}', [SocialiteIntegrationController::class, 'destroy'])
         ->name('socialite.destroy');
 
-    Route::prefix("integrations/jira")
+    Route::get('/teams/{team}/integrations', [SocialiteIntegrationController::class, "show"])
+        ->name('teams.integrations.show');
+
+    Route::prefix("integrations/{team}/jira")
         ->group(function() {
             Route::get("/boards", [JiraController::class, "boards"])
                 ->name("integrations.jira.boards");

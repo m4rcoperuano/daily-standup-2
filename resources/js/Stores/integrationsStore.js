@@ -22,8 +22,8 @@ export const useIntegrationsStore = defineStore( 'integrationsStore', {
         setIntegrationsLoading( value ) {
             this.integrationsLoading = value;
         },
-        async fetchIntegrations() {
-            const response = await axios.get( route( 'socialite.index' ) );
+        async fetchIntegrations( teamId ) {
+            const response = await axios.get( route( 'socialite.index', teamId ) );
             this.integrations = response.data;
             this.integrationsLoading = false;
         },

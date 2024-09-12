@@ -103,6 +103,10 @@
                         Team Settings
                       </DropdownLink>
 
+                      <DropdownLink :href="route('teams.integrations.show', $page.props.auth.user.current_team)">
+                        Integration Settings
+                      </DropdownLink>
+
                       <DropdownLink
                         v-if="$page.props.jetstream.canCreateTeams"
                         :href="route('teams.create')"
@@ -338,6 +342,13 @@
                   :active="route().current('teams.show')"
                   >
                   Team Settings
+                </ResponsiveNavLink>
+
+                <ResponsiveNavLink
+                  :href="route('teams.integrations.show', $page.props.auth.user.current_team)"
+                  :active="route().current('teams.integrations.show')"
+                  >
+                  Integration Settings
                 </ResponsiveNavLink>
 
                 <ResponsiveNavLink

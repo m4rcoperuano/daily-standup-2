@@ -28,7 +28,8 @@ class StandUpGroupController extends Controller
     {
         $this->authorize('create', [StandUpGroup::class, $request->user()->currentTeam]);
 
-        return Inertia::render('StandUpGroups/Create');
+        return Inertia::render('StandUpGroups/Create')
+            ->with('team', $request->user()->currentTeam);
     }
 
     public function edit(Request $request, StandUpGroup $standUpGroup)

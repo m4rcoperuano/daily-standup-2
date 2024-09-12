@@ -52,14 +52,14 @@ export function useApi( ) {
 
     const integrations = {
         jira: {
-            boards: async (): Promise<CustomResponse> => {
-                return await callApi( 'get', route( 'integrations.jira.boards' ) );
+            boards: async ( teamId: StringOrNumber ): Promise<CustomResponse> => {
+                return await callApi( 'get', route( 'integrations.jira.boards', teamId ) );
             },
-            sprints: async ( boardId: StringOrNumber,  activeOnly = true ): Promise<CustomResponse> => {
-                return await callApi( 'get', route( 'integrations.jira.sprints', boardId ) + '?active=' + ( activeOnly ? 1 : 0 )  );
+            sprints: async ( teamId: StringOrNumber, boardId: StringOrNumber,  activeOnly = true ): Promise<CustomResponse> => {
+                return await callApi( 'get', route( 'integrations.jira.sprints', { team: teamId, boardId } ) + '?active=' + ( activeOnly ? 1 : 0 )  );
             },
-            sprint: async ( sprintId: StringOrNumber ): Promise<CustomResponse> => {
-                return await callApi( 'get', route( 'integrations.jira.sprint', sprintId ) );
+            sprint: async ( teamId: StringOrNumber, sprintId: StringOrNumber ): Promise<CustomResponse> => {
+                return await callApi( 'get', route( 'integrations.jira.sprint', { team: teamId, sprintId } ) );
             },
         },
     };

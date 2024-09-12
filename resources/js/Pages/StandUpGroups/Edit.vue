@@ -35,24 +35,23 @@
   };
 
   const fetchBoards = async () => {
-    boards.value = ( await api.integrations.jira.boards() ).result?.data;
+    boards.value = ( await api.integrations.jira.boards( props.standUpGroup.team_id ) ).result?.data;
   };
 
 
   const fetchSprints = async () => {
-    sprints.value = ( await api.integrations.jira.sprints( form.atlassian_board_id, false ) ).result?.data;
+    sprints.value = ( await api.integrations.jira.sprints( props.standUpGroup.team_id, form.atlassian_board_id, false ) ).result?.data;
   };
 
   const userConnected = async () => {
-    await integrationsStore.fetchIntegrations();
+    await integrationsStore.fetchIntegrations( props.standUpGroup.team_id );
     fetchBoards();
     fetchSprints();
   };
 
   onMounted(
     async () => {
-      await integrationsStore.fetchIntegrations();
-
+      await integrationsStore.fetchIntegrations( props.standUpGroup.team_id );
       fetchBoards();
       if ( form.atlassian_board_id ) {
         fetchSprints();

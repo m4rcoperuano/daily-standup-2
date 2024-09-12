@@ -21,6 +21,7 @@ class StandUpGroupResource extends JsonResource
             "name" => $this->name,
             "atlassian_board_id" => $this->atlassian_board_id,
             "atlassian_sprint_id" => $this->atlassian_sprint_id,
+            'team_id' => $this->team_id
         ];
     }
 }

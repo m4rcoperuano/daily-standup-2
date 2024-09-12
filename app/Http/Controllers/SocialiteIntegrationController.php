@@ -6,17 +6,28 @@ use App\Actions\Socialite\SaveAtlassianIntegration;
 use App\Actions\Socialite\SaveGithubIntegration;
 use App\Http\Resources\SocialiteIntegrationResource;
 use App\Models\SocialiteIntegration;
+use App\Models\Team;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteIntegrationController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request) {
+    public function show(Request $request, Team $team) {
+        return Inertia::render('SocialiteIntegrations/Show', [
+            "team" => $team,
+        ]);
+    }
+
+    public function index(Request $request, Team $team) {
         $user = $request->user();
-        $integrations = $user->socialiteIntegrations;
+        $integrations = $user->socialiteIntegrations()
+            ->where('team_id', $team->getKey())
+            ->get();
+
         return response()->json(
             SocialiteIntegrationResource::collection($integrations)
         );

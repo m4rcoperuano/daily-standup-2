@@ -1,17 +1,23 @@
 <script setup lang="ts">
   import ActionSection from '@/Components/ActionSection.vue';
-  import PrimaryButton from '@/Components/PrimaryButton.vue';
   import { computed, onMounted, ref } from 'vue';
   import DangerButton from '@/Components/DangerButton.vue';
   import ConnectToGithub from '@/Components/Integrations/ConnectToGithub.vue';
   import ConnectToJira from '@/Components/Integrations/ConnectToJira.vue';
+
+  const props = defineProps( {
+    team: {
+      type: Object,
+      required: true,
+    },
+  } );
 
   const loading = ref( true );
   const integrations = ref( [] );
 
   const fetchIntegrations = async () => {
     loading.value = true;
-    const response = await axios.get( route( 'socialite.index' ) );
+    const response = await axios.get( route( 'socialite.index', { team: props.team.id } ) );
     integrations.value = response.data;
     loading.value = false;
   };

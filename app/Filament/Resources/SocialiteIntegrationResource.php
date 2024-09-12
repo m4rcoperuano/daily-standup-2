@@ -22,10 +22,15 @@ class SocialiteIntegrationResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $availableTeams = request()->user()->allTeams();
         return $form
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
+                    ->required(),
+                Forms\Components\Select::make('team_id')
+                    ->label('Team')
+                    ->options($availableTeams->pluck('name', 'id')->toArray())
                     ->required(),
                 Forms\Components\TextInput::make('provider')
                     ->required()
@@ -49,6 +54,8 @@ class SocialiteIntegrationResource extends Resource
                     ->label('Avatar'),
                 Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('team.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('provider')
                     ->searchable(),
