@@ -85,7 +85,7 @@
 <template>
   <AppLayout :title="standUpGroup.name">
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight ">
+      <h2 class="font-semibold text-xl text-center text-gray-800 dark:text-gray-200 leading-tight ">
         {{ standUpGroup.name }}
       </h2>
     </template>
@@ -169,6 +169,7 @@
             ></EditStandUpEntry>
           <div class="mb-4 border-b pb-8 border-gray-200  dark:border-gray-700"></div>
         </div>
+
 
         <div
           v-for="date in standUpEntryGroupByDateKeys"

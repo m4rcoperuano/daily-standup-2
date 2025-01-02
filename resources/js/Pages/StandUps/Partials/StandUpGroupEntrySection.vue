@@ -150,7 +150,10 @@
                 (N/A)
               </span>
             </div>
-            <div class="align-top p-4 dark:border-gray-700 col-span-2 stand-up-content">
+            <div
+              v-if="entry.blockers"
+              class="align-top p-4 dark:border-gray-700 col-span-2 stand-up-content"
+              >
               <div class="uppercase font-bold text-xs text-gray-500">
                 <span>Blockers</span>
                 <copy-text-button

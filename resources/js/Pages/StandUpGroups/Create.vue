@@ -67,10 +67,10 @@
 </script>
 
 <template>
-  <AppLayout title="Create Stand Up Group">
+  <AppLayout title="Create Stand Up Sprint">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        New Stand Up Group
+        New Stand Up Sprint
       </h2>
     </template>
 
@@ -78,10 +78,10 @@
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <FormSection @submitted="submitForm">
           <template #title>
-            Create Stand Up Group
+            Create Stand Up Sprint
           </template>
           <template #description>
-            Name your Stand Up Group after your Sprint name! If you have a JIRA integration, you can connect your JIRA Sprint to this group.
+            Name your Stand Up Sprint after your Sprint name! If you have a JIRA integration, you can connect your JIRA Sprint to this group.
             Coming soon: Adding images to your Sprint
           </template>
           <template #form>

@@ -33,7 +33,7 @@
               <p
                 class="mb-2"
                 >
-                Hey! Your team currently doesn't have any stand up groups created. Start collecting
+                Hey! Your team currently doesn't have any stand up sprints created. Start collecting
                 stand ups from your team by creating a group first.
               </p>
               <PrimaryButton
@@ -41,7 +41,7 @@
                 link
                 :route="route('stand-up-groups.create')"
                 >
-                Create Stand Up Group
+                Create Stand Up Sprint
               </PrimaryButton>
             </div>
             <div v-else>
@@ -53,7 +53,7 @@
                   link
                   :route="route('stand-up-groups.create')"
                   >
-                  Create Stand Up Group
+                  Create Stand Up Sprint
                 </PrimaryButton>
               </div>
 
@@ -75,7 +75,7 @@
               v-if="canCreateOrEdit"
               pro-tip-name="stand-up-groups-info"
               >
-              Your stand up groups are containers for each of your Sprints. Any time you start a new sprint, create a new group!
+              Your stand up sprints are containers for each of your Sprints. Any time you start a new sprint, create a new group!
               Your team members will automatically get access to it.
 
             </ProTipAlert>
