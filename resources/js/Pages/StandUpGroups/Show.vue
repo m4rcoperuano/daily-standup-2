@@ -80,6 +80,13 @@
     standUpEntriesStore.fetch( props.standUpGroup.id, showFilter.value === 'show-all' );
   };
 
+
+  onMounted( () => {
+    Echo.private( `stand-up.${props.standUpGroup.id}` )
+      .listen( 'StandUpUpdated', ( e ) => {
+        console.log( e );
+      } );
+  } );
 </script>
 
 <template>

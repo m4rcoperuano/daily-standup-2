@@ -6,6 +6,7 @@ use App\Http\Controllers\SocialiteIntegrationController;
 use App\Http\Controllers\StandUpEntryController;
 use App\Http\Controllers\StandUpGroupController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 

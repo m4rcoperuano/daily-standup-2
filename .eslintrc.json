@@ -16,7 +16,8 @@
     "test": true,
     "expect": true,
     "beforeEach": true,
-    "beforeAll": true
+    "beforeAll": true,
+    "Echo": true
   },
   "rules": {
     "max-len": [

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Actions\ExtractStandUpEntryLinks;
+use App\Events\StandUpUpdated;
 use App\Models\StandUpEntry;
 
 class StandUpEntryObserver
@@ -15,5 +16,6 @@ class StandUpEntryObserver
     public function updated(StandUpEntry $entry)
     {
         app(ExtractStandUpEntryLinks::class)->execute($entry);
+        StandUpUpdated::dispatch($entry->standUpGroup);
     }
 }
