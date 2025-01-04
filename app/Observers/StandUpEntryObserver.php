@@ -16,6 +16,6 @@ class StandUpEntryObserver
     public function updated(StandUpEntry $entry)
     {
         app(ExtractStandUpEntryLinks::class)->execute($entry);
-        StandUpUpdated::dispatch($entry->standUpGroup);
+        StandUpUpdated::dispatch($entry);
     }
 }

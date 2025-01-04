@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import { CustomResponse, useApi } from '@/useApi';
 import { defineStore } from 'pinia';
 import { useLinkPreviewsStore } from '@/Stores/linkPreviewStore.js';
+import { replace } from 'lodash';
 
 export type StandUpEntry = {
     in_progress: string,
@@ -76,14 +77,17 @@ export const useStandUpEntriesStore = defineStore( 'standUpEntries', {
             const response = await api.standUpEntries.update( id, payload );
 
             if ( response.success ) {
-                const index = this.standUpEntries.findIndex( entry => entry.id === id );
-                this.standUpEntries[index] = response.result.data.data;
-
-                const linkPreviewsStore = useLinkPreviewsStore();
-                linkPreviewsStore.addLinks( response.result.data.data.stand_up_entry_links );
+                await this.replace( id, response.result.data.data );
             }
 
             return response;
+        },
+        async replace( id: StringOrNumber, payload: StandUpEntry ) {
+            const index = this.standUpEntries.findIndex( entry => entry.id === id );
+            this.standUpEntries[index] = payload;
+
+            const linkPreviewsStore = useLinkPreviewsStore();
+            linkPreviewsStore.addLinks( payload.stand_up_entry_links );
         },
         async delete( id: StringOrNumber ) {
             const api = useApi();

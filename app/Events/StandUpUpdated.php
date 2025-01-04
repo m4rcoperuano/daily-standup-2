@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\StandUpGroup;
+use App\Models\StandUpEntry;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -16,9 +16,9 @@ class StandUpUpdated implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public StandUpGroup $group)
+    public function __construct(public StandUpEntry $entry)
     {
-        //
+        $this->entry->load(['standUpEntryLinks', 'user']);
     }
 
     /**
@@ -29,7 +29,7 @@ class StandUpUpdated implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('stand-up.'.$this->group->getKey()),
+            new PrivateChannel('stand-up.'.$this->entry->standUpGroup->getKey()),
         ];
     }
 }

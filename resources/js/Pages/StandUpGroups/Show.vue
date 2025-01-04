@@ -80,13 +80,14 @@
     standUpEntriesStore.fetch( props.standUpGroup.id, showFilter.value === 'show-all' );
   };
 
+  Echo.private( `stand-up.${props.standUpGroup.id}` )
+    .listen( 'StandUpUpdated', ( e ) => {
+      if ( e.entry.user_id === user.value.id ) {
+        return;
+      }
 
-  onMounted( () => {
-    Echo.private( `stand-up.${props.standUpGroup.id}` )
-      .listen( 'StandUpUpdated', ( e ) => {
-        console.log( e );
-      } );
-  } );
+      standUpEntriesStore.replace( e.entry.id, e.entry );
+    } );
 </script>
 
 <template>
