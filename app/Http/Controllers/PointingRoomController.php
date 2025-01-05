@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Events\RemovedVote;
+use App\Events\ResetVotes;
 use App\Events\Voted;
+use App\Events\VotesRevealed;
 use App\Models\PointingRoom;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -43,5 +45,28 @@ class PointingRoomController extends Controller
         }
 
         return response()->json(['message' => 'Vote deleted']);
+    }
+
+    public function revealVotes(Request $request)
+    {
+        /** @var PointingRoom $room */
+        $room = $request->user()->currentTeam->pointingRooms()->firstOrFail();
+        $room->update(['reveal' => true]);
+
+        VotesRevealed::dispatch($room);
+
+        return response()->json(['message' => 'Votes revealed']);
+    }
+
+    public function resetVotes(Request $request)
+    {
+        /** @var PointingRoom $room */
+        $room = $request->user()->currentTeam->pointingRooms()->firstOrFail();
+        $room->votes()->delete();
+        $room->update(['reveal' => false]);
+
+        ResetVotes::dispatch($room);
+
+        return response()->json(['message' => 'Votes reset']);
     }
 }

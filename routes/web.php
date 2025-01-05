@@ -35,6 +35,12 @@ Route::middleware([
     Route::post('/pointing-room/vote', [PointingRoomController::class, "submitVote"])
         ->name('pointing-room.vote');
 
+    Route::post('/pointing-room/reveal', [PointingRoomController::class, "revealVotes"])
+        ->name('pointing-room.reveal');
+
+    Route::post('/pointing-room/reset', [PointingRoomController::class, "resetVotes"])
+        ->name('pointing-room.reset');
+
     Route::delete('/pointing-room/vote', [PointingRoomController::class, "deleteVote"]);
 
     Route::resource('/stand-up-groups', StandUpGroupController::class)

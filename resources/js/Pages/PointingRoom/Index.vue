@@ -2,6 +2,8 @@
   import AppLayout from '@/Layouts/AppLayout.vue';
   import { computed, onMounted, onUnmounted, ref } from 'vue';
   import { usePage } from '@inertiajs/vue3';
+  import PrimaryButton from '@/Components/PrimaryButton.vue';
+  import SecondaryButton from '@/Components/SecondaryButton.vue';
 
   const props = defineProps( {
     room: {
@@ -13,6 +15,7 @@
   const loggedInUser = computed( () => page.props.auth.user );
 
   const roomUsers = ref( [] );
+  const votesRevealed = ref( props.room.reveal );
   const votes = ref( props.room.votes.slice() );
   const pointValues = [ 1, 2, 3, 5, 8, 13, 21 ];
 
@@ -34,6 +37,12 @@
       } )
       .listen( 'RemovedVote', ( event ) => {
         votes.value = votes.value.filter( ( vote ) => vote.id !== event.voteId );
+      } )
+      .listen( 'VotesRevealed', () => {
+        votesRevealed.value = true;
+      } )
+      .listen( 'ResetVotes', () => {
+        window.location.reload();
       } )
       .error( ( error ) => {
         console.error( error );
@@ -60,6 +69,14 @@
     votes.value = votes.value.filter( ( vote ) => vote.user_id !== loggedInUser.value.id );
   };
 
+  const revealVotes = async () => {
+    await axios.post( route( 'pointing-room.reveal' ) );
+  };
+
+  const resetVotes = async () => {
+    await axios.post( route( 'pointing-room.reset' ) );
+  };
+
 </script>
 
 <template>
@@ -72,6 +89,21 @@
 
     <div class="py-6 dark:text-white">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <PrimaryButton
+          v-if="!votesRevealed"
+          class="mb-4"
+          @click="revealVotes"
+          >
+          Reveal Votes
+        </PrimaryButton>
+        <SecondaryButton
+          v-else
+          class="mb-4"
+          @click="resetVotes"
+          >
+          Reset Votes
+        </SecondaryButton>
+
         <ul
           role="list"
           class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
@@ -97,9 +129,18 @@
                   Voted
                 </div>
                 <div class="text-2xl font-semibold">
-                  {{ votes.find(vote => vote.user_id === user.id).value }}
+                  <span v-if="user.id === loggedInUser.id || votesRevealed">
+                    {{ votes.find(vote => vote.user_id === user.id).value }}
+                  </span>
+                  <span
+                    v-else
+                    class="opacity-50"
+                    >
+                    Hidden!
+                  </span>
                 </div>
                 <button
+                  v-if="user.id === loggedInUser.id"
                   type="button"
                   class="mt-4 w-full py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
                   @click="deleteVote()"

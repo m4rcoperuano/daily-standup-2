@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PointingRoom extends Model
 {
-    protected $fillable = ['name', 'team_id'];
+    protected $fillable = ['name', 'team_id', 'reveal'];
 
     public function votes()
     {
