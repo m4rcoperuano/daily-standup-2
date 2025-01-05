@@ -50,4 +50,9 @@ class Team extends JetstreamTeam
     {
         return $this->hasMany(StandUpGroup::class);
     }
+
+    public function pointingRooms(): HasMany
+    {
+        return $this->hasMany(PointingRoom::class);
+    }
 }

@@ -103,4 +103,8 @@ class User extends Authenticatable implements FilamentUser
     public function hasIntegration(string $integration): bool {
         return $this->socialiteIntegrations()->where('provider', $integration)->exists();
     }
+
+    public function canJoinPointingRoom(int $id): bool {
+        return $this->allTeams()->contains(PointingRoom::find($id)->team);
+    }
 }

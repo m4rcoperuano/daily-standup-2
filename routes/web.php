@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FetchLinkPreviewController;
 use App\Http\Controllers\JiraController;
+use App\Http\Controllers\PointingRoomController;
 use App\Http\Controllers\SocialiteIntegrationController;
 use App\Http\Controllers\StandUpEntryController;
 use App\Http\Controllers\StandUpGroupController;
@@ -27,6 +28,14 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    Route::get('/pointing-room', [PointingRoomController::class, "index"])
+        ->name('pointing-room.index');
+
+    Route::post('/pointing-room/vote', [PointingRoomController::class, "submitVote"])
+        ->name('pointing-room.vote');
+
+    Route::delete('/pointing-room/vote', [PointingRoomController::class, "deleteVote"]);
 
     Route::resource('/stand-up-groups', StandUpGroupController::class)
         ->only(['index', 'create', 'store', 'show', 'edit', 'update']);
