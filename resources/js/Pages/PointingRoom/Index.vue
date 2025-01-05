@@ -71,6 +71,8 @@
 
   const revealVotes = async () => {
     await axios.post( route( 'pointing-room.reveal' ) );
+
+    votesRevealed.value = true;
   };
 
   const resetVotes = async () => {
