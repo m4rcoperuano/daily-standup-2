@@ -15,10 +15,17 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: [ 'Figtree', ...defaultTheme.fontFamily.sans ],
+            },
+            colors: {
+                primary: '#27EDA1',
+                secondary: '#05A8F1',
+                tertiary: '#01161e',
+                quaternary: '#063648',
+                five: '#041e2b',
             },
         },
     },
 
-    plugins: [forms, typography],
+    plugins: [ forms, typography ],
 };

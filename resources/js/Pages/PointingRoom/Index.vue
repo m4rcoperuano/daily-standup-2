@@ -4,6 +4,7 @@
   import { usePage } from '@inertiajs/vue3';
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import SecondaryButton from '@/Components/SecondaryButton.vue';
+  import StellarLayout from '@/Layouts/StellarLayout.vue';
 
   const props = defineProps( {
     room: {
@@ -82,38 +83,42 @@
 </script>
 
 <template>
-  <AppLayout title="Pointing Room">
+  <StellarLayout title="Pointing Room">
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        Pointing Room
-      </h2>
+      <div class="flex items-center justify-center gap-4 content-center flex-col">
+        <h2 class="font-semibold text-xl text-gray-200 leading-tight text-center">
+          Pointing Room
+        </h2>
+        <div>
+          <PrimaryButton
+            v-if="!votesRevealed"
+            class="mb-4"
+            @click="revealVotes"
+            >
+            Reveal Votes
+          </PrimaryButton>
+          <SecondaryButton
+            v-else
+            class="mb-4"
+            @click="resetVotes"
+            >
+            Reset Votes
+          </SecondaryButton>
+        </div>
+      </div>
     </template>
 
-    <div class="py-6 dark:text-white">
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <PrimaryButton
-          v-if="!votesRevealed"
-          class="mb-4"
-          @click="revealVotes"
-          >
-          Reveal Votes
-        </PrimaryButton>
-        <SecondaryButton
-          v-else
-          class="mb-4"
-          @click="resetVotes"
-          >
-          Reset Votes
-        </SecondaryButton>
-
+    <div class="py-6 text-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <ul
           role="list"
-          class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          class="flex flex-wrap gap-6"
           >
           <li
             v-for="user in roomUsers.sort((a, b) => a.name.localeCompare(b.name))"
             :key="user.id"
-            class="col-span-1 flex flex-col overflow-hidden divide-y dark:divide-gray-700 divide-gray-200 rounded-lg bg-white dark:bg-gray-900 text-center shadow dark:shadow-gray-700"
+            style="width:300px;"
+            class="col-span-1 flex flex-col overflow-hidden divide-y divide-quaternary  rounded-lg bg-five text-center shadow shadow-gray-700"
             >
             <div class="flex flex-1 flex-col p-4">
               <img
@@ -121,7 +126,7 @@
                 :src="user.profile_photo_url"
                 alt=""
                 />
-              <h3 class="mt-6 font-medium text-gray-900 dark:text-gray-200">
+              <h3 class="mt-6 font-medium text-gray-200">
                 {{ user.name }}
               </h3>
             </div>
@@ -144,7 +149,7 @@
                 <button
                   v-if="user.id === loggedInUser.id"
                   type="button"
-                  class="mt-4 w-full py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
+                  class="mt-4 w-full py-2 text-sm font-medium text-quaternary bg-primary rounded hover:opacity-50 transition-opacity"
                   @click="deleteVote()"
                   >
                   Change Vote
@@ -160,12 +165,12 @@
                 <div
                   v-for="point in pointValues"
                   :key="point"
-                  class="flex-grow border border-gray-200 dark:border-gray-700"
+                  class="flex-grow border border-gray-700"
                   style="min-width:50px;"
                   >
                   <button
                     type="button"
-                    class="w-full py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    class="w-full py-2 text-sm font-medium text-gray-200 hover:bg-primary hover:text-quaternary"
                     @click="submitVote(point)"
                     >
                     {{ point }}
@@ -185,5 +190,5 @@
         </ul>
       </div>
     </div>
-  </AppLayout>
+  </StellarLayout>
 </template>

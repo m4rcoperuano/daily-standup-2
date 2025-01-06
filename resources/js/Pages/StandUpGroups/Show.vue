@@ -11,6 +11,7 @@
   import DateAwareDatePicker from '@/Components/DateAwareDatePicker.vue';
   import { useLinkPreviewsStore } from '@/Stores/linkPreviewStore';
   import SprintDetails from '@/Pages/StandUpGroups/Partials/SprintDetails.vue';
+  import StellarLayout from '@/Layouts/StellarLayout.vue';
 
   const props = defineProps( {
     standUpGroup: {
@@ -91,20 +92,9 @@
 </script>
 
 <template>
-  <AppLayout :title="standUpGroup.name">
-    <template #header>
-      <h2 class="font-semibold text-xl text-center text-gray-800 dark:text-gray-200 leading-tight ">
-        {{ standUpGroup.name }}
-      </h2>
-    </template>
-    <div class="py-6 dark:text-white">
+  <StellarLayout :title="standUpGroup.name">
+    <div class="py-6 text-gray-200">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          v-if="!isCreatingStandUpEntry && hasSprintIntegration"
-          class="mb-4 md:mb-0 md:float-right"
-          >
-          <SprintDetails :sprint-id="standUpGroup.atlassian_sprint_id"></SprintDetails>
-        </div>
         <div
           v-if="!isCreatingStandUpEntry"
           class="mb-4"
@@ -116,57 +106,79 @@
             No stand up entries yet! Click the button below to create one!
           </p>
 
-          <div class="flex">
-            <PrimaryButton
-              type="button"
-              @click="isCreatingStandUpEntry = !isCreatingStandUpEntry"
+          <div class="flex items-center">
+            <div
+              class="gap-3 flex flex-grow flex-col"
               >
-              Create Standup Entry
-            </PrimaryButton>
-          </div>
-
-          <div
-            class="gap-3 flex pt-4"
-            >
-            <div class="flex items-center">
-              <input
-                id="show-mine"
-                name="show_filter"
-                type="radio"
-                value="show-mine"
-                :checked="showFilter === 'show-mine'"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                @input="changeFilter('show-mine')"
-                />
-              <label
-                for="show-mine"
-                class="ms-2 cursor-pointer font-medium text-gray-900 dark:text-gray-300"
-                >Show My Entries</label>
+              <h2 class="font-semibold text-xl bg-gradient-to-r text-primary">
+                {{ standUpGroup.name }}
+              </h2>
+              <div class="flex gap-3">
+                <div class="flex items-center">
+                  <input
+                    id="show-mine"
+                    name="show_filter"
+                    type="radio"
+                    value="show-mine"
+                    :checked="showFilter === 'show-mine'"
+                    class="w-4 h-4 text-primary bg-gray-700 border-gray-900 focus:ring-primary ring-offset-gray-800 focus:ring-2"
+                    @input="changeFilter('show-mine')"
+                    />
+                  <label
+                    for="show-mine"
+                    class="ms-2 cursor-pointer font-medium "
+                    >Show My Entries</label>
+                </div>
+                <div class="flex items-center">
+                  <input
+                    id="show-all"
+                    type="radio"
+                    value="show-all"
+                    name="show_filter"
+                    :checked="showFilter === 'show-all'"
+                    class="w-4 h-4 text-primary bg-gray-700 border-gray-900 focus:ring-primary ring-offset-gray-800 focus:ring-2"
+                    @input="changeFilter('show-all')"
+                    />
+                  <label
+                    for="show-all"
+                    class="ms-2 cursor-pointer font-medium "
+                    >Show Everyone</label>
+                </div>
+              </div>
             </div>
-            <div class="flex items-center">
-              <input
-                id="show-all"
-                type="radio"
-                value="show-all"
-                name="show_filter"
-                :checked="showFilter === 'show-all'"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                @input="changeFilter('show-all')"
-                />
-              <label
-                for="show-all"
-                class="ms-2 cursor-pointer font-medium text-gray-900 dark:text-gray-300"
-                >Show Everyone</label>
+
+            <div
+              v-if="!isCreatingStandUpEntry"
+              >
+              <button
+                type="button"
+                class="block items-center p-1 bg-gradient-to-r from-[#05A8F1] to-[#28F09E] rounded-md font-semibold hover:opacity-50 transition-opacity text-xs text-white disabled:opacity-50 transition ease-in-out duration-150"
+                @click="isCreatingStandUpEntry = !isCreatingStandUpEntry"
+                >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="3"
+                  stroke="currentColor"
+                  class="size-12"
+                  >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                    ></path>
+                </svg>
+              </button>
             </div>
           </div>
         </div>
         <div v-else>
           <h3 class="text-2xl font-bold mb-4">New Stand Up Entry</h3>
           <div class="mb-2">
-            <InputLabel
-              value="Date"
-              class="uppercase"
-              ></InputLabel>
+            <label class="block font-medium text-sm uppercase">
+              <span>Date</span>
+            </label>
             <DateAwareDatePicker
               v-model="creatingStandUpEntryDate"
               ></DateAwareDatePicker>
@@ -193,7 +205,7 @@
         </div>
       </div>
     </div>
-  </AppLayout>
+  </StellarLayout>
 </template>
 
 <style scoped>

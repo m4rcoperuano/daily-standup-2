@@ -3,6 +3,8 @@
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import StandUpGroupCard from '@/Pages/StandUpGroups/Partials/StandUpGroupCard.vue';
   import ProTipAlert from '@/Components/ProTipAlert.vue';
+  import StellarLayout from '@/Layouts/StellarLayout.vue';
+  import { Link } from '@inertiajs/vue3';
 
   defineProps( {
     standUpGroups: {
@@ -18,13 +20,7 @@
 </script>
 
 <template>
-  <AppLayout title="Stand Ups">
-    <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        Stand Ups
-      </h2>
-    </template>
-
+  <StellarLayout title="Stand Ups">
     <div class="py-6 dark:text-white">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div>
@@ -47,14 +43,31 @@
             <div v-else>
               <div
                 v-if="canCreateOrEdit"
-                class="flex gap-2 justify-center mb-4"
+                class="flex gap-2 mb-4 justify-center items-center"
                 >
-                <PrimaryButton
-                  link
-                  :route="route('stand-up-groups.create')"
+                <div class="flex-grow text-2xl font-bold text-primary">
+                  Stand Up Sprints
+                </div>
+                <Link
+                  type="button"
+                  class="block items-center p-1 bg-gradient-to-r from-[#05A8F1] to-[#28F09E] rounded-md font-semibold hover:opacity-50 transition-opacity text-xs text-white disabled:opacity-50 transition ease-in-out duration-150"
+                  :href="route('stand-up-groups.create')"
                   >
-                  Create Stand Up Sprint
-                </PrimaryButton>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="3"
+                    stroke="currentColor"
+                    class="size-12"
+                    >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                      ></path>
+                  </svg>
+                </Link>
               </div>
 
               <div class="justify-center">
@@ -83,5 +96,5 @@
         </div>
       </div>
     </div>
-  </AppLayout>
+  </StellarLayout>
 </template>

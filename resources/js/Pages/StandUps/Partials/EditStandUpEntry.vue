@@ -89,7 +89,7 @@
   <div>
     <div class="grid grid-cols-1 gap-4">
       <div class="content">
-        <div class="dark:bg-gray-950 dark:text-white px-4 py-2 bg-gray-100 border-b">
+        <div class="bg-gray-950 text-white px-4 py-2 border-b">
           ✅ What did you do yesterday?
         </div>
         <RichTextEditor
@@ -98,7 +98,7 @@
           ></RichTextEditor>
       </div>
       <div class="content">
-        <div class="dark:bg-gray-950 dark:text-white px-4 py-2 bg-gray-100 border-b">
+        <div class="bg-gray-950 text-white px-4 py-2 border-b">
           💯 What will you do today?
         </div>
         <RichTextEditor
@@ -107,7 +107,7 @@
           ></RichTextEditor>
       </div>
       <div class="content">
-        <div class="dark:bg-gray-950 dark:text-white px-4 py-2 bg-gray-100 border-b">
+        <div class="bg-gray-950 text-white px-4 py-2 border-b">
           🚨 Blockers
         </div>
         <RichTextEditor
@@ -155,7 +155,7 @@
     </div>
     <div
       v-if="!integrationsStore.integrationsLoading && ( suggestAtlassianIntegration || suggestGithubIntegration )"
-      class="dark:text-white p-2 rounded mt-4"
+      class="text-white p-2 rounded mt-4"
       >
       <div class="flex justify-center">
         <div class="flex gap-2  opacity-50">
@@ -198,9 +198,9 @@
 
 <style scoped>
 .content:deep(.ck-content) {
-    @apply prose dark:prose-invert prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0
+    @apply prose prose-invert prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0
     prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg
-    prose-li:break-words prose-ol:m-0 py-2 dark:bg-gray-800 bg-white;
+    prose-li:break-words prose-ol:m-0 py-2 bg-five;
 
     border-radius:initial !important;
     border-bottom-left-radius: 12px !important;
@@ -211,6 +211,6 @@
 }
 
 .content {
-    @apply rounded-xl border border-gray-200 dark:border-gray-900 shadow overflow-hidden;
+    @apply rounded-xl border border-gray-900 shadow overflow-hidden;
 }
 </style>

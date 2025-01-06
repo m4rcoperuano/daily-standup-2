@@ -61,7 +61,7 @@
   <div class="font-bold py-2 capitalize text-xl">
     {{ title }}
   </div>
-  <div class="w-full dark:border-gray-950 gap-6 flex flex-col">
+  <div class="w-full  gap-6 flex flex-col">
     <transition-group name="fade">
       <div
         v-for="entry in standUpEntries"
@@ -86,20 +86,20 @@
             v-show="editingId !== entry.id"
             class="row shadow"
             >
-            <div class="align-top border-b px-4 py-2 dark:border-gray-700 flex dark:bg-gray-950 bg-gray-50">
+            <div class="align-top px-4 py-2 flex bg-gray-950">
               <div class="items-center flex flex-grow gap-2">
                 <img
                   class="h-8 w-8 rounded-full object-cover"
                   :src="entry.user.profile_photo_url"
                   :alt="entry.user.name"
                   />
-                <span class="font-normal dark:text-gray-300">
+                <span class="font-normal text-gray-300">
                   {{ entry.user.name }}
                 </span>
               </div>
               <button
                 v-if="entry.user.id === currentUserId"
-                class="edit dark:text-teal-500 dark:border-teal-500 text-teal-600 border-teal-600 border px-2 rounded hover:opacity-50"
+                class="edit text-primary border-primary border px-2 rounded-lg hover:opacity-50"
                 type="button"
                 @click="editRow(entry.id)"
                 >
@@ -107,7 +107,7 @@
               </button>
             </div>
             <div
-              class="align-top border-b p-4 dark:border-gray-700 col-span-2 stand-up-content"
+              class="align-top p-4  col-span-2 stand-up-content"
               >
               <div class="uppercase font-bold text-xs text-gray-500">
                 <span>What did you do yesterday?</span>
@@ -129,7 +129,7 @@
                 (N/A)
               </span>
             </div>
-            <div class="align-top border-b p-4 dark:border-gray-700 col-span-2 stand-up-content">
+            <div class="align-top  p-4 col-span-2 stand-up-content">
               <div class="uppercase font-bold text-xs text-gray-500">
                 <span>What will you do today?</span>
                 <copy-text-button
@@ -152,7 +152,7 @@
             </div>
             <div
               v-if="entry.blockers"
-              class="align-top p-4 dark:border-gray-700 col-span-2 stand-up-content"
+              class="align-top p-4  col-span-2 stand-up-content"
               >
               <div class="uppercase font-bold text-xs text-gray-500">
                 <span>Blockers</span>
@@ -183,11 +183,11 @@
 
 <style scoped>
 .header {
-    @apply z-20 sticky top-0 font-semibold uppercase text-sm text-gray-700 bg-gray-100 border-x dark:bg-gray-950 dark:text-gray-400 dark:border-gray-700 py-2 px-4 border-b border-gray-300 dark:border-gray-700;
+    @apply z-20 sticky top-0 font-semibold uppercase text-sm bg-gray-100 border-x dark:bg-gray-950 text-gray-400 border-gray-700 py-2 px-4 border-b;
 }
 
 .prose-styles {
-    @apply dark:prose-invert prose prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg
+    @apply prose-invert prose prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg
         prose-li:break-words;
     @apply prose-ol:m-0 prose-p:break-words;
 }
@@ -209,7 +209,7 @@
 }
 
 .row {
-    @apply bg-white dark:bg-gray-800 rounded-lg overflow-hidden;
+    @apply bg-five rounded-lg overflow-hidden divide-y divide-quaternary;
 }
 
 .copy-text-button {
