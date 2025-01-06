@@ -81,6 +81,13 @@
           >
           Pointing Room
         </StellarNavLink>
+
+        <StellarNavLink
+          :href="route('profile.show')"
+          :active="route().current('profile.show')"
+          >
+          Profile
+        </StellarNavLink>
       </nav>
 
 
