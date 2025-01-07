@@ -47,8 +47,8 @@
             />
 
           <div class="ms-4 leading-tight">
-            <div class="text-gray-900 dark:text-white">{{ team.owner.name }}</div>
-            <div class="text-gray-700 dark:text-gray-300 text-sm">
+            <div class="text-white">{{ team.owner.name }}</div>
+            <div class="text-gray-300 text-sm">
               {{ team.owner.email }}
             </div>
           </div>

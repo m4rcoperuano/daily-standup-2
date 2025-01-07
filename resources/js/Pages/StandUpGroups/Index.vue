@@ -1,5 +1,4 @@
 <script setup>
-  import AppLayout from '@/Layouts/AppLayout.vue';
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import StandUpGroupCard from '@/Pages/StandUpGroups/Partials/StandUpGroupCard.vue';
   import ProTipAlert from '@/Components/ProTipAlert.vue';
@@ -21,10 +20,10 @@
 
 <template>
   <StellarLayout title="Stand Ups">
-    <div class="py-6 dark:text-white">
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="text-white">
+      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 px-6">
         <div>
-          <div class="p-4">
+          <div>
             <div v-if="standUpGroups.length <= 0">
               <p
                 class="mb-2"
@@ -45,12 +44,12 @@
                 v-if="canCreateOrEdit"
                 class="flex gap-2 mb-4 justify-center items-center"
                 >
-                <div class="flex-grow text-2xl font-bold text-primary">
+                <div class="flex-grow text-xl font-bold text-primary">
                   Stand Up Sprints
                 </div>
                 <Link
                   type="button"
-                  class="block items-center p-1 bg-gradient-to-r from-[#05A8F1] to-[#28F09E] rounded-md font-semibold hover:opacity-50 transition-opacity text-xs text-white disabled:opacity-50 transition ease-in-out duration-150"
+                  class="block items-center p-1 btn-shine rounded-md font-semibold hover:opacity-50 transition-opacity text-xs text-white disabled:opacity-50 transition ease-in-out duration-150"
                   :href="route('stand-up-groups.create')"
                   >
                   <svg

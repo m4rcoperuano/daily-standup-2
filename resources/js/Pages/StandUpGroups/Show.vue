@@ -94,7 +94,7 @@
 <template>
   <StellarLayout :title="standUpGroup.name">
     <div class="py-6 text-gray-200">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto px-6 sm:px-6 lg:px-8">
         <div
           v-if="!isCreatingStandUpEntry"
           class="mb-4"
@@ -113,7 +113,7 @@
               <h2 class="font-semibold text-xl bg-gradient-to-r text-primary">
                 {{ standUpGroup.name }}
               </h2>
-              <div class="flex gap-3">
+              <div class="flex gap-3 flex-col sm:flex-row">
                 <div class="flex items-center">
                   <input
                     id="show-mine"

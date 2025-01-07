@@ -12,7 +12,7 @@
     },
     contentClasses: {
       type: Array,
-      default: () => [ 'py-1', 'bg-white dark:bg-gray-700' ],
+      default: () => [ 'py-1', 'bg-quaternary' ],
     },
   } );
 

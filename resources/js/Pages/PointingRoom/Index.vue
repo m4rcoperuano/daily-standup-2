@@ -85,21 +85,19 @@
 <template>
   <StellarLayout title="Pointing Room">
     <template #header>
-      <div class="flex items-center justify-center gap-4 content-center flex-col">
-        <h2 class="font-semibold text-xl text-gray-200 leading-tight text-center">
+      <div class="flex items-center justify-center gap-4 content-center mb-4">
+        <h2 class="font-semibold text-xl text-primary flex-grow">
           Pointing Room
         </h2>
         <div>
           <PrimaryButton
             v-if="!votesRevealed"
-            class="mb-4"
             @click="revealVotes"
             >
             Reveal Votes
           </PrimaryButton>
           <SecondaryButton
             v-else
-            class="mb-4"
             @click="resetVotes"
             >
             Reset Votes
@@ -108,16 +106,14 @@
       </div>
     </template>
 
-    <div class="py-6 text-white">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ul
-          role="list"
-          class="flex flex-wrap gap-6"
+    <div class="text-white">
+      <div class="max-w-7xl mx-auto px-6 pb-8">
+        <div
+          class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
           >
-          <li
+          <div
             v-for="user in roomUsers.sort((a, b) => a.name.localeCompare(b.name))"
             :key="user.id"
-            style="width:300px;"
             class="col-span-1 flex flex-col overflow-hidden divide-y divide-quaternary  rounded-lg bg-five text-center shadow shadow-gray-700"
             >
             <div class="flex flex-1 flex-col p-4">
@@ -186,8 +182,8 @@
                 Still pointing...
               </div>
             </template>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
     </div>
   </StellarLayout>

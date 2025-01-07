@@ -11,6 +11,7 @@
   import { useApi } from '@/useApi.ts';
   import { useIntegrationsStore } from '@/Stores/integrationsStore.js';
   import ConnectToJira from '@/Components/Integrations/ConnectToJira.vue';
+  import StellarLayout from '@/Layouts/StellarLayout.vue';
 
   const api = useApi();
   const boards = ref( [] );
@@ -67,18 +68,14 @@
 </script>
 
 <template>
-  <AppLayout title="Create Stand Up Sprint">
-    <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        New Stand Up Sprint
-      </h2>
-    </template>
-
-    <div class="py-12 dark:text-white">
+  <StellarLayout title="Create Stand Up Sprint">
+    <div class="text-white">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <FormSection @submitted="submitForm">
           <template #title>
-            Create Stand Up Sprint
+            <h2 class="font-semibold text-xl text-primary mb-4">
+              Create Stand Up Sprint
+            </h2>
           </template>
           <template #description>
             Name your Stand Up Sprint after your Sprint name! If you have a JIRA integration, you can connect your JIRA Sprint to this group.
@@ -153,5 +150,5 @@
         </FormSection>
       </div>
     </div>
-  </AppLayout>
+  </StellarLayout>
 </template>

@@ -11,6 +11,7 @@
   import { useApi } from '@/useApi.ts';
   import ConnectToJira from '@/Components/Integrations/ConnectToJira.vue';
   import { useIntegrationsStore } from '@/Stores/integrationsStore.js';
+  import StellarLayout from '@/Layouts/StellarLayout.vue';
 
   const props = defineProps( {
     standUpGroup: {
@@ -68,18 +69,14 @@
 </script>
 
 <template>
-  <AppLayout title="Create Stand Up Group">
-    <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        Editing {{ standUpGroup.name }}
-      </h2>
-    </template>
-
-    <div class="py-6 dark:text-white">
+  <StellarLayout title="Edit Stand Up Sprint">
+    <div class="py-6 text-white">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <FormSection @submitted="submitForm">
           <template #title>
-            Edit Stand Up Group
+            <h2 class="font-semibold text-xl text-primary">
+              Editing {{ standUpGroup.name }}
+            </h2>
           </template>
           <template #description>
             Name your Stand Up Group after your Sprint name! If you have a JIRA integration, you can connect your JIRA Sprint to this group.
@@ -154,5 +151,5 @@
         </FormSection>
       </div>
     </div>
-  </AppLayout>
+  </StellarLayout>
 </template>

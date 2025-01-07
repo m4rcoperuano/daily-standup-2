@@ -51,10 +51,10 @@
           class="flex items-center gap-3 mt-2"
           >
           <div class="flex-grow">
-            <div class="text-gray-600 dark:text-gray-400">
+            <div class="text-gray-400">
               JIRA is <span class="text-green-500 font-bold">connected</span>
             </div>
-            <div class="text-sm dark:text-white">
+            <div class="text-sm text-white">
               This JIRA connection will allow us to show linked tickets and confluence articles in the app.
             </div>
           </div>
@@ -72,14 +72,14 @@
           >
           <div>
             <ConnectToJira @user-connected="fetchIntegrations"></ConnectToJira>
-            <div class="dark:text-white pt-4">
+            <div class="text-white pt-4">
               Connecting to JIRA will automatically format pasted links to JIRA tickets and Confluence articles.
             </div>
           </div>
         </div>
 
         <div class="py-6">
-          <div class="border-t border-gray-200 dark:border-gray-700"></div>
+          <div class="border-t border-gray-700"></div>
         </div>
 
         <div
@@ -87,10 +87,10 @@
           class="flex items-center gap-3 mb-3"
           >
           <div class="flex-grow">
-            <div class="text-gray-600 dark:text-gray-400">
+            <div class="text-gray-400">
               Github is <span class="text-green-500 font-bold">connected</span>
             </div>
-            <div class="text-sm dark:text-white">
+            <div class="text-sm text-white">
               This Github connection will allow us to show linked pull requests and issues in the app.
             </div>
           </div>
@@ -108,7 +108,7 @@
           >
           <div>
             <ConnectToGithub></ConnectToGithub>
-            <div class="dark:text-white pt-4">
+            <div class="text-white pt-4">
               Connecting to Github will automatically format pasted links to issues and pull requests.
             </div>
           </div>

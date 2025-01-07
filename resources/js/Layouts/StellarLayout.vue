@@ -33,7 +33,7 @@
     class="fixed inset-x-0 min-h-screen -z-10 blur-3xl transform-gpu"
     >
     <div
-      class="left-[calc(10%+3rem)] absolute -z-10"
+      class="left-[calc(10%+3rem)] absolute -z-10 hidden lg:block"
       style="clip-path: circle(50% at 50% 50%);width:200px;height:200px;background-color:#04A6F3"
       ></div>
 
@@ -43,12 +43,12 @@
       ></div>
 
     <div
-      class="right-[calc(30%+3rem)] top-56 absolute"
+      class="right-[calc(30%+3rem)] top-56 absolute hidden xl:block"
       style="clip-path: circle(50% at 50% 50%);width:150px;height:150px;background-color:#04A6F3"
       ></div>
 
     <div
-      class="right-[calc(10%+3rem)] absolute"
+      class="right-[calc(10%+3rem)] absolute hidden md:block"
       style="clip-path: circle(50% at 50% 50%);width:100px;height:100px;background-color:#04A6F3;top:50px"
       ></div>
   </div>
@@ -67,7 +67,7 @@
         </span>
       </div>
 
-      <nav class="flex justify-center items-center gap-6 mb-6">
+      <nav class="flex flex-col sm:flex-row sm:justify-center px-4 sm:items-center gap-2 sm:gap-4 mb-4">
         <StellarNavLink
           :href="route('stand-up-groups.index')"
           :active="route().current('stand-up-groups.index') || route().current('stand-up-groups.show')"
@@ -95,7 +95,7 @@
       <header
         v-if="$slots.header"
         >
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 px-6">
           <slot name="header"></slot>
         </div>
       </header>

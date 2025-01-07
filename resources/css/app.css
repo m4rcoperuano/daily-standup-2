@@ -5,3 +5,7 @@
 [x-cloak] {
     display: none;
 }
+
+.btn-shine {
+  @apply bg-gradient-to-r from-[#05A8F1] to-[#28F09E];
+}
