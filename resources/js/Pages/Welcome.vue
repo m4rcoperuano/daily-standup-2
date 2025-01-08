@@ -1,5 +1,7 @@
 <script setup>
   import { Head, Link } from '@inertiajs/vue3';
+  import PrimaryButton from '@/Components/PrimaryButton.vue';
+  import ApplicationMark from '@/Components/ApplicationMark.vue';
 
   defineProps( {
     canLogin: {
@@ -21,7 +23,31 @@
 
 <template>
   <Head title="Welcome"></Head>
-  <div class="bg-gray-50 min-h-screen min-w-screen flex flex-col justify-center text-black/50 dark:bg-black dark:text-white/50 px-8">
+  <div
+    class="fixed inset-x-0 min-h-screen -z-10 blur-3xl transform-gpu"
+    >
+    <div
+      class="left-[calc(10%+3rem)] absolute -z-10 hidden lg:block"
+      style="clip-path: circle(50% at 50% 50%);width:200px;height:200px;background-color:#04A6F3"
+      ></div>
+
+    <div
+      class="left-[calc(30%+3rem)] top-36 absolute"
+      style="clip-path: circle(50% at 50% 50%);width:200px;height:200px;background-color:#04A6F3"
+      ></div>
+
+    <div
+      class="right-[calc(30%+3rem)] top-56 absolute hidden xl:block"
+      style="clip-path: circle(50% at 50% 50%);width:150px;height:150px;background-color:#04A6F3"
+      ></div>
+
+    <div
+      class="right-[calc(10%+3rem)] absolute hidden md:block"
+      style="clip-path: circle(50% at 50% 50%);width:100px;height:100px;background-color:#04A6F3;top:50px"
+      ></div>
+  </div>
+
+  <div class="min-h-screen min-w-screen flex flex-col justify-center text-white px-8">
     <div class="relative mx-auto flex flex-col sm:flex-row gap-8 items-center justify-start bg-cover bg-center">
       <div
         class="landing-image"
@@ -34,14 +60,19 @@
           />
       </div>
       <div class="flex flex-col">
+        <div class="text-center">
+          <ApplicationMark class="mx-auto block h-9 w-auto"></ApplicationMark>
+        </div>
         <div
           class="landing-content justify-center text-center"
           style="min-width:300px;"
           >
-          <h1 class="text-gray-900 dark:text-gray-300 font-bold text-xl">
-            Stellar Standups
-          </h1>
-          <h2>
+          <div class="max-w-7xl mx-auto mb-1 px-4 sm:px-6 lg:px-8 flex items-center justify-center text-2xl gap-3 mt-2">
+            <span class="bg-gradient-to-r from-[#28F09E] to-[#05A8F1] inline-block text-transparent bg-clip-text">
+              Stellar Standups
+            </span>
+          </div>
+          <h2 class="mb-1">
             Where Teamwork Meets Simplicity!
           </h2>
         </div>
@@ -80,14 +111,12 @@
                 </span>
               </Link>
               <template v-else>
-                <Link
-                  :href="route('login')"
-                  class="custom-color rounded-md px-3 py-2 text-black ring-1 ring-transparent transition
-                  hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-black
-                  dark:focus-visible:ring-white"
+                <PrimaryButton
+                  link
+                  :route="route('login')"
                   >
                   Log in
-                </Link>
+                </PrimaryButton>
 
                 <Link
                   v-if="canRegister"
@@ -106,7 +135,7 @@
     </div>
     <div class="selection:bg-[#FF2D20] selection:text-white mx-auto">
       <div class="relative w-full max-w-2xl lg:max-w-7xl">
-        <footer class="pb-4 text-center text-sm text-black dark:text-white/70">
+        <footer class="pb-4 text-center text-md text-white opacity-50">
           Innovation starts here. Have a stellar standup!
         </footer>
       </div>

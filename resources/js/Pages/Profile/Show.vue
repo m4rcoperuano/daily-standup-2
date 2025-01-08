@@ -123,6 +123,15 @@
                       </DropdownLink>
                     </form>
                   </template>
+
+                  <div class="border-t border-gray-200 dark:border-gray-600"></div>
+
+                  <!-- Authentication -->
+                  <form @submit.prevent="logout">
+                    <DropdownLink as="button">
+                      Log Out
+                    </DropdownLink>
+                  </form>
                 </template>
               </div>
             </template>

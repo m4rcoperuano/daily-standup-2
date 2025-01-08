@@ -93,7 +93,7 @@
 
 <template>
   <StellarLayout :title="standUpGroup.name">
-    <div class="py-6 text-gray-200">
+    <div class="pb-4 text-gray-200">
       <div class="max-w-4xl mx-auto px-6 sm:px-6 lg:px-8">
         <div
           v-if="!isCreatingStandUpEntry"
@@ -174,7 +174,7 @@
           </div>
         </div>
         <div v-else>
-          <h3 class="text-2xl font-bold mb-4">New Stand Up Entry</h3>
+          <h3 class="text-xl text-primary font-bold mb-4">New Stand Up Entry</h3>
           <div class="mb-2">
             <label class="block font-medium text-sm uppercase">
               <span>Date</span>
