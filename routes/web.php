@@ -20,6 +20,14 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/terms', function () {
+    return Inertia::render('TermsOfService');
+})->name('terms');
+
+Route::get('/privacy', function () {
+    return Inertia::render('PrivacyPolicy');
+})->name('privacy');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

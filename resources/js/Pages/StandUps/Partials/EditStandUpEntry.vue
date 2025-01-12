@@ -56,9 +56,9 @@
   const suggestAtlassianIntegration = computed( () => {
     return !integrationsStore.hasIntegration( 'atlassian' ) &&
       (
-        form.value.in_progress.includes( 'atlassian.com' )
-        || form.value.priorities.includes( 'atlassian.com' )
-        || form.value.blockers.includes( 'atlassian.com' )
+        form.value.in_progress.includes( 'atlassian.net' )
+        || form.value.priorities.includes( 'atlassian.net' )
+        || form.value.blockers.includes( 'atlassian.net' )
       );
   } );
 

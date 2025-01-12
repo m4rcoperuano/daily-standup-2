@@ -126,11 +126,11 @@
               I agree to the <a
                 target="_blank"
                 :href="route('terms.show')"
-                class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                class="underline text-sm text-gray-200 hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800"
                 >Terms of Service</a> and <a
                 target="_blank"
                 :href="route('policy.show')"
-                class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                class="underline text-sm text-gray-200 hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800"
                 >Privacy Policy</a>
             </div>
           </div>
@@ -141,10 +141,20 @@
         </InputLabel>
       </div>
 
+      <div class="text-white p-4 rounded-lg mt-4 text-sm bg-teal-800">
+        By registering, you confirm that you accept our <a
+          href="/terms"
+          class="underline text-sm text-primary hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800"
+          >Terms of Service</a> and <a
+          href="/privacy"
+          class="underline text-sm text-primary hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800"
+          >Privacy Policy</a>.
+      </div>
+
       <div class="flex items-center justify-end mt-4">
         <Link
           :href="route('login')"
-          class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+          class="underline text-sm text-gray-200 hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800"
           >
           Already registered?
         </Link>
