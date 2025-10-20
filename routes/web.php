@@ -7,6 +7,7 @@ use App\Http\Controllers\PointingRoomController;
 use App\Http\Controllers\SocialiteIntegrationController;
 use App\Http\Controllers\StandUpEntryController;
 use App\Http\Controllers\StandUpGroupController;
+use App\Http\Controllers\TeamIntegrationSettingsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
@@ -75,6 +76,12 @@ Route::middleware([
 
     Route::get('/clockwork/{email}', [ClockworkController::class, "index"])
         ->name('clockwork.index');
+
+    Route::get('clockwork/settings/get', [ClockworkController::class, 'settings'])
+        ->name('clockwork.settings');
+
+    Route::post('clockwork/settings/update', [ClockworkController::class, 'updateSettings'])
+        ->name('clockwork.settings-update');
 
     Route::prefix("integrations/jira")
         ->group(function() {

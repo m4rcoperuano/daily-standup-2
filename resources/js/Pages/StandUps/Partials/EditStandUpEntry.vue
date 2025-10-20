@@ -108,14 +108,42 @@
     await fetchTimeEntries();
   } );
 
+  let timeoutId: number | null = null;
+
   watch( () => props.date, () => {
-    fetchTimeEntries();
+    if ( timeoutId ) {
+      clearTimeout( timeoutId );
+    }
+    //debounce for 500ms
+    timeoutId = setTimeout( async() => {
+      await fetchTimeEntries();
+    }, 500 );
   } );
 </script>
 
 <template>
   <div>
     <div class="grid grid-cols-1 gap-4">
+      <div class="mt-4 p-3 bg-gray-900 rounded">
+        <div
+          v-for="work in recentWork"
+          :key="work.id"
+          >
+          <div class="mb-2">
+            <div>
+              <img
+                :src="work.issueType.iconUrl"
+                :alt="work.issueType.name"
+                class="inline-block size-5 mr-2 align-middle"
+                />
+              <strong>{{ work.issueKey }}: {{ work.issueSummary }}</strong>:
+            </div>
+            <div>
+              {{ work.comment }}
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="content">
         <div class="bg-gray-950 text-white px-4 py-2 border-b">
           ✅ What did you do yesterday?
@@ -176,27 +204,6 @@
       </PrimaryButton>
     </div>
 
-    <div
-      v-for="work in recentWork"
-      :key="work.id"
-      >
-      <div class="mt-4 p-3 bg-gray-900 rounded">
-        <div class="text-sm text-gray-400 mb-1">
-          Recent Work Entry
-        </div>
-        <div>
-          <img
-            :src="work.issueType.iconUrl"
-            :alt="work.issueType.name"
-            class="inline-block size-5 mr-2 align-middle"
-            />
-          <strong>{{ work.issueKey }}: {{ work.issueSummary }}</strong>:
-        </div>
-        <div>
-          {{ work.comment }}
-        </div>
-      </div>
-    </div>
     <div
       v-if="integrationConnectedSuccess"
       class="text-green-100 bg-green-900 p-3 rounded mt-4"

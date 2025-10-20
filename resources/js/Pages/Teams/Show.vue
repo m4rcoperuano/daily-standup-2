@@ -4,8 +4,9 @@
   import SectionBorder from '@/Components/SectionBorder.vue';
   import TeamMemberManager from '@/Pages/Teams/Partials/TeamMemberManager.vue';
   import UpdateTeamNameForm from '@/Pages/Teams/Partials/UpdateTeamNameForm.vue';
-  import StellarLayout from '@/Layouts/StellarLayout.vue';
+  import IntegrationSettings from '@/Pages/Teams/Partials/IntegrationSettings.vue';
 
+  import StellarLayout from '@/Layouts/StellarLayout.vue';
   defineProps( {
     team: Object,
     availableRoles: Array,
@@ -27,6 +28,8 @@
           :team="team"
           :permissions="permissions"
           ></UpdateTeamNameForm>
+
+        <IntegrationSettings></IntegrationSettings>
 
         <TeamMemberManager
           class="mt-10 sm:mt-0"
