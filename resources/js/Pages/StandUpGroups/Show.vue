@@ -184,6 +184,7 @@
               ></DateAwareDatePicker>
           </div>
           <EditStandUpEntry
+            :date="creatingStandUpEntryDate"
             @save="saveNew"
             @cancel="cancelNew"
             ></EditStandUpEntry>

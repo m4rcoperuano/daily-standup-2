@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import PrimaryButton from '@/Components/PrimaryButton.vue';
-  import { computed, onMounted, Ref, ref } from 'vue';
+  import { computed, onMounted, Ref, ref, watch } from 'vue';
   import SecondaryButton from '@/Components/SecondaryButton.vue';
   import DangerButton from '@/Components/DangerButton.vue';
   import { StandUpEntry } from '@/Pages/StandUps/standUpEntriesStore';
@@ -9,6 +9,10 @@
   import ConnectToGithub from '@/Components/Integrations/ConnectToGithub.vue';
   import { useIntegrationsStore } from '@/Stores/integrationsStore.js';
   import ProTipAlert from '@/Components/ProTipAlert.vue';
+  import { useApi } from '@/useApi';
+  import { usePage } from '@inertiajs/vue3';
+  const page = usePage();
+  const api = useApi();
 
   const props = defineProps( {
     isEditing: {
@@ -24,6 +28,10 @@
       default: null,
     },
     blockers: {
+      type: String,
+      default: null,
+    },
+    date: {
       type: String,
       default: null,
     },
@@ -80,8 +88,28 @@
     }
   };
 
-  onMounted( () => {
-    integrationsStore.fetchIntegrations();
+  const recentWork = ref( [] );
+  const fetchTimeEntries = async () => {
+    const email = integrationsStore.integrations.filter( x => x.provider === 'atlassian' )[0].email;
+    const response = await api.integrations.clockwork.query( email, props.date );
+
+    recentWork.value = response.result.data.filter( x => !!x.comment )
+      .map( x => ( {
+        id: x.id,
+        comment: x.comment,
+        issueType: x.issue.fields.issuetype,
+        issueKey: x.issue.key,
+        issueSummary: x.issue.fields.summary,
+      } ) );
+  };
+
+  onMounted( async() => {
+    await integrationsStore.fetchIntegrations();
+    await fetchTimeEntries();
+  } );
+
+  watch( () => props.date, () => {
+    fetchTimeEntries();
   } );
 </script>
 
@@ -146,6 +174,28 @@
         >
         Save
       </PrimaryButton>
+    </div>
+
+    <div
+      v-for="work in recentWork"
+      :key="work.id"
+      >
+      <div class="mt-4 p-3 bg-gray-900 rounded">
+        <div class="text-sm text-gray-400 mb-1">
+          Recent Work Entry
+        </div>
+        <div>
+          <img
+            :src="work.issueType.iconUrl"
+            :alt="work.issueType.name"
+            class="inline-block size-5 mr-2 align-middle"
+            />
+          <strong>{{ work.issueKey }}: {{ work.issueSummary }}</strong>:
+        </div>
+        <div>
+          {{ work.comment }}
+        </div>
+      </div>
     </div>
     <div
       v-if="integrationConnectedSuccess"

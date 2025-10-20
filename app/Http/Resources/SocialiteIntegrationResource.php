@@ -18,6 +18,7 @@ class SocialiteIntegrationResource extends JsonResource
             'id' => $this->id,
             'provider' => $this->provider,
             'version' => $this->version,
+            'email' => $this->provider_user_email
         ];
     }
 }

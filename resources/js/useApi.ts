@@ -62,6 +62,11 @@ export function useApi( ) {
                 return await callApi( 'get', route( 'integrations.jira.sprint', sprintId ) );
             },
         },
+        clockwork: {
+            query: async( email:string, date: string ): Promise<CustomResponse> => {
+                return await callApi( 'get', route( 'clockwork.index', email ) + '?date=' + date );
+            },
+        },
     };
 
     return {

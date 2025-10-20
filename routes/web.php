@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClockworkController;
 use App\Http\Controllers\FetchLinkPreviewController;
 use App\Http\Controllers\JiraController;
 use App\Http\Controllers\PointingRoomController;
@@ -71,6 +72,9 @@ Route::middleware([
         ->name('socialite.index');
     Route::delete('auth/integrations/{socialiteIntegration}', [SocialiteIntegrationController::class, 'destroy'])
         ->name('socialite.destroy');
+
+    Route::get('/clockwork/{email}', [ClockworkController::class, "index"])
+        ->name('clockwork.index');
 
     Route::prefix("integrations/jira")
         ->group(function() {
