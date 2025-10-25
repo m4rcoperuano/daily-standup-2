@@ -146,9 +146,12 @@
     } );
   } );
 
-  const createCopyableText = ( work ) => {
-    const issueUrl = `${jiraBaseUrl.value}/browse/${work.issueKey}`;
-    return `[${issueUrl}](${issueUrl})\n${work.comment}`;
+  const createCopyableText = ( recentWork ) => {
+    if ( !Array.isArray( recentWork ) ) return '';
+    return recentWork.map( work => {
+      const issueUrl = `${jiraBaseUrl.value}/browse/${work.issueKey}`;
+      return `[${work.issueKey}](${issueUrl}): ${work.issueSummary}\n${work.comment}`;
+    } ).join( '\n\n' );
   };
 </script>
 
@@ -192,13 +195,13 @@
                 {{ work.comment }}
               </div>
             </div>
-
-            <copy-text-button
-              v-if="!isFetchingRecentWork"
-              class="absolute top-4 right-4"
-              :text="createCopyableText(work)"
-              ></copy-text-button>
           </div>
+
+          <copy-text-button
+            v-if="!isFetchingRecentWork"
+            class="absolute top-4 right-4"
+            :text="createCopyableText(recentWork)"
+            ></copy-text-button>
         </div>
       </div>
       <div class="content">
