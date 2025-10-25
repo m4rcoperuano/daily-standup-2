@@ -150,7 +150,7 @@
     if ( !Array.isArray( recentWork ) ) return '';
     return recentWork.map( work => {
       const issueUrl = `${jiraBaseUrl.value}/browse/${work.issueKey}`;
-      return `[${issueUrl}](${issueUrl}): ${work.issueSummary}\n${work.comment}`;
+      return `[${issueUrl}](${issueUrl})\n${work.comment}`;
     } ).join( '\n\n' );
   };
 </script>
