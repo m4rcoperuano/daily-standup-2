@@ -38,9 +38,19 @@ class ClockworkController extends Controller
             ])
             ->get("https://api.clockwork.report/v1/worklogs");
 
+        // Extract baseUrl from the self link in the first worklog entry, if available
+        $baseUrl = null;
+        $resultJson = $result->json();
+        if (!empty($resultJson) && !empty($resultJson[0]['self'])) {
+            if (preg_match('/^(https:\/\/[^\/]+\.atlassian\.net)/', $resultJson[0]['self'], $matches)) {
+                $baseUrl = $matches[1];
+            }
+        }
+
         return response()->json([
             'date_used' => $queryDate->toDateString(),
-            'data' => $result->json(),
+            'base_url' => $baseUrl,
+            'data' => $resultJson,
         ]);
     }
 

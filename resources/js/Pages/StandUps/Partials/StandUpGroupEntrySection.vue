@@ -76,6 +76,7 @@
               :priorities="entry.priorities"
               :blockers="entry.blockers"
               :is-editing="true"
+              :date="entry.date"
               @save="onUpdate"
               @cancel="onCancel"
               @delete="onDelete"

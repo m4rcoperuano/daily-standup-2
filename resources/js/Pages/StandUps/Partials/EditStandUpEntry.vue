@@ -12,6 +12,7 @@
   import { useApi } from '@/useApi';
   const api = useApi();
   import { DateTime } from 'luxon';
+  import CopyTextButton from '@/Components/CopyTextButton.vue';
 
   const props = defineProps( {
     isEditing: {
@@ -90,6 +91,7 @@
   const recentWork = ref( [] );
   const isFetchingRecentWork = ref( false );
   const recentWorkDate = ref( '' );
+  const jiraBaseUrl = ref( null );
   const fetchTimeEntries = async () => {
     recentWork.value = [];
     isFetchingRecentWork.value = true;
@@ -98,6 +100,7 @@
     const response = await api.integrations.clockwork.query( email, props.date );
 
     recentWorkDate.value = response.result.data.date_used;
+    jiraBaseUrl.value = response.result.data.base_url;
     recentWork.value = response.result.data.data.filter( x => !!x.comment )
       .map( x => ( {
         id: x.id,
@@ -142,12 +145,17 @@
       }
     } );
   } );
+
+  const createCopyableText = ( work ) => {
+    const issueUrl = `${jiraBaseUrl.value}/browse/${work.issueKey}`;
+    return `[${issueUrl}](${issueUrl})\n${work.comment}`;
+  };
 </script>
 
 <template>
   <div>
     <div class="grid grid-cols-1 gap-4">
-      <div class="text-gray-400 mt-4 p-3 bg-gray-900 rounded flex flex-col min-h-[48px]">
+      <div class="text-gray-400 mt-4 p-3 relative bg-gray-900 rounded flex flex-col min-h-[48px]">
         <div
           v-if="!isFetchingRecentWork"
           class="uppercase text-sm font-bold mb-1"
@@ -184,6 +192,12 @@
                 {{ work.comment }}
               </div>
             </div>
+
+            <copy-text-button
+              v-if="!isFetchingRecentWork"
+              class="absolute top-4 right-4"
+              :text="createCopyableText(work)"
+              ></copy-text-button>
           </div>
         </div>
       </div>
