@@ -10,9 +10,8 @@
   import { useIntegrationsStore } from '@/Stores/integrationsStore.js';
   import ProTipAlert from '@/Components/ProTipAlert.vue';
   import { useApi } from '@/useApi';
-  import { usePage } from '@inertiajs/vue3';
-  const page = usePage();
   const api = useApi();
+  import { DateTime } from 'luxon';
 
   const props = defineProps( {
     isEditing: {
@@ -89,11 +88,17 @@
   };
 
   const recentWork = ref( [] );
+  const isFetchingRecentWork = ref( false );
+  const recentWorkDate = ref( '' );
   const fetchTimeEntries = async () => {
+    recentWork.value = [];
+    isFetchingRecentWork.value = true;
+
     const email = integrationsStore.integrations.filter( x => x.provider === 'atlassian' )[0].email;
     const response = await api.integrations.clockwork.query( email, props.date );
 
-    recentWork.value = response.result.data.filter( x => !!x.comment )
+    recentWorkDate.value = response.result.data.date_used;
+    recentWork.value = response.result.data.data.filter( x => !!x.comment )
       .map( x => ( {
         id: x.id,
         comment: x.comment,
@@ -101,6 +106,8 @@
         issueKey: x.issue.key,
         issueSummary: x.issue.fields.summary,
       } ) );
+
+    isFetchingRecentWork.value = false;
   };
 
   onMounted( async() => {
@@ -108,7 +115,7 @@
     await fetchTimeEntries();
   } );
 
-  let timeoutId: number | null = null;
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
   watch( () => props.date, () => {
     if ( timeoutId ) {
@@ -119,27 +126,63 @@
       await fetchTimeEntries();
     }, 500 );
   } );
+
+  const formattedRecentWorkDate = computed( () => {
+    if ( !recentWorkDate.value ) return '';
+    // Parse as ISO date and format as 'Friday, March 3rd, 2025'
+    return DateTime.fromISO( recentWorkDate.value ).toFormat( 'cccc, LLLL d\',\' yyyy' ).replace( /\b(\d{1,2})\b/, ( d ) => {
+      // Add ordinal suffix
+      const n = parseInt( d );
+      if ( n > 3 && n < 21 ) return n + 'th';
+      switch ( n % 10 ) {
+        case 1: return n + 'st';
+        case 2: return n + 'nd';
+        case 3: return n + 'rd';
+        default: return n + 'th';
+      }
+    } );
+  } );
 </script>
 
 <template>
   <div>
     <div class="grid grid-cols-1 gap-4">
-      <div class="mt-4 p-3 bg-gray-900 rounded">
+      <div class="text-gray-400 mt-4 p-3 bg-gray-900 rounded flex flex-col min-h-[48px]">
         <div
-          v-for="work in recentWork"
-          :key="work.id"
+          v-if="!isFetchingRecentWork"
+          class="uppercase text-sm font-bold mb-1"
           >
-          <div class="mb-2">
-            <div>
-              <img
-                :src="work.issueType.iconUrl"
-                :alt="work.issueType.name"
-                class="inline-block size-5 mr-2 align-middle"
-                />
-              <strong>{{ work.issueKey }}: {{ work.issueSummary }}</strong>:
-            </div>
-            <div>
-              {{ work.comment }}
+          Looking back to {{ formattedRecentWorkDate }} (clockwork)
+        </div>
+        <div
+          v-if="isFetchingRecentWork"
+          >
+          <span>Loading recent work...</span>
+        </div>
+        <div
+          v-else-if="recentWork.length === 0"
+          >
+          <span>No clockwork entries found.</span>
+        </div>
+        <div
+          v-else
+          >
+          <div
+            v-for="work in recentWork"
+            :key="work.id"
+            >
+            <div class="mb-2">
+              <div>
+                <img
+                  :src="work.issueType.iconUrl"
+                  :alt="work.issueType.name"
+                  class="inline-block size-5 mr-2 align-middle "
+                  />
+                <strong class="text-white">{{ work.issueKey }}: {{ work.issueSummary }}</strong>:
+              </div>
+              <div>
+                {{ work.comment }}
+              </div>
             </div>
           </div>
         </div>
