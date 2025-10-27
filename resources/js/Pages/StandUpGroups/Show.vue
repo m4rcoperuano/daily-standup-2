@@ -1,17 +1,16 @@
 <script setup lang="ts">
-  import AppLayout from '@/Layouts/AppLayout.vue';
   import { computed, onMounted, ref } from 'vue';
   import { DateTime } from 'luxon';
   import StandUpGroupEntrySection from '@/Pages/StandUps/Partials/StandUpGroupEntrySection.vue';
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import EditStandUpEntry from '@/Pages/StandUps/Partials/EditStandUpEntry.vue';
-  import InputLabel from '@/Components/InputLabel.vue';
   import { StandUpEntry, useStandUpEntriesStore } from '@/Pages/StandUps/standUpEntriesStore';
   import { usePage } from '@inertiajs/vue3';
   import DateAwareDatePicker from '@/Components/DateAwareDatePicker.vue';
   import { useLinkPreviewsStore } from '@/Stores/linkPreviewStore';
-  import SprintDetails from '@/Pages/StandUpGroups/Partials/SprintDetails.vue';
   import StellarLayout from '@/Layouts/StellarLayout.vue';
+  import CopyTextButton from '@/Components/CopyTextButton.vue';
+  import RichTextEditor from '@/Components/RichTextEditor.vue';
 
   const props = defineProps( {
     standUpGroup: {
@@ -89,6 +88,15 @@
 
       standUpEntriesStore.replace( e.entry.id, e.entry );
     } );
+
+  const summaryData = ref( null );
+  const isFetchingSummary = ref( false );
+  const initiateSummary = async () => {
+    isFetchingSummary.value = true;
+    const response = await axios.get( route( 'stand-up-entries.export', { standUpGroup: props.standUpGroup.id } ) );
+    summaryData.value = response.data;
+    isFetchingSummary.value = false;
+  };
 </script>
 
 <template>
@@ -191,7 +199,19 @@
           <div class="mb-4 border-b pb-8 border-gray-200  dark:border-gray-700"></div>
         </div>
 
+        <div class="text-right">
+          <primary-button @click="initiateSummary">Create Summary (BETA)</primary-button>
+        </div>
 
+        <div
+          v-if="isFetchingSummary"
+          >
+          Loading summary..
+        </div>
+        <RichTextEditor
+          v-else-if="summaryData"
+          :model-value="summaryData"
+          ></RichTextEditor>
         <div
           v-for="date in standUpEntryGroupByDateKeys"
           :key="date"
@@ -213,4 +233,28 @@
 .stand-up-group-entry-section:deep(.link-preview) {
     text-decoration: none;
 }
+
+
+.prose-styles {
+  @apply prose-invert prose prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg
+  prose-li:break-words;
+  @apply prose-ol:m-0 prose-p:break-words;
+}
+
+.prose-styles:deep( input[type="checkbox"] ) {
+  @apply mr-2 bg-gray-200 border-gray-200;
+}
+
+.prose-styles:deep( input[type="checkbox"]:checked ) {
+  @apply bg-teal-500 border-teal-500;
+}
+
+.prose-styles:deep( ul.todo-list ) {
+  @apply list-none;
+}
+
+.prose-styles:deep( ul.todo-list:first-child ) {
+  @apply pl-0;
+}
+
 </style>

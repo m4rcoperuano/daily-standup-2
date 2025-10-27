@@ -59,6 +59,9 @@ Route::middleware([
     Route::get('/stand-up-groups/{standUpGroup}/entries', [StandUpEntryController::class, 'index'])
         ->name('stand-up-entries.index');
 
+    Route::get('/stand-up-groups/{standUpGroup}/export', [StandUpEntryController::class, 'export'])
+        ->name('stand-up-entries.export');
+
     Route::resource('/stand-up-entries', StandUpEntryController::class)
         ->only(['store', 'update', 'destroy']);
 

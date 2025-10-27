@@ -16,6 +16,7 @@
         "laravel/socialite": "^5.15",
         "laravel/telescope": "^5.2",
         "laravel/tinker": "^2.9",
+        "league/html-to-markdown": "^5.1",
         "resend/resend-laravel": "^0.14.0",
         "socialiteproviders/atlassian": "dev-master",
         "stechstudio/filament-impersonate": "^3.14",
