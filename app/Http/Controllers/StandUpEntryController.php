@@ -82,11 +82,11 @@ class StandUpEntryController extends Controller
         $response = Http::withToken(config('services.openai.key'))
             ->timeout(120)
             ->post('https://api.openai.com/v1/chat/completions', [
-                'model' => 'gpt-5',
+                'model' => 'gpt-5-mini',
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => 'Create a summary of the following stand up entries. The audience is the business team, not the developer, so make it sound less technical and more company facing. Group it by Assignee then by Ticket.',
+                        'content' => 'Create a summary of the following stand up entries. The audience is the business team, not the developer, so make it sound less technical and more company facing. Group it by Assignee then by Ticket. This is to prepare for a Sprint Review meeting with the company.',
                     ],
                     [
                         'role' => 'user',
