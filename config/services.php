@@ -44,7 +44,7 @@ return [
         'client_secret' => env('ATLASSIAN_CLIENT_SECRET'),
         'redirect' => env('ATLASSIAN_REDIRECT_URI')
     ],
-    'clockwork' => [
-      'api_key' => env('CLOCKWORK_API_KEY'),
+    'openai' => [
+        'key' => env('OPEN_AI_API_KEY'),
     ]
 ];
