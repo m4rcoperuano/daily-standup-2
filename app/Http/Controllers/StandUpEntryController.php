@@ -70,7 +70,6 @@ class StandUpEntryController extends Controller
         $entries = $standUpGroup->standUpEntries()
             ->orderBy('date', 'desc')
             ->with('user', 'standUpEntryLinks')
-            ->unless($request->boolean('all'), fn($query) => $query->where('user_id', $request->user()->id))
             ->get()
             ->map(fn(StandUpEntry $entry) => [
                 'Date' => $entry->date->toDateString(),
