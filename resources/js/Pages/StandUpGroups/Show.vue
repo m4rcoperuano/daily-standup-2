@@ -199,19 +199,19 @@
           <div class="mb-4 border-b pb-8 border-gray-200  dark:border-gray-700"></div>
         </div>
 
-        <div class="text-right">
-          <primary-button @click="initiateSummary">Create Summary (BETA)</primary-button>
+        <div class="text-right mb-2">
+          <primary-button @click="initiateSummary">
+            {{ isFetchingSummary ? 'Generating Summary...' : 'Generate Summary' }}
+          </primary-button>
         </div>
-
         <div
-          v-if="isFetchingSummary"
+          v-if="summaryData"
+          class="content"
           >
-          Loading summary..
+          <RichTextEditor
+            :model-value="summaryData"
+            ></RichTextEditor>
         </div>
-        <RichTextEditor
-          v-else-if="summaryData"
-          :model-value="summaryData"
-          ></RichTextEditor>
         <div
           v-for="date in standUpEntryGroupByDateKeys"
           :key="date"
@@ -234,27 +234,21 @@
     text-decoration: none;
 }
 
+.content:deep(.ck-content) {
+  @apply prose prose-invert prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0
+  prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg
+  prose-li:break-words prose-ol:m-0 py-2 bg-five prose-h2:mt-2;
 
-.prose-styles {
-  @apply prose-invert prose prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg
-  prose-li:break-words;
-  @apply prose-ol:m-0 prose-p:break-words;
+  border-radius:initial !important;
+  border-bottom-left-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+
+  height:calc(100% - 40px);
+  max-width: 100%;
 }
 
-.prose-styles:deep( input[type="checkbox"] ) {
-  @apply mr-2 bg-gray-200 border-gray-200;
-}
-
-.prose-styles:deep( input[type="checkbox"]:checked ) {
-  @apply bg-teal-500 border-teal-500;
-}
-
-.prose-styles:deep( ul.todo-list ) {
-  @apply list-none;
-}
-
-.prose-styles:deep( ul.todo-list:first-child ) {
-  @apply pl-0;
+.content {
+  @apply rounded-xl border border-gray-900 shadow overflow-hidden;
 }
 
 </style>
