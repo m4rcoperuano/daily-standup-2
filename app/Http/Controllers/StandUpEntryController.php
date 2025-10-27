@@ -82,7 +82,7 @@ class StandUpEntryController extends Controller
         $response = Http::withToken(config('services.openai.key'))
             ->timeout(120)
             ->post('https://api.openai.com/v1/chat/completions', [
-                'model' => 'gpt-5-mini',
+                'model' => 'gpt-5',
                 'messages' => [
                     [
                         'role' => 'system',
