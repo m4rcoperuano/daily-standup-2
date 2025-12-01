@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use SocialiteProviders\Atlassian\Provider;
 use App\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -26,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Event::listen(function (SocialiteWasCalled $event) {
-            $event->extendSocialite('atlassian', Atlassian\Provider::class);
+            $event->extendSocialite('atlassian', Provider::class);
         });
 
         Event::listen(function (TeamCreated $event) {

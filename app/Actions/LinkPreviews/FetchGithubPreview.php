@@ -2,6 +2,7 @@
 
 namespace App\Actions\LinkPreviews;
 
+use Exception;
 use App\Services\GithubIntegration;
 
 class FetchGithubPreview implements FetchServicePreview
@@ -26,7 +27,7 @@ class FetchGithubPreview implements FetchServicePreview
                 default => $this->fetchRepository($url, $repositoryOwner, $repositoryName),
             };
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             return new LinkPreviewDto(
                 title: 'Github Error ' . $e->getMessage(),
                 description: '',

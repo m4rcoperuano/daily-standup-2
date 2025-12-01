@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "filament/filament": "^3.2",
+        "filament/filament": "^4.0",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.9",
         "laravel/jetstream": "^5.1",
@@ -19,11 +19,12 @@
         "league/html-to-markdown": "^5.1",
         "resend/resend-laravel": "^0.14.0",
         "socialiteproviders/atlassian": "dev-master",
-        "stechstudio/filament-impersonate": "^3.14",
+        "stechstudio/filament-impersonate": "^4.0",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "filament/upgrade": "^4.0",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
