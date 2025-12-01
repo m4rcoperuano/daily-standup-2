@@ -41,6 +41,7 @@
       v-if="sprint"
       :start-date="sprintStartDate"
       :end-date="sprintEndDate"
+      :goal="sprint.goal"
       ></SprintDaysRemaining>
     <div
       v-else-if="integrations.hasIntegration( 'atlassian', '1.0.0' )"

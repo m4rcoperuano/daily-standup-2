@@ -14,6 +14,10 @@
       type: Date,
       required: true,
     },
+    goal: {
+      type: String,
+      required: false,
+    },
   } );
 
   let daysRemaining  = DateTime.fromJSDate( props.endDate ).diff( DateTime.now(), 'days' ).days;
@@ -55,9 +59,7 @@
         <div v-if="daysRemaining > 0">{{ Math.ceil(daysRemaining) }}</div>
       </div>
     </div>
-    <div class="text-sm italic text-center mt-1">
-      {{ daysRemaining <= 0 ? 'Sprint is Over' : 'Days Remaining in Sprint' }}
-    </div>
+    <div class="whitespace-pre text-center pt-4">{{ goal }}</div>
   </div>
 </template>
 

@@ -11,6 +11,7 @@
   import StellarLayout from '@/Layouts/StellarLayout.vue';
   import CopyTextButton from '@/Components/CopyTextButton.vue';
   import RichTextEditor from '@/Components/RichTextEditor.vue';
+  import SprintDetails from '@/Pages/StandUpGroups/Partials/SprintDetails.vue';
 
   const props = defineProps( {
     standUpGroup: {
@@ -103,6 +104,17 @@
   <StellarLayout :title="standUpGroup.name">
     <div class="pb-4 text-gray-200">
       <div class="max-w-4xl mx-auto px-6 sm:px-6 lg:px-8">
+        <div class="my-6 border-t border-primary"></div>
+        <h2 class="font-semibold text-xl bg-gradient-to-r text-primary text-center mb-2">
+          {{ standUpGroup.name }}
+        </h2>
+
+        <sprint-details
+          v-if="hasSprintIntegration"
+          :sprint-id="standUpGroup.atlassian_sprint_id"
+          ></sprint-details>
+        <div class="my-6 border-t border-primary"></div>
+
         <div
           v-if="!isCreatingStandUpEntry"
           class="mb-4"
@@ -118,9 +130,6 @@
             <div
               class="gap-3 flex flex-grow flex-col"
               >
-              <h2 class="font-semibold text-xl bg-gradient-to-r text-primary">
-                {{ standUpGroup.name }}
-              </h2>
               <div class="flex gap-3 flex-col sm:flex-row">
                 <div class="flex items-center">
                   <input
@@ -152,6 +161,12 @@
                     class="ms-2 cursor-pointer font-medium "
                     >Show Everyone</label>
                 </div>
+              </div>
+
+              <div class="mb-2">
+                <primary-button @click="initiateSummary">
+                  {{ isFetchingSummary ? 'Generating Summary...' : 'Generate Summary' }}
+                </primary-button>
               </div>
             </div>
 
@@ -197,12 +212,6 @@
             @cancel="cancelNew"
             ></EditStandUpEntry>
           <div class="mb-4 border-b pb-8 border-gray-200  dark:border-gray-700"></div>
-        </div>
-
-        <div class="text-right mb-2">
-          <primary-button @click="initiateSummary">
-            {{ isFetchingSummary ? 'Generating Summary...' : 'Generate Summary' }}
-          </primary-button>
         </div>
         <div
           v-if="summaryData"

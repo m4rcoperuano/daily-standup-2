@@ -49,18 +49,42 @@ class AtlassianIntegration
             ->get("/ex/jira/$cloudId/rest/agile/1.0/sprint/$sprintId");
     }
 
-    public function getBoards(string $cloudId): Response
+    public function getBoards(string $cloudId): array
     {
-        return $this
+        $response = $this
             ->http()
             ->get("/ex/jira/$cloudId/rest/agile/1.0/board");
+
+        return $response->json('values', []);
     }
 
-    public function getSprints(string $cloudId, string $boardId, bool $activeOnly = true): Response
+    public function getSprints(string $cloudId, string $boardId, bool $activeOnly = true): array
     {
-        return $this
+        $url = "/ex/jira/$cloudId/rest/agile/1.0/board/$boardId/sprint";
+        $queryParams = [];
+
+        if ($activeOnly) {
+            $queryParams['state'] = 'active,future';
+        }
+
+        $response = $this
             ->http()
-            ->get("/ex/jira/$cloudId/rest/agile/1.0/board/$boardId/sprint". ($activeOnly ? "?state=active" : ""));
+            ->get($url, $queryParams);
+
+        $values = $response->json('values', []);
+        $isLast = $response->json('isLast', true);
+
+        while (!$isLast) {
+            $startAt = count($values);
+            $nextResponse = $this
+                ->http()
+                ->get($url, array_merge($queryParams, ['startAt' => $startAt]));
+
+            $values = array_merge($values, $nextResponse->json('values', []));
+            $isLast = $nextResponse->json('isLast', true);
+        }
+
+        return $values;
     }
 
     public function getSprint(string $cloudId, string $sprintId): Response
