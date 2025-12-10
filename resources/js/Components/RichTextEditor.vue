@@ -1,20 +1,71 @@
 <script setup lang="ts">
   import { useEditor, EditorContent } from '@tiptap/vue-3';
   import StarterKit from '@tiptap/starter-kit';
-  import Link from '@tiptap/extension-link';
   import { LinkCard } from '@/Components/TipTap/LinkCard';
-  import { LinkCardAutoExtension } from '@/Components/TipTap/LinkCardInputRule';
+  import { Plugin, PluginKey, TextSelection } from 'prosemirror-state';
 
   const model = defineModel<string>();
 
   const editor = useEditor( {
     extensions: [
-      StarterKit,
+      StarterKit.configure( {
+        link: {
+          openOnClick: false,
+        },
+      } )
+        .extend( {
+          addProseMirrorPlugins() {
+            const editor = this.editor;
+            const type = editor.schema.nodes.linkCard;
+
+            return [
+              new Plugin( {
+                key : new PluginKey( 'inlineLinkCardPlugin' ),
+                appendTransaction( transactions, oldState, newState ) {
+                  const docChanged = transactions.some( tr => tr.docChanged );
+                  if ( !docChanged ) return null;
+
+                  const { tr } = newState;
+                  let modified = false;
+
+                  newState.doc.descendants( ( node, pos ) => {
+                    if ( !node.isText ) return;
+
+                    //check if node's content contains a mark of type link
+                    const linkMark = newState.schema.marks.link;
+                    const marks = node.marks.filter( mark => mark.type === linkMark );
+                    if ( marks.length === 0 ) return;
+
+                    let text = node.text;
+                    const $pos = newState.doc.resolve( pos );
+                    if (
+                      $pos.parent &&
+                      $pos.parent.type.name === 'linkCard'
+                    ) {
+                      return;
+                    }
+
+                    // Replace the text node with a linkCard node
+                    const end = pos + node.nodeSize;
+                    tr.replaceWith( pos, end, type.create( { href: text } ) );
+
+                    modified = true;
+                  } );
+
+                  if ( !modified ) return null;
+
+                  // Preserve selection reasonably
+                  const selection = tr.selection;
+                  const lastPos = selection.from;
+                  tr.setSelection( TextSelection.near( tr.doc.resolve( lastPos ) ) );
+
+                  return tr;
+                },
+              } ),
+            ];
+          },
+        } ),
       LinkCard,
-      Link.configure( {
-        openOnClick: false, // optional; Jira-like behavior often customizes this
-      } ),
-      LinkCardAutoExtension,
     ],
     content: model.value,
     onUpdate: ( { editor } ) => {

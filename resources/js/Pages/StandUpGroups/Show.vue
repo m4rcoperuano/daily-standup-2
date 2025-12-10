@@ -36,13 +36,29 @@
       const image = preview.image;
 
       if ( image ) {
-        element.innerHTML = `
-          <div class="inline not-prose">
-            <div class="bg-teal-950 text-blue-200 mb-2 hover:bg-teal-900 rounded inline break-all py-1 pr-1" style="line-height:34px;">
-              <img src="${image}" class="inline-block p-1 rounded mr-1 bg-white" style="height:25px;position:relative;top:-2px;" />
+        if ( element.classList.contains( 'inline-card' ) ) {
+          const imgElement = element.querySelector( 'img' );
+          if ( imgElement ) {
+            imgElement.setAttribute( 'src', image );
+          }
+          const titleElement = element.querySelector( '.link-card' );
+          if ( titleElement ) {
+            titleElement.innerHTML = `
+              <img src="${image}" />
+              ${title}
+            `;
+          }
+        }
+        else {
+          element.innerHTML = `
+          <div class="inline-card-link-container">
+            <div class="link-card">
+              <img src="${image}" />
               ${title}
             </div>
           </div>`;
+        }
+
         element.classList.add( 'link-preview' );
       }
       else {

@@ -2,8 +2,9 @@
 import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey, TextSelection } from 'prosemirror-state';
 
+//Need a URL regex that looks for <a href="...">, mailto:..., tel:..., http(s)://..., www....
 const urlRegex =
-  /(https?:\/\/[^\s]+)|(www\.[^\s]+)|(mailto:[^\s]+)|(tel:[^\s]+)/i;
+  /((https?:\/\/|www\.|mailto:|tel:)[^\s<>"']+)/i;
 
 export const LinkCardAutoExtension = Extension.create( {
   name: 'linkCardAuto',
@@ -33,7 +34,6 @@ export const LinkCardAutoExtension = Extension.create( {
             // Simple heuristic: full node is a URL or starts at beginning
             const fullMatch = match[0];
             if ( text.trim() !== fullMatch.trim() ) return;
-
             // Avoid reconverting if it’s already a card
             const $pos = newState.doc.resolve( pos );
             if (
@@ -48,6 +48,7 @@ export const LinkCardAutoExtension = Extension.create( {
             tr.replaceWith( pos, end, type.create( { href: fullMatch } ) );
 
             modified = true;
+
             return false; // stop descending here
           } );
 

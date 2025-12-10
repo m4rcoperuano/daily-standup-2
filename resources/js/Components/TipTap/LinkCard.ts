@@ -20,10 +20,9 @@ export const LinkCard = Node.create<LinkCardOptions>( {
   selectable: true,
   atom: true,   // behave as a single unit
   draggable: false,
-
   addOptions() {
     return {
-      HTMLAttributes: { class: 'inline-link-card' },
+      HTMLAttributes: { class: 'inline-card' },
     };
   },
 
@@ -41,23 +40,31 @@ export const LinkCard = Node.create<LinkCardOptions>( {
   parseHTML() {
     return [
       {
-        tag: 'span[data-link-card]',
+        tag: 'a',
+        priority: 100,
       },
     ];
   },
 
   renderHTML( { HTMLAttributes } ) {
     const { href, title } = HTMLAttributes;
+
     return [
-      'span',
+      'a',
       mergeAttributes( this.options.HTMLAttributes, {
         'data-link-card': 'true',
-        'data-href': href,
+        href: href,
+        target: '_blank',
+        rel: 'noopener noreferrer',
       } ),
       [
-        'a',
-        { href, target: '_blank', rel: 'noopener noreferrer' },
-        title || href,
+        'div',
+        { class: 'inline-card-link-container' },
+        [
+          'div',
+          { class: 'link-card' },
+          href,
+        ],
       ],
     ];
   },

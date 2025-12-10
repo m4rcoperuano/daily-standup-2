@@ -44,3 +44,17 @@
 .prose-styles:deep( ul.todo-list:first-child ) {
   @apply pl-0;
 }
+
+.inline-card-link-container {
+  @apply inline;
+}
+
+.inline-card-link-container .link-card {
+  @apply bg-teal-950 text-blue-200 mb-2 hover:bg-teal-900 rounded inline break-all py-1 pr-1;
+  line-height: 34px;
+}
+
+.inline-card-link-container img {
+  @apply inline-block p-1 rounded mr-1 bg-white;
+  height:25px;position:relative;top:-2px;
+}
