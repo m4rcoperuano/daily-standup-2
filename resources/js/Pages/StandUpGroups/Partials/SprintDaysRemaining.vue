@@ -20,16 +20,17 @@
     },
   } );
 
-  let daysRemaining  = DateTime.fromJSDate( props.endDate ).diff( DateTime.now(), 'days' ).days;
-  if ( daysRemaining < 0 ) daysRemaining = 0;
-
-  let totalDays = DateTime.fromJSDate( props.endDate ).diff( DateTime.fromJSDate( props.startDate ), 'days' ).days;
-  let daysElapsed = totalDays - daysRemaining;
+  const start = DateTime.fromJSDate( props.startDate ).startOf( 'day' );
+  const end = DateTime.fromJSDate( props.endDate ).startOf( 'day' );
+  const now = DateTime.now().startOf( 'day' );
+  const totalDays = end.diff( start, 'days' ).days - 1;
+  const daysElapsed = now.diff( start, 'days' ).days;
+  const daysRemaining = totalDays - daysElapsed;
 
   const chartData = {
     datasets: [ {
       label: 'Days Remaining',
-      data: [ Math.ceil( daysElapsed ), Math.ceil( daysRemaining ) ],
+      data: [ Math.floor( daysElapsed ), Math.floor( daysRemaining ) ],
       backgroundColor: [
         'rgb(0,202,62)',
         'rgb(179,179,179)',
@@ -56,7 +57,7 @@
         style="top:50%;margin-top:-17px;text-align: center"
         class="absolute w-full text-2xl font-extrabold"
         >
-        <div v-if="daysRemaining > 0">{{ Math.ceil(daysRemaining) }}</div>
+        <div v-if="daysRemaining > 0">{{ Math.floor(daysRemaining) }}</div>
       </div>
     </div>
     <div class="whitespace-pre text-center pt-4">{{ goal }}</div>
