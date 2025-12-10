@@ -187,28 +187,6 @@
     @apply z-20 sticky top-0 font-semibold uppercase text-sm bg-gray-100 border-x dark:bg-gray-950 text-gray-400 border-gray-700 py-2 px-4 border-b;
 }
 
-.prose-styles {
-    @apply prose-invert prose prose-ul:m-0 prose-p:m-0 prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 prose-h5:m-0 prose-h6:m-0 prose-li:m-0 prose-h1:text-lg prose-h2:text-lg prose-h3:text-lg
-        prose-li:break-words;
-    @apply prose-ol:m-0 prose-p:break-words;
-}
-
-.prose-styles:deep( input[type="checkbox"] ) {
-    @apply mr-2 bg-gray-200 border-gray-200;
-}
-
-.prose-styles:deep( input[type="checkbox"]:checked ) {
-    @apply bg-teal-500 border-teal-500;
-}
-
-.prose-styles:deep( ul.todo-list ) {
-    @apply list-none;
-}
-
-.prose-styles:deep( ul.todo-list:first-child ) {
-    @apply pl-0;
-}
-
 .row {
     @apply bg-five rounded-lg overflow-hidden divide-y divide-quaternary;
 }

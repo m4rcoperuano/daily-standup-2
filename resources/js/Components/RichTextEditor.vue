@@ -1,84 +1,35 @@
 <script setup lang="ts">
-  import 'ckeditor5/ckeditor5.css';
-  import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
-  import {
-    BalloonEditor,
-    Bold,
-    Essentials,
-    Italic,
-    Undo,
-    Paragraph,
-    Autoformat,
-    PasteFromMarkdownExperimental,
-    AutoLink,
-    Heading,
-    Link,
-    List,
-    TodoList,
-    ListProperties,
-    Code,
-    CodeBlock,
-    LinkUI,
-    PasteFromOffice,
-  } from 'ckeditor5';
+  import { useEditor, EditorContent } from '@tiptap/vue-3';
+  import StarterKit from '@tiptap/starter-kit';
 
-  const props = defineProps( {
-    placeholder: {
-      type: String,
-      default: 'Enter text here',
+  const model = defineModel<string>();
+
+  const editor = useEditor( {
+    extensions: [
+      StarterKit,
+    ],
+    content: model.value,
+    onUpdate: ( { editor } ) => {
+      model.value = editor.getHTML();
+    },
+    editorProps: {
+      attributes: {
+        class: 'prose-styles editor-prose',
+      },
     },
   } );
 
-  const model = defineModel();
-
-  const ckEditorConfig = {
-    plugins: [
-      Essentials,
-      Bold,
-      Italic,
-      Autoformat,
-      Undo,
-      Paragraph,
-      PasteFromMarkdownExperimental,
-      AutoLink,
-      Heading,
-      Link,
-      LinkUI,
-      List,
-      TodoList,
-      ListProperties,
-      Code,
-      CodeBlock,
-      PasteFromOffice,
-    ],
-    toolbar: [ 'undo', 'redo', '|', 'heading', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'todoList' ],
-    link: {
-      addTargetToExternalLinks: true,
-      defaultProtocol: 'https://',
-      decorators: [
-        {
-          mode: 'manual',
-          label: 'Disable Rich Link',
-          attributes: {
-            'disable-rich-link': true,
-          },
-        },
-      ],
-    },
-    placeholder: props.placeholder,
-  };
-
-  const editor = BalloonEditor;
 </script>
 
 <template>
-  <ckeditor
-    v-model="model"
-    :editor="editor"
-    :config="ckEditorConfig"
-    ></ckeditor>
+  <div class="editor-wrapper">
+    <editor-content :editor="editor"></editor-content>
+  </div>
 </template>
 
 <style scoped>
-
+.editor-wrapper:deep(.editor-prose) {
+  max-width: 100%;
+  @apply focus:outline-none m-3;
+}
 </style>

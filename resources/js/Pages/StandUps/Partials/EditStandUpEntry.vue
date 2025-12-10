@@ -101,6 +101,12 @@
 
     recentWorkDate.value = response.result.data.date_used;
     jiraBaseUrl.value = response.result.data.base_url;
+
+    if ( !!response.result.data.data === false ) {
+      isFetchingRecentWork.value = false;
+      return;
+    }
+
     recentWork.value = response.result.data.data.filter( x => !!x.comment )
       .map( x => ( {
         id: x.id,

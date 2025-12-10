@@ -34,6 +34,9 @@
     "dependencies": {
         "@ckeditor/ckeditor5-vue": "^6.0.0",
         "@rushstack/eslint-patch": "^1.10.3",
+        "@tiptap/pm": "^3.13.0",
+        "@tiptap/starter-kit": "^3.13.0",
+        "@tiptap/vue-3": "^3.13.0",
         "@vue/eslint-config-typescript": "^13.0.0",
         "chart.js": "^4.4.4",
         "ckeditor5": "^42.0.2",
