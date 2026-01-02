@@ -86,6 +86,9 @@ Route::middleware([
     Route::post('clockwork/settings/update', [ClockworkController::class, 'updateSettings'])
         ->name('clockwork.settings-update');
 
+    Route::get('clockwork/settings/has-integration', [ClockworkController::class, 'hasIntegration'])
+        ->name('clockwork.has-integration');
+
     Route::prefix("integrations/jira")
         ->group(function() {
             Route::get("/boards", [JiraController::class, "boards"])

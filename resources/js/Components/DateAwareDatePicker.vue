@@ -3,16 +3,6 @@
   import { computed, ref } from 'vue';
   import { DateTime } from 'luxon';
   const model = defineModel( { required: false } );
-  const selectedButton = ref( 'today' );
-
-  const changeSelectedButton = ( value ) => {
-    selectedButton.value = value;
-
-    const option = dayOptions.value.find( ( option ) => option.value === value );
-
-    //get only date in yyyy-mm-dd format taking into account timezone, which would not be using toISOString()
-    model.value = DateTime.fromJSDate( option.date ).toISODate();
-  };
 
   const dayOptions = computed( () => {
     const today = new Date();
@@ -30,11 +20,43 @@
       { value: 'yesterday', label: `Yesterday (${abbreviationForYesterday})`, date: yesterday },
       { value: 'today', label: `Today (${abbreviationForToday})`, date: today },
       { value: 'tomorrow', label: `Tomorrow (${abbreviationForTomorrow})`, date: tomorrow },
+      { value: 'custom', label: 'Other', date: null },
     ];
   } );
 
+  const initialSelectedButton = () => {
+    if ( !model.value ) {
+      return 'today';
+    }
+
+    const matchingDayOption = dayOptions.value
+      .find( ( option ) => DateTime.fromJSDate( option.date ).toISODate() === model.value );
+
+    if ( matchingDayOption ) {
+      return matchingDayOption.value;
+    }
+
+    return 'custom';
+  };
+
+  const selectedButton = ref( initialSelectedButton() );
+
+  const changeSelectedButton = ( value ) => {
+    selectedButton.value = value;
+
+    const option = dayOptions.value.find( ( option ) => option.value === value );
+
+    //get only date in yyyy-mm-dd format taking into account timezone, which would not be using toISOString()
+    model.value = DateTime.fromJSDate( option.date ).toISODate();
+  };
+
+
   const dateChanged = ( date ) => {
     model.value = date;
+
+    if ( selectedButton.value === 'custom' ) {
+      return;
+    }
 
     const matchingDayOption = dayOptions.value
       .find( ( option ) => DateTime.fromJSDate( option.date ).toISODate() === date );
@@ -65,8 +87,10 @@
     </button>
   </div>
   <TextInput
+    v-if="selectedButton === 'custom'"
     :model-value="model"
     type="date"
+    class="block mt-2"
     @update:model-value="dateChanged"
     ></TextInput>
 </template>

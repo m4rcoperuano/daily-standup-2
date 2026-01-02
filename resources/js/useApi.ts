@@ -65,6 +65,9 @@ export function useApi() {
       query: async ( email: string, date: string ): Promise<CustomResponse> => {
         return await callApi( 'get', route( 'clockwork.index', email ) + '?date=' + date );
       },
+      has: async (): Promise<CustomResponse> => {
+        return await callApi( 'get', route( 'clockwork.has-integration' ) );
+      },
     },
   };
 

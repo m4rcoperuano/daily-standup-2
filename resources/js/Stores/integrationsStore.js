@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
-
+import { useApi } from '@/useApi.ts';
 
 export const useIntegrationsStore = defineStore( 'integrationsStore', {
   state: () => ( {
     integrations: [],
     integrationsLoading: true,
+    teamHasClockworkIntegration: false,
   } ),
   getters: {
     hasIntegration: ( state ) => ( provider, version ) => {
@@ -23,8 +24,10 @@ export const useIntegrationsStore = defineStore( 'integrationsStore', {
       this.integrationsLoading = value;
     },
     async fetchIntegrations() {
+      const api = useApi();
       const response = await axios.get( route( 'socialite.index' ) );
       this.integrations = response.data;
+      this.teamHasClockworkIntegration = ( await api.integrations.clockwork.has() ).result.data.has_integration;
       this.integrationsLoading = false;
     },
   },

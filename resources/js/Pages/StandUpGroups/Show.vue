@@ -2,16 +2,15 @@
   import { computed, onMounted, ref } from 'vue';
   import { DateTime } from 'luxon';
   import StandUpGroupEntrySection from '@/Pages/StandUps/Partials/StandUpGroupEntrySection.vue';
-  import PrimaryButton from '@/Components/PrimaryButton.vue';
   import EditStandUpEntry from '@/Pages/StandUps/Partials/EditStandUpEntry.vue';
   import { StandUpEntry, useStandUpEntriesStore } from '@/Pages/StandUps/standUpEntriesStore';
   import { usePage } from '@inertiajs/vue3';
   import DateAwareDatePicker from '@/Components/DateAwareDatePicker.vue';
   import { useLinkPreviewsStore } from '@/Stores/linkPreviewStore';
   import StellarLayout from '@/Layouts/StellarLayout.vue';
-  import CopyTextButton from '@/Components/CopyTextButton.vue';
-  import RichTextEditor from '@/Components/RichTextEditor.vue';
   import SprintDetails from '@/Pages/StandUpGroups/Partials/SprintDetails.vue';
+  import { useIntegrationsStore } from '@/Stores/integrationsStore';
+  import ClockworkEntries from '@/Components/Integrations/ClockworkEntries.vue';
 
   const props = defineProps( {
     standUpGroup: {
@@ -28,6 +27,7 @@
   const isCreatingStandUpEntry = ref( false );
   const showFilter = ref( 'show-mine' );
   const creatingStandUpEntryDate = ref( DateTime.now().toFormat( 'yyyy-MM-dd' ) );
+  const integrationsStore = useIntegrationsStore();
 
   linkPreviewsStore.setCallBack( ( preview ) => {
     const elements = document.querySelectorAll( `a[href="${preview.url}"]` );
@@ -55,6 +55,7 @@
 
   onMounted(  () =>  {
     standUpEntriesStore.fetch( props.standUpGroup.id );
+    integrationsStore.fetchIntegrations();
   } );
 
   const cancelNew = () => {
@@ -89,149 +90,126 @@
 
       standUpEntriesStore.replace( e.entry.id, e.entry );
     } );
-
-  const summaryData = ref( null );
-  const isFetchingSummary = ref( false );
-  const initiateSummary = async () => {
-    isFetchingSummary.value = true;
-    const response = await axios.get( route( 'stand-up-entries.export', { standUpGroup: props.standUpGroup.id } ) );
-    summaryData.value = response.data;
-    isFetchingSummary.value = false;
-  };
 </script>
 
 <template>
   <StellarLayout :title="standUpGroup.name">
     <div class="pb-4 text-gray-200">
-      <div class="max-w-4xl mx-auto px-6 sm:px-6 lg:px-8">
-        <div class="my-6 border-t border-primary"></div>
-        <h2 class="font-semibold text-xl bg-gradient-to-r text-primary text-center mb-2">
-          {{ standUpGroup.name }}
-        </h2>
+      <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="col-4">
+          <SprintDetails
+            v-if="hasSprintIntegration"
+            :sprint-name="standUpGroup.name"
+            :sprint-id="standUpGroup.atlassian_sprint_id"
+            ></SprintDetails>
 
-        <sprint-details
-          v-if="hasSprintIntegration"
-          :sprint-id="standUpGroup.atlassian_sprint_id"
-          ></sprint-details>
-        <div class="my-6 border-t border-primary"></div>
-
-        <div
-          v-if="!isCreatingStandUpEntry"
-          class="mb-4"
-          >
-          <p
-            v-if="standUpEntryGroupByDateKeys.length <= 0"
-            class="mb-2"
+          <ClockworkEntries v-if="integrationsStore.teamHasClockworkIntegration"></ClockworkEntries>
+        </div>
+        <div class="col-8">
+          <div
+            v-if="!isCreatingStandUpEntry"
             >
-            No stand up entries yet! Click the button below to create one!
-          </p>
-
-          <div class="flex items-center">
-            <div
-              class="gap-3 flex flex-grow flex-col"
+            <p
+              v-if="standUpEntryGroupByDateKeys.length <= 0"
+              class="mb-2"
               >
-              <div class="flex gap-3 flex-col sm:flex-row">
-                <div class="flex items-center">
-                  <input
-                    id="show-mine"
-                    name="show_filter"
-                    type="radio"
-                    value="show-mine"
-                    :checked="showFilter === 'show-mine'"
-                    class="w-4 h-4 text-primary bg-gray-700 border-gray-900 focus:ring-primary ring-offset-gray-800 focus:ring-2"
-                    @input="changeFilter('show-mine')"
-                    />
-                  <label
-                    for="show-mine"
-                    class="ms-2 cursor-pointer font-medium "
-                    >Show My Entries</label>
-                </div>
-                <div class="flex items-center">
-                  <input
-                    id="show-all"
-                    type="radio"
-                    value="show-all"
-                    name="show_filter"
-                    :checked="showFilter === 'show-all'"
-                    class="w-4 h-4 text-primary bg-gray-700 border-gray-900 focus:ring-primary ring-offset-gray-800 focus:ring-2"
-                    @input="changeFilter('show-all')"
-                    />
-                  <label
-                    for="show-all"
-                    class="ms-2 cursor-pointer font-medium "
-                    >Show Everyone</label>
-                </div>
-              </div>
+              No stand up entries yet! Click the button below to create one!
+            </p>
 
-              <div class="mb-2">
-                <primary-button @click="initiateSummary">
-                  {{ isFetchingSummary ? 'Generating Summary...' : 'Generate Summary' }}
-                </primary-button>
-              </div>
-            </div>
-
-            <div
-              v-if="!isCreatingStandUpEntry"
-              >
-              <button
-                type="button"
-                class="block items-center p-1 bg-gradient-to-r from-[#05A8F1] to-[#28F09E] rounded-md font-semibold hover:opacity-50 transition-opacity text-xs text-white disabled:opacity-50 transition ease-in-out duration-150"
-                @click="isCreatingStandUpEntry = !isCreatingStandUpEntry"
+            <div class="flex items-center">
+              <div
+                class="gap-3 flex flex-grow flex-col"
                 >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="3"
-                  stroke="currentColor"
-                  class="size-12"
+                <div class="flex gap-3 flex-row">
+                  <div class="flex items-center">
+                    <input
+                      id="show-mine"
+                      name="show_filter"
+                      type="radio"
+                      value="show-mine"
+                      :checked="showFilter === 'show-mine'"
+                      class="w-4 h-4 text-primary bg-gray-700 border-gray-900 focus:ring-primary ring-offset-gray-800 focus:ring-2"
+                      @input="changeFilter('show-mine')"
+                      />
+                    <label
+                      for="show-mine"
+                      class="ms-2 cursor-pointer font-medium "
+                      >Show My Entries</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input
+                      id="show-all"
+                      type="radio"
+                      value="show-all"
+                      name="show_filter"
+                      :checked="showFilter === 'show-all'"
+                      class="w-4 h-4 text-primary bg-gray-700 border-gray-900 focus:ring-primary ring-offset-gray-800 focus:ring-2"
+                      @input="changeFilter('show-all')"
+                      />
+                    <label
+                      for="show-all"
+                      class="ms-2 cursor-pointer font-medium "
+                      >Show Everyone</label>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                v-if="!isCreatingStandUpEntry"
+                >
+                <button
+                  type="button"
+                  class="block items-center p-1 bg-gradient-to-r from-[#05A8F1] to-[#28F09E] rounded-md font-semibold hover:opacity-50 transition-opacity text-xs text-white disabled:opacity-50 transition ease-in-out duration-150"
+                  @click="isCreatingStandUpEntry = !isCreatingStandUpEntry"
                   >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 4.5v15m7.5-7.5h-15"
-                    ></path>
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="3"
+                    stroke="currentColor"
+                    class="size-12"
+                    >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                      ></path>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div v-else>
-          <h3 class="text-xl text-primary font-bold mb-4">New Stand Up Entry</h3>
-          <div class="mb-2">
-            <label class="block font-medium text-sm uppercase">
-              <span>Date</span>
-            </label>
-            <DateAwareDatePicker
-              v-model="creatingStandUpEntryDate"
-              ></DateAwareDatePicker>
+          <div v-else>
+            <h3 class="text-xl text-primary font-bold mb-4">New Stand Up Entry</h3>
+            <div class="mb-2">
+              <label class="block font-medium text-sm uppercase">
+                <span>Date</span>
+              </label>
+              <DateAwareDatePicker
+                v-model="creatingStandUpEntryDate"
+                ></DateAwareDatePicker>
+            </div>
+            <EditStandUpEntry
+              :date="creatingStandUpEntryDate"
+              @save="saveNew"
+              @cancel="cancelNew"
+              ></EditStandUpEntry>
+            <div class="mb-4 border-b pb-8 border-gray-200  dark:border-gray-700"></div>
           </div>
-          <EditStandUpEntry
-            :date="creatingStandUpEntryDate"
-            @save="saveNew"
-            @cancel="cancelNew"
-            ></EditStandUpEntry>
-          <div class="mb-4 border-b pb-8 border-gray-200  dark:border-gray-700"></div>
-        </div>
-        <div
-          v-if="summaryData"
-          class="content"
-          >
-          <RichTextEditor
-            :model-value="summaryData"
-            ></RichTextEditor>
-        </div>
-        <div
-          v-for="date in standUpEntryGroupByDateKeys"
-          :key="date"
-          class="mb-4 stand-up-group-entry-section"
-          >
-          <StandUpGroupEntrySection
-            :title="date"
-            :current-user-id="user?.id"
-            :stand-up-entries="standUpEntriesStore.groupedByDate[date]"
+
+          <div
+            v-for="date in standUpEntryGroupByDateKeys"
+            :key="date"
+            class="mb-4 stand-up-group-entry-section"
             >
-          </StandUpGroupEntrySection>
+            <StandUpGroupEntrySection
+              :title="date"
+              :current-user-id="user?.id"
+              :stand-up-entries="standUpEntriesStore.groupedByDate[date]"
+              >
+            </StandUpGroupEntrySection>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import PrimaryButton from '@/Components/PrimaryButton.vue';
-  import { computed, onMounted, Ref, ref, watch } from 'vue';
+  import { computed, onMounted, Ref, ref } from 'vue';
   import SecondaryButton from '@/Components/SecondaryButton.vue';
   import DangerButton from '@/Components/DangerButton.vue';
   import { StandUpEntry } from '@/Pages/StandUps/standUpEntriesStore';
@@ -9,10 +9,6 @@
   import ConnectToGithub from '@/Components/Integrations/ConnectToGithub.vue';
   import { useIntegrationsStore } from '@/Stores/integrationsStore.js';
   import ProTipAlert from '@/Components/ProTipAlert.vue';
-  import { useApi } from '@/useApi';
-  const api = useApi();
-  import { DateTime } from 'luxon';
-  import CopyTextButton from '@/Components/CopyTextButton.vue';
 
   const props = defineProps( {
     isEditing: {
@@ -87,123 +83,11 @@
       integrationConnectedSuccess.value = true;
     }
   };
-
-  const recentWork = ref( [] );
-  const isFetchingRecentWork = ref( false );
-  const recentWorkDate = ref( '' );
-  const jiraBaseUrl = ref( null );
-  const fetchTimeEntries = async () => {
-    recentWork.value = [];
-    isFetchingRecentWork.value = true;
-
-    const email = integrationsStore.integrations.filter( x => x.provider === 'atlassian' )[0].email;
-    const response = await api.integrations.clockwork.query( email, props.date );
-
-    recentWorkDate.value = response.result.data.date_used;
-    jiraBaseUrl.value = response.result.data.base_url;
-    recentWork.value = response.result.data.data.filter( x => !!x.comment )
-      .map( x => ( {
-        id: x.id,
-        comment: x.comment,
-        issueType: x.issue.fields.issuetype,
-        issueKey: x.issue.key,
-        issueSummary: x.issue.fields.summary,
-      } ) );
-
-    isFetchingRecentWork.value = false;
-  };
-
-  onMounted( async() => {
-    await integrationsStore.fetchIntegrations();
-    await fetchTimeEntries();
-  } );
-
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
-
-  watch( () => props.date, () => {
-    if ( timeoutId ) {
-      clearTimeout( timeoutId );
-    }
-    //debounce for 500ms
-    timeoutId = setTimeout( async() => {
-      await fetchTimeEntries();
-    }, 500 );
-  } );
-
-  const formattedRecentWorkDate = computed( () => {
-    if ( !recentWorkDate.value ) return '';
-    // Parse as ISO date and format as 'Friday, March 3rd, 2025'
-    return DateTime.fromISO( recentWorkDate.value ).toFormat( 'cccc, LLLL d\',\' yyyy' ).replace( /\b(\d{1,2})\b/, ( d ) => {
-      // Add ordinal suffix
-      const n = parseInt( d );
-      if ( n > 3 && n < 21 ) return n + 'th';
-      switch ( n % 10 ) {
-        case 1: return n + 'st';
-        case 2: return n + 'nd';
-        case 3: return n + 'rd';
-        default: return n + 'th';
-      }
-    } );
-  } );
-
-  const createCopyableText = ( recentWork ) => {
-    if ( !Array.isArray( recentWork ) ) return '';
-    return recentWork.map( work => {
-      const issueUrl = `${jiraBaseUrl.value}/browse/${work.issueKey}`;
-      return `[${issueUrl}](${issueUrl})\n${work.comment}`;
-    } ).join( '\n\n' );
-  };
 </script>
 
 <template>
   <div>
     <div class="grid grid-cols-1 gap-4">
-      <div class="text-gray-400 mt-4 p-3 relative bg-gray-900 rounded flex flex-col min-h-[48px]">
-        <div
-          v-if="!isFetchingRecentWork"
-          class="uppercase text-sm font-bold mb-1"
-          >
-          Looking back to {{ formattedRecentWorkDate }} (clockwork)
-        </div>
-        <div
-          v-if="isFetchingRecentWork"
-          >
-          <span>Loading recent work...</span>
-        </div>
-        <div
-          v-else-if="recentWork.length === 0"
-          >
-          <span>No clockwork entries found.</span>
-        </div>
-        <div
-          v-else
-          >
-          <div
-            v-for="work in recentWork"
-            :key="work.id"
-            >
-            <div class="mb-2">
-              <div>
-                <img
-                  :src="work.issueType.iconUrl"
-                  :alt="work.issueType.name"
-                  class="inline-block size-5 mr-2 align-middle "
-                  />
-                <strong class="text-white">{{ work.issueKey }}: {{ work.issueSummary }}</strong>:
-              </div>
-              <div>
-                {{ work.comment }}
-              </div>
-            </div>
-          </div>
-
-          <copy-text-button
-            v-if="!isFetchingRecentWork"
-            class="absolute top-4 right-4"
-            :text="createCopyableText(recentWork)"
-            ></copy-text-button>
-        </div>
-      </div>
       <div class="content">
         <div class="bg-gray-950 text-white px-4 py-2 border-b">
           ✅ What did you do yesterday?

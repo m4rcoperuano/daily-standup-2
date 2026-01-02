@@ -60,7 +60,7 @@
         <div v-if="daysRemaining > 0">{{ Math.floor(daysRemaining) }}</div>
       </div>
     </div>
-    <div class="whitespace-pre text-center pt-4">{{ goal }}</div>
+    <div class="whitespace-pre-wrap pt-4">{{ goal }}</div>
   </div>
 </template>
 
