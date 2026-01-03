@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,4 +10,8 @@
 
 .btn-shine {
   @apply bg-gradient-to-r from-[#05A8F1] to-[#28F09E];
+}
+
+.press-start {
+  font-family: 'Press Start 2P', cursive;
 }

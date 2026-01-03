@@ -123,8 +123,9 @@
     <div
       v-else-if="recentWork.length === 0"
       style="height:150px;"
+      class="bg-teal-900 flex items-center justify-center rounded rounded-lg"
       >
-      <span>No clockwork entries found.</span>
+      <span>No clockwork entries found for this selected date</span>
     </div>
     <div
       v-else

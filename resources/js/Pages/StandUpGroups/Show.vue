@@ -11,6 +11,7 @@
   import SprintDetails from '@/Pages/StandUpGroups/Partials/SprintDetails.vue';
   import { useIntegrationsStore } from '@/Stores/integrationsStore';
   import ClockworkEntries from '@/Components/Integrations/ClockworkEntries.vue';
+  import Spaceman from '@/Components/Spaceman.vue';
 
   const props = defineProps( {
     standUpGroup: {
@@ -109,13 +110,6 @@
           <div
             v-if="!isCreatingStandUpEntry"
             >
-            <p
-              v-if="standUpEntryGroupByDateKeys.length <= 0"
-              class="mb-2"
-              >
-              No stand up entries yet! Click the button below to create one!
-            </p>
-
             <div class="flex items-center">
               <div
                 class="gap-3 flex flex-grow flex-col"
@@ -209,6 +203,16 @@
               :stand-up-entries="standUpEntriesStore.groupedByDate[date]"
               >
             </StandUpGroupEntrySection>
+          </div>
+
+          <div
+            v-if="standUpEntryGroupByDateKeys.length <= 0"
+            class="my-2 flex items-center"
+            >
+            <Spaceman style="height:100px;"></Spaceman>
+            <div class="text-md">
+              So much empty space! It looks like there are no stand up entries yet. Why not create one?
+            </div>
           </div>
         </div>
       </div>

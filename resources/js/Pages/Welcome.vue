@@ -2,6 +2,7 @@
   import { Head, Link } from '@inertiajs/vue3';
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import ApplicationMark from '@/Components/ApplicationMark.vue';
+  import Starfield from '@/Components/Starfield.vue';
 
   defineProps( {
     canLogin: {

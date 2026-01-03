@@ -85,9 +85,6 @@
 </script>
 
 <style scoped>
-/* Ensure the pixel font is loaded */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 .star-field-wrapper {
   position: relative;
   width: 100%;
