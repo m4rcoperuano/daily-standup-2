@@ -86,7 +86,7 @@ class StandUpEntryController extends Controller
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => 'Create a summary of the following stand up entries. The audience is the business team, not the developer, so make it sound less technical and more company facing. Group it by Assignee then by Ticket. This is to prepare for a Sprint Review meeting with the company.',
+                        'content' => 'Create a summary of the following stand up entries. The audience is the business team, not the developer, so make it sound less technical and more company facing. Group it by Assignee then by Ticket. This is to prepare for a Sprint Review meeting with the company. Ignore work that is related to QA-ing or Reviewing other code. Only involve work where the participant is actively developing or designing features.',
                     ],
                     [
                         'role' => 'user',
