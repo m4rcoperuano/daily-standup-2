@@ -21,6 +21,10 @@
       type: String,
       required: true,
     },
+    standUpGroupId: {
+      type: [ Number, String ],
+      required: true,
+    },
   } );
 
   const sprint = ref( null );
@@ -28,7 +32,7 @@
   const isFetchingSummary = ref( false );
   const initiateSummary = async () => {
     isFetchingSummary.value = true;
-    const response = await axios.get( route( 'stand-up-entries.export', { standUpGroup: props.standUpGroup.id } ) );
+    const response = await axios.get( route( 'stand-up-entries.export', { standUpGroup: props.standUpGroupId } ) );
     summaryData.value = response.data;
     isFetchingSummary.value = false;
   };
@@ -87,7 +91,14 @@
       </div>
     </div>
     <div class="mt-4 text-center">
-      <primary-button @click="initiateSummary">
+      <Starfield
+        v-if="isFetchingSummary"
+        title="Going supernova..."
+        ></Starfield>
+      <primary-button
+        v-else
+        @click="initiateSummary"
+        >
         {{ isFetchingSummary ? 'Generating Summary...' : 'Generate Summary' }}
       </primary-button>
     </div>

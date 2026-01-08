@@ -102,6 +102,7 @@
             v-if="hasSprintIntegration"
             :sprint-name="standUpGroup.name"
             :sprint-id="standUpGroup.atlassian_sprint_id"
+            :stand-up-group-id="standUpGroup.id"
             ></SprintDetails>
 
           <ClockworkEntries v-if="integrationsStore.teamHasClockworkIntegration"></ClockworkEntries>
