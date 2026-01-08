@@ -74,8 +74,8 @@ class StandUpEntryController extends Controller
             ->map(fn(StandUpEntry $entry) => [
                 'Date' => $entry->date->toDateString(),
                 'User' => $entry->user->name,
-                'In Progress' => $htmlConverter->convert($entry->in_progress | ""),
-                'Priorities' => $htmlConverter->convert($entry->priorities | ""),
+                'In Progress' => $htmlConverter->convert($entry->in_progress || ""),
+                'Priorities' => $htmlConverter->convert($entry->priorities || ""),
                 'Blockers' => $htmlConverter->convert($entry->blockers || ""),
             ]);
 
