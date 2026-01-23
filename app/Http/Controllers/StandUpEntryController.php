@@ -79,6 +79,10 @@ class StandUpEntryController extends Controller
                 'Blockers' => $htmlConverter->convert($entry->blockers ?? ""),
             ]);
 
+        $entriesTextFormatted = $entries->map(function ($entry) {
+            return "Date: {$entry['Date']}\nUser: {$entry['User']}\nIn Progress:\n{$entry['In Progress']}\nPriorities:\n{$entry['Priorities']}\nBlockers:\n{$entry['Blockers']}\n";
+        })->implode("\n---\n");
+
         $response = Http::withToken(config('services.openai.key'))
             ->timeout(120)
             ->post('https://api.openai.com/v1/chat/completions', [
@@ -86,11 +90,33 @@ class StandUpEntryController extends Controller
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => 'Create a summary of the following stand up entries. The audience is the business team, not the developer, so make it sound less technical and more company facing. Group it by Assignee then by Ticket. This is to prepare for a Sprint Review meeting with the company. Ignore work that is related to QA-ing. Only involve work where the participant has developed, or is developing features.',
+                        'content' =>
+                            <<<PROMPT
+                            '
+                            YOUR ROLE: BUSINESS ANALYST.
+                            YOUR TASKS:
+                            1. Given the text from stand up entries, produce a concise summary for a business audience.
+                            2. Group the summary by Assignee and then by Ticket.
+                            3. Focus only on development work, excluding QA tasks.
+                            4. Ensure the summary is clear, non-technical, and suitable for a Sprint Review meeting.
+
+                            EXAMPLE:
+                            ASSIGNEE: Jane Doe
+                            - http://example.com/ticket-123: Implemented the user authentication module, enabling secure login and registration for users.
+                            - http://example.com/ticket-456: Developed the payment processing feature, allowing users to make
+                            purchases seamlessly.
+                            ASSIGNEE: John Smith
+                            - http://example.com/ticket-789: Created the reporting dashboard, providing insights into
+                            sales and user engagement metrics.
+
+                            OUTPUT CONTRACT:
+                            Your response must be in Markdown format.
+                            PROMPT
+                            ,
                     ],
                     [
                         'role' => 'user',
-                        'content' => 'Here is the stand up entry data, reply in Markdown. Your reply must be grouped by assignee then by ticket with a 100-200 snippet of what they did. When grouping by ticket, just keep the hyperlink URL, no need for a prefix or suffix. Be succinct. ' . json_encode($entries),
+                        'content' => $entriesTextFormatted
                     ],
                 ],
             ]);
