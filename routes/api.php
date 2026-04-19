@@ -13,5 +13,7 @@ Route::group([
         return $request->user();
     });
 
-    Route::post('/stand-up-entries', [StandUpEntryController::class, 'store']);
+    Route::get('/stand-up-groups/{standUpGroup}/stand-up-entries', [StandUpEntryController::class, 'index']);
+    Route::apiResource('stand-up-entries', StandUpEntryController::class)
+        ->only(['store', 'update', 'destroy']);
 });
