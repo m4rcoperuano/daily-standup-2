@@ -87,6 +87,13 @@
                   Create New Team
                 </DropdownLink>
 
+                <DropdownLink
+                  v-if="$page.props.jetstream.hasApiFeatures"
+                  :href="route('api-tokens.index')"
+                  >
+                  API Tokens
+                </DropdownLink>
+
                 <!-- Authentication -->
                 <form @submit.prevent="logout">
                   <DropdownLink as="button">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StandUpEntryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,4 +12,6 @@ Route::group([
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::post('/stand-up-entries', [StandUpEntryController::class, 'store']);
 });
