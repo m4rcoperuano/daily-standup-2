@@ -41,6 +41,15 @@ class StandUpEntryController extends Controller
         return (new StandUpEntryResource($entry))->response()->setStatusCode(201);
     }
 
+    public function show(Request $request, StandUpEntry $standUpEntry)
+    {
+        $this->authorize('view', $standUpEntry);
+
+        $standUpEntry->load('user', 'standUpEntryLinks');
+
+        return new StandUpEntryResource($standUpEntry);
+    }
+
     public function update(UpdateStandUpEntryRequest $request, StandUpEntry $standUpEntry)
     {
         $attributes = $request->validated();
