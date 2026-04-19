@@ -39,5 +39,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('viewPulse', function (User $user) {
             return $user->email === 'marco.j.ledesma@gmail.com' && $user->hasVerifiedEmail();
         });
+
+        Gate::define('viewApiDocs', fn (User $user) => true);
     }
 }
